@@ -25,7 +25,7 @@ function NavCloseButton() {
   return (
     <button
       onClick={() => window.dispatchEvent(new CustomEvent("navClose"))}
-      className="absolute top-6 left-6 z-50 text-white hover:text-[#9CAF88] transition-colors duration-200"
+      className="absolute top-6 left-6 z-50 text-white hover:text-[#9CAF88] transition-colors duration-200 cursor-pointer"
       style={{ fontSize: "2.5rem", lineHeight: 1, fontWeight: 300 }}
       aria-label="Close menu"
     >

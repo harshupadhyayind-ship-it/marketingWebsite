@@ -93,18 +93,23 @@
     scroll-behavior: smooth;
   }
 
-  /* Nav-open: lock scroll */
+  /* Nav-open: lock scroll + clip the rotating card at viewport edges */
   body.nav-open {
+    overflow: hidden;
+  }
+  html:has(body.nav-open) {
     overflow: hidden;
   }
 
   /* Nav-open: push main content like a tilted card */
   body.nav-open main {
-    transform: translateX(20rem) translateY(2rem) rotate(-4deg) scale(0.88);
+    transform: translateX(20rem) translateY(-5rem)  rotate(-6deg) scale(1);
     border-radius: 20px;
     overflow: hidden;
   }
   main {
+    position: relative;
+    z-index: 1; /* sits above the full-page nav image (z-0) */
     transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
                 border-radius 0.55s ease;
     transform-origin: top right;
