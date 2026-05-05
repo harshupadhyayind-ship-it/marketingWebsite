@@ -1,291 +1,330 @@
 "use client";
 
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import { motion, AnimatePresence } from "framer-motion";
-import AnimatedSection from "@/components/ui/AnimatedSection";
-import CTASection from "@/components/sections/CTASection";
-import { Badge } from "@/components/ui/badge";
-import {
-  Palette,
-  Globe,
-  Megaphone,
-  BarChart3,
-  Camera,
-  PenTool,
-  Check,
-  ChevronDown,
-} from "lucide-react";
+import Link from "next/link";
+
+const ServicesCanvas = dynamic(() => import("@/components/three/ServicesCanvas"), { ssr: false });
 
 const services = [
   {
-    id: "brand-strategy",
-    icon: Palette,
+    num: "01",
     title: "Brand Strategy",
     tagline: "Position your brand to lead.",
     description:
       "A strong brand is your most valuable asset. We develop comprehensive brand strategies that define who you are, who you serve, and why you matter — then translate that into a visual and verbal identity that turns heads.",
-    features: [
-      "Brand Audit & Competitive Analysis",
-      "Brand Identity & Visual System",
-      "Tone of Voice & Messaging Framework",
-      "Brand Guidelines Document",
-      "Logo & Typography Design",
-    ],
-    process: [
-      { step: "01", title: "Discovery", desc: "Deep-dive into your business, audience, and competitive landscape." },
-      { step: "02", title: "Strategy", desc: "Define positioning, brand pillars, and core messaging." },
-      { step: "03", title: "Design", desc: "Craft the visual identity — logo, color, type, and assets." },
-      { step: "04", title: "Handover", desc: "Full guidelines doc + asset library delivered." },
-    ],
     deliveryTime: "3–4 weeks",
     color: "#9CAF88",
+    features: ["Brand Audit & Competitive Analysis", "Brand Identity & Visual System", "Tone of Voice & Messaging", "Brand Guidelines Document", "Logo & Typography Design"],
   },
   {
-    id: "web-design",
-    icon: Globe,
+    num: "02",
     title: "Web Design & Development",
     tagline: "Websites that convert and captivate.",
     description:
       "We build cinematic web experiences using Next.js, Three.js, and a relentless focus on performance and conversion. Every site is custom-designed, fully responsive, and engineered for speed.",
-    features: [
-      "Custom UI/UX Design (Figma)",
-      "Next.js Development (App Router)",
-      "Three.js 3D Experiences",
-      "CMS Integration (Sanity)",
-      "Performance Optimization (Lighthouse ≥ 90)",
-    ],
-    process: [
-      { step: "01", title: "Wireframes", desc: "Low-fi layout exploration and information architecture." },
-      { step: "02", title: "Hi-fi Design", desc: "Full Figma mockups for desktop and mobile." },
-      { step: "03", title: "Development", desc: "Next.js build with CMS integration and animations." },
-      { step: "04", title: "Launch", desc: "Vercel deployment, domain config, and handover." },
-    ],
     deliveryTime: "2–3 weeks",
-    color: "#7A9068",
+    color: "#B8C9A8",
+    features: ["Custom UI/UX Design (Figma)", "Next.js Development (App Router)", "Three.js 3D Experiences", "CMS Integration (Sanity)", "Performance Optimization (Lighthouse ≥ 90)"],
   },
   {
-    id: "digital-marketing",
-    icon: Megaphone,
+    num: "03",
     title: "Digital Marketing",
     tagline: "Full-funnel growth, measurably.",
     description:
       "From paid media to SEO and email — we build and run data-driven marketing programs that fill your pipeline and reduce your cost per acquisition over time.",
-    features: [
-      "Meta & Google Ads Management",
-      "Search Engine Optimisation (SEO)",
-      "Email Marketing & Automation",
-      "Growth Hacking & Experiments",
-      "Monthly Performance Reports",
-    ],
-    process: [
-      { step: "01", title: "Audit", desc: "Benchmark your current performance and identify quick wins." },
-      { step: "02", title: "Strategy", desc: "Build a full-funnel growth plan tailored to your goals." },
-      { step: "03", title: "Execute", desc: "Launch campaigns across paid, owned, and earned channels." },
-      { step: "04", title: "Optimise", desc: "Weekly analysis and iteration to improve results." },
-    ],
     deliveryTime: "Ongoing retainer",
-    color: "#B8C9A8",
+    color: "#9CAF88",
+    features: ["Meta & Google Ads Management", "Search Engine Optimisation (SEO)", "Email Marketing & Automation", "Growth Hacking & Experiments", "Monthly Performance Reports"],
   },
   {
-    id: "analytics",
-    icon: BarChart3,
+    num: "04",
     title: "Performance Analytics",
     tagline: "Turn data into decisions.",
     description:
-      "Most brands are flying blind. We implement robust tracking, build custom dashboards, and deliver monthly insights reports so you always know exactly what's working and why.",
-    features: [
-      "GA4 & GTM Setup",
-      "Custom Looker Studio Dashboards",
-      "Conversion Funnel Analysis",
-      "A/B Testing Programme",
-      "Monthly Insights Reports",
-    ],
-    process: [
-      { step: "01", title: "Audit", desc: "Identify tracking gaps and measurement objectives." },
-      { step: "02", title: "Setup", desc: "Implement GA4, GTM, and event tracking." },
-      { step: "03", title: "Dashboard", desc: "Build custom dashboards for your key metrics." },
-      { step: "04", title: "Insights", desc: "Monthly reporting with actionable recommendations." },
-    ],
+      "Most brands are flying blind. We implement robust tracking, build custom dashboards, and deliver monthly insights so you always know what's working and why.",
     deliveryTime: "1–2 weeks setup",
-    color: "#9CAF88",
+    color: "#7A9068",
+    features: ["GA4 & GTM Setup", "Custom Looker Studio Dashboards", "Conversion Funnel Analysis", "A/B Testing Programme", "Monthly Insights Reports"],
   },
   {
-    id: "content",
-    icon: Camera,
+    num: "05",
     title: "Content Creation",
     tagline: "Stories that stop the scroll.",
     description:
       "From product photography to viral social content — our creative team produces visually stunning, strategically crafted content for every platform and format.",
-    features: [
-      "Product & Brand Photography",
-      "Video Production & Editing",
-      "Long-form Copywriting",
-      "Social Media Management",
-      "Content Calendar Planning",
-    ],
-    process: [
-      { step: "01", title: "Content Audit", desc: "Review existing assets and identify content gaps." },
-      { step: "02", title: "Strategy", desc: "Build a content calendar aligned to your goals." },
-      { step: "03", title: "Production", desc: "Shoot, write, and edit all content assets." },
-      { step: "04", title: "Publish & Manage", desc: "Schedule, post, and engage across platforms." },
-    ],
     deliveryTime: "Ongoing retainer",
-    color: "#7A9068",
+    color: "#B8C9A8",
+    features: ["Product & Brand Photography", "Video Production & Editing", "Long-form Copywriting", "Social Media Management", "Content Calendar Planning"],
   },
   {
-    id: "creative-direction",
-    icon: PenTool,
+    num: "06",
     title: "Creative Direction",
     tagline: "Campaigns that live in culture.",
     description:
-      "End-to-end creative strategy and art direction for brand campaigns, product launches, and high-impact marketing moments that create lasting cultural relevance.",
-    features: [
-      "Campaign Concept Development",
-      "Art Direction",
-      "Print & Out-of-Home",
-      "Launch Campaigns",
-      "Creative QA & Production Oversight",
-    ],
-    process: [
-      { step: "01", title: "Brief", desc: "Deep-dive on campaign goals, audience, and KPIs." },
-      { step: "02", title: "Concepts", desc: "3 creative directions for client review." },
-      { step: "03", title: "Production", desc: "Art direct all creative assets end-to-end." },
-      { step: "04", title: "Launch", desc: "Co-ordinate release and performance monitoring." },
-    ],
+      "End-to-end creative strategy and art direction for brand campaigns, product launches, and high-impact moments that create lasting cultural relevance.",
     deliveryTime: "Project-based",
-    color: "#B8C9A8",
+    color: "#9CAF88",
+    features: ["Campaign Concept Development", "Art Direction", "Print & Out-of-Home", "Launch Campaigns", "Creative QA & Production Oversight"],
   },
 ];
 
-function ServiceCard({ service }: { service: typeof services[0] }) {
-  const [expanded, setExpanded] = useState(false);
-
+/* ─── Mobile accordion item ─────────────────────────────────────────────── */
+function AccordionItem({ s, open, onToggle }: { s: typeof services[0]; open: boolean; onToggle: () => void }) {
   return (
-    <motion.div
-      id={service.id}
-      className="rounded-3xl bg-white/60 border border-beige-dark shadow-warm overflow-hidden"
-      whileHover={{ y: -2 }}
-      transition={{ duration: 0.2 }}
-    >
-      {/* Header */}
+    <div className="border-b border-[#F5F1E8]/10">
       <button
-        onClick={() => setExpanded((v) => !v)}
-        className="w-full text-left p-8 flex items-center justify-between gap-4 hover:bg-beige-dark/30 transition-colors"
+        className="w-full text-left px-6 py-7 flex items-center justify-between gap-6 group"
+        onClick={onToggle}
       >
         <div className="flex items-center gap-5">
-          <div
-            className="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0"
-            style={{ backgroundColor: `${service.color}20` }}
-          >
-            <service.icon size={22} style={{ color: service.color }} />
-          </div>
+          <span className="font-mono text-xs flex-shrink-0" style={{ color: s.color }}>{s.num}</span>
           <div>
-            <h3 className="font-heading text-xl font-bold text-foreground">{service.title}</h3>
-            <p className="text-stone text-sm mt-0.5">{service.tagline}</p>
+            <div
+              className="font-bold text-[#F5F1E8] group-hover:text-[#9CAF88] transition-colors"
+              style={{ fontSize: "clamp(1.2rem, 3vw, 1.8rem)", letterSpacing: "-0.03em" }}
+            >
+              {s.title}
+            </div>
+            <div className="text-[#8B7E6E] text-sm mt-0.5">{s.tagline}</div>
           </div>
         </div>
-        <div className="flex items-center gap-3 flex-shrink-0">
-          <Badge className="bg-sage/10 text-sage border-sage/20 text-xs">{service.deliveryTime}</Badge>
-          <motion.div animate={{ rotate: expanded ? 180 : 0 }} transition={{ duration: 0.2 }}>
-            <ChevronDown size={18} className="text-stone" />
-          </motion.div>
+        <div className="flex items-center gap-4 flex-shrink-0">
+          <span className="text-[#8B7E6E] text-xs font-mono hidden sm:block">{s.deliveryTime}</span>
+          <motion.span
+            animate={{ rotate: open ? 45 : 0 }}
+            transition={{ duration: 0.2 }}
+            className="text-[#F5F1E8] text-2xl leading-none w-6 text-center"
+          >
+            +
+          </motion.span>
         </div>
       </button>
 
-      {/* Expanded content */}
       <AnimatePresence>
-        {expanded && (
+        {open && (
           <motion.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
             className="overflow-hidden"
           >
-            <div className="px-8 pb-8 border-t border-beige-dark pt-6">
-              <div className="grid md:grid-cols-2 gap-8">
-                {/* Left */}
-                <div>
-                  <p className="text-stone leading-relaxed mb-6">{service.description}</p>
-                  <h4 className="font-semibold text-foreground text-sm mb-4">What&apos;s included</h4>
-                  <ul className="space-y-2">
-                    {service.features.map((f) => (
-                      <li key={f} className="flex items-start gap-2.5 text-stone text-sm">
-                        <Check size={14} className="text-sage mt-0.5 flex-shrink-0" />
-                        {f}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* Right: process steps */}
-                <div>
-                  <h4 className="font-semibold text-foreground text-sm mb-4">Our Process</h4>
-                  <div className="space-y-4">
-                    {service.process.map((step) => (
-                      <div key={step.step} className="flex gap-4">
-                        <div
-                          className="text-xs font-bold w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
-                          style={{ backgroundColor: `${service.color}20`, color: service.color }}
-                        >
-                          {step.step}
-                        </div>
-                        <div>
-                          <div className="font-semibold text-foreground text-sm">{step.title}</div>
-                          <div className="text-stone text-xs mt-0.5">{step.desc}</div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+            <div className="px-6 pb-8 pl-[calc(1.5rem+1.5rem+1.25rem+1.5rem)]">
+              <p className="text-[#8B7E6E] leading-relaxed mb-6">{s.description}</p>
+              <div className="flex flex-wrap gap-2">
+                {s.features.map((f) => (
+                  <span key={f} className="text-xs px-3 py-1.5 rounded-full border border-[#9CAF88]/30 text-[#9CAF88] font-mono">
+                    {f}
+                  </span>
+                ))}
               </div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.div>
+    </div>
   );
 }
 
+/* ─── Page ───────────────────────────────────────────────────────────────── */
 export default function ServicesPageContent() {
+  const [open, setOpen] = useState<string | null>(null);      // mobile accordion
+  const [active, setActive] = useState(0);                    // desktop tab
+
+  const current = services[active];
+
   return (
-    <>
-      {/* Hero */}
-      <section className="pt-36 pb-20 bg-beige relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-sage/10 rounded-full blur-3xl pointer-events-none translate-x-1/2 -translate-y-1/2" />
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <AnimatedSection>
-            <span className="inline-block text-sage text-sm font-medium uppercase tracking-widest mb-4">
-              What We Do
-            </span>
-          </AnimatedSection>
-          <AnimatedSection delay={0.1}>
-            <h1 className="font-heading text-5xl md:text-6xl font-bold text-foreground leading-tight mb-6 max-w-3xl">
-              Services designed to{" "}
-              <span className="text-gradient">move the needle</span>.
-            </h1>
-          </AnimatedSection>
-          <AnimatedSection delay={0.15}>
-            <p className="text-stone text-xl leading-relaxed max-w-2xl">
-              From brand-building to performance marketing — every service is
-              delivered with craft, data, and a relentless focus on results.
-            </p>
-          </AnimatedSection>
+    <div className="bg-[#0D0B08] min-h-screen">
+
+      {/* ── Hero with 3D canvas ── */}
+      <div className="relative overflow-hidden" style={{ minHeight: "68vh" }}>
+        <div className="absolute inset-0 pointer-events-none">
+          <ServicesCanvas />
+        </div>
+        <div
+          className="absolute bottom-0 left-0 right-0 h-40 pointer-events-none"
+          style={{ background: "linear-gradient(to bottom, transparent, #0D0B08)" }}
+        />
+        <section className="relative z-10 pt-40 pb-24 px-6 max-w-7xl mx-auto">
+          <p className="text-[#9CAF88] text-xs font-mono uppercase tracking-[0.2em] mb-6">What We Do</p>
+          <h1
+            className="font-bold text-[#F5F1E8] leading-none mb-8"
+            style={{ fontSize: "clamp(3rem, 8vw, 8rem)", letterSpacing: "-0.04em" }}
+          >
+            Services designed
+            <br />
+            <em className="text-[#9CAF88] not-italic">to move the needle.</em>
+          </h1>
+          <p className="text-[#8B7E6E] text-lg max-w-md leading-relaxed">
+            Every service delivered with craft, data, and a relentless focus on results.
+          </p>
+        </section>
+      </div>
+
+      {/* ══════════════════════════════════════════════════════════════════
+          DESKTOP — side-by-side tab layout
+          ══════════════════════════════════════════════════════════════════ */}
+      <section className="hidden md:block border-t border-[#F5F1E8]/10">
+        <div className="max-w-7xl mx-auto grid grid-cols-[1fr_1.7fr]" style={{ minHeight: "75vh" }}>
+
+          {/* Left: service picker */}
+          <div className="border-r border-[#F5F1E8]/10 flex flex-col justify-center py-12">
+            {services.map((s, i) => (
+              <button
+                key={s.num}
+                onClick={() => setActive(i)}
+                className="relative text-left px-8 py-5 flex items-baseline gap-6 transition-all duration-300 group border-b border-[#F5F1E8]/06 last:border-b-0"
+              >
+                {/* Active left bar */}
+                <div
+                  className="absolute left-0 top-0 bottom-0 w-0.5 rounded-r transition-all duration-300"
+                  style={{ background: s.color, opacity: active === i ? 1 : 0 }}
+                />
+
+                <span
+                  className="font-mono text-xs flex-shrink-0 transition-colors duration-200"
+                  style={{ color: active === i ? s.color : "#4A4540" }}
+                >
+                  {s.num}
+                </span>
+
+                <div className="flex-1">
+                  <div
+                    className="font-bold leading-tight transition-all duration-300"
+                    style={{
+                      fontSize: active === i ? "clamp(1.3rem, 1.8vw, 1.7rem)" : "clamp(1rem, 1.5vw, 1.3rem)",
+                      letterSpacing: "-0.03em",
+                      color: active === i ? "#F5F1E8" : "#5A5450",
+                    }}
+                  >
+                    {s.title}
+                  </div>
+                  <div
+                    className="text-sm mt-0.5 transition-opacity duration-300"
+                    style={{ color: "#8B7E6E", opacity: active === i ? 1 : 0 }}
+                  >
+                    {s.tagline}
+                  </div>
+                </div>
+
+                {active === i && (
+                  <span className="text-[#9CAF88] text-sm flex-shrink-0">→</span>
+                )}
+              </button>
+            ))}
+          </div>
+
+          {/* Right: active service detail */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={active}
+              initial={{ opacity: 0, x: 24 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -16 }}
+              transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+              className="relative px-14 py-16 flex flex-col justify-center overflow-hidden"
+            >
+              {/* Giant watermark number */}
+              <div
+                className="absolute right-8 top-8 font-bold text-[#F5F1E8] leading-none pointer-events-none select-none"
+                style={{ fontSize: "min(22vw, 18rem)", letterSpacing: "-0.06em", opacity: 0.03 }}
+              >
+                {current.num}
+              </div>
+
+              {/* Delivery badge */}
+              <div className="flex items-center gap-3 mb-8">
+                <span
+                  className="inline-flex items-center gap-2 border rounded-full px-4 py-1.5 text-xs font-mono uppercase tracking-widest"
+                  style={{ borderColor: `${current.color}40`, color: current.color }}
+                >
+                  <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: current.color }} />
+                  {current.deliveryTime}
+                </span>
+              </div>
+
+              {/* Tagline */}
+              <p
+                className="font-mono text-xs uppercase tracking-[0.2em] mb-4"
+                style={{ color: current.color }}
+              >
+                {current.tagline}
+              </p>
+
+              {/* Heading */}
+              <h2
+                className="font-bold text-[#F5F1E8] mb-6 leading-tight"
+                style={{ fontSize: "clamp(2.2rem, 3.5vw, 4rem)", letterSpacing: "-0.04em" }}
+              >
+                {current.title}
+              </h2>
+
+              {/* Description */}
+              <p className="text-[#8B7E6E] text-lg leading-relaxed mb-10 max-w-lg">
+                {current.description}
+              </p>
+
+              {/* Feature chips */}
+              <div className="flex flex-wrap gap-2.5 mb-12">
+                {current.features.map((f) => (
+                  <span
+                    key={f}
+                    className="text-xs px-4 py-2 rounded-full border font-mono transition-colors duration-200"
+                    style={{ borderColor: `${current.color}35`, color: current.color }}
+                  >
+                    {f}
+                  </span>
+                ))}
+              </div>
+
+              {/* CTA */}
+              <div>
+                <Link
+                  href="/contact"
+                  className="inline-block font-bold px-8 py-4 rounded-full text-sm uppercase tracking-widest transition-colors duration-200 text-[#0D0B08]"
+                  style={{ background: current.color }}
+                  onMouseEnter={e => (e.currentTarget.style.background = "#F5F1E8")}
+                  onMouseLeave={e => (e.currentTarget.style.background = current.color)}
+                >
+                  Start This Service →
+                </Link>
+              </div>
+            </motion.div>
+          </AnimatePresence>
         </div>
       </section>
 
-      {/* Services accordion */}
-      <section className="py-16 bg-beige">
-        <div className="max-w-4xl mx-auto px-6 space-y-4">
-          {services.map((service, i) => (
-            <AnimatedSection key={service.id} delay={i * 0.07}>
-              <ServiceCard service={service} />
-            </AnimatedSection>
-          ))}
-        </div>
+      {/* ══════════════════════════════════════════════════════════════════
+          MOBILE — accordion
+          ══════════════════════════════════════════════════════════════════ */}
+      <section className="md:hidden border-t border-[#F5F1E8]/10">
+        {services.map((s) => (
+          <AccordionItem
+            key={s.num}
+            s={s}
+            open={open === s.num}
+            onToggle={() => setOpen(open === s.num ? null : s.num)}
+          />
+        ))}
       </section>
 
-      <CTASection />
-    </>
+      {/* ── CTA ── */}
+      <section className="py-32 px-6 text-center border-t border-[#F5F1E8]/10">
+        <h2
+          className="font-bold text-[#F5F1E8] mb-8"
+          style={{ fontSize: "clamp(2rem, 5vw, 5rem)", letterSpacing: "-0.04em" }}
+        >
+          Ready to start?
+        </h2>
+        <Link
+          href="/contact"
+          className="inline-block bg-[#9CAF88] text-[#0D0B08] font-bold px-10 py-4 rounded-full text-sm uppercase tracking-widest hover:bg-[#F5F1E8] transition-colors duration-200"
+        >
+          Let's Talk →
+        </Link>
+      </section>
+    </div>
   );
 }

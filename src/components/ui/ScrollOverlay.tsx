@@ -1,233 +1,333 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowUpRight, ArrowDownRight } from "lucide-react";
 import { useScrollProgress } from "@/hooks/useScrollProgress";
 
-interface SceneContent {
-  tag: string;
-  headline: React.ReactNode;
-  sub: string;
-  cta?: { label: string; href: string; primary?: boolean };
-  extras?: React.ReactNode;
-}
-
-const SCENES: SceneContent[] = [
-  // 0 — Hero (progress 0.00–0.18)
-  {
-    tag: "Premium Marketing Agency · Mumbai, India",
-    headline: (
-      <>
-        We build brands
-        <br />
-        <span className="italic text-[#9CAF88]">that command</span>
-        <br />
-        attention.
-      </>
-    ),
-    sub: "Strategy, design & performance marketing for ambitious Indian brands.",
-    cta: { label: "View Our Work", href: "/work" },
-  },
-  // 1 — About (progress 0.18–0.38)
-  {
-    tag: "About ChronoGrowth",
-    headline: (
-      <>
-        A decade of building
-        <br />
-        <span className="italic text-[#9CAF88]">India&apos;s boldest</span>
-        <br />
-        brands.
-      </>
-    ),
-    sub: "From brand identity to full-stack digital marketing, we partner with ambitious companies that want to lead their market.",
-    extras: (
-      <div className="flex gap-10 mt-8">
-        {[["150+", "Brands"], ["12", "Industries"], ["4×", "Awards"]].map(([num, label]) => (
-          <div key={label}>
-            <div className="font-heading text-3xl font-bold text-[#F5F1E8]">{num}</div>
-            <div className="text-[#9CAF88] text-xs uppercase tracking-widest mt-1">{label}</div>
-          </div>
-        ))}
-      </div>
-    ),
-  },
-  // 2 — Services (progress 0.38–0.62)
-  {
-    tag: "What We Do",
-    headline: (
-      <>
-        Everything your
-        <br />
-        <span className="italic text-[#9CAF88]">brand needs</span>
-        <br />
-        to grow.
-      </>
-    ),
-    sub: "End-to-end marketing across strategy, creative, and performance channels.",
-    extras: (
-      <ul className="mt-8 grid grid-cols-2 gap-x-8 gap-y-3">
-        {["Brand Strategy", "Creative Design", "Performance Marketing", "Content Creation", "Social Media", "SEO & Growth"].map((s) => (
-          <li key={s} className="flex items-center gap-2 text-[#F5F1E8]/80 text-sm">
-            <span className="w-1 h-1 rounded-full bg-[#9CAF88] inline-block" />
-            {s}
-          </li>
-        ))}
-      </ul>
-    ),
-    cta: { label: "All Services", href: "/services" },
-  },
-  // 3 — Work (progress 0.62–0.82)
-  {
-    tag: "Featured Work",
-    headline: (
-      <>
-        Projects we&apos;re
-        <br />
-        <span className="italic text-[#9CAF88]">proud of.</span>
-      </>
-    ),
-    sub: "A selection of campaigns, identities, and digital experiences built for market leaders.",
-    extras: (
-      <div className="mt-8 flex flex-wrap gap-3">
-        {["Verdant Rebrand", "Lumina Launch", "Artisan Co.", "Horizon Fin", "Bloom Beauty", "Nexus SaaS"].map((name) => (
-          <span key={name} className="text-xs uppercase tracking-widest text-[#9CAF88] border border-[#9CAF88]/30 px-3 py-1 rounded-full">
-            {name}
-          </span>
-        ))}
-      </div>
-    ),
-    cta: { label: "See All Work", href: "/work" },
-  },
-  // 4 — Contact (progress 0.82–1.00)
-  {
-    tag: "Let&apos;s Talk",
-    headline: (
-      <>
-        Ready to
-        <br />
-        <span className="italic text-[#9CAF88]">grow?</span>
-      </>
-    ),
-    sub: "Tell us about your brand and we'll craft a strategy that delivers real results.",
-    cta: { label: "Start a Project", href: "/contact", primary: true },
-    extras: (
-      <a
-        href="mailto:hello@chronogrowth.in"
-        className="mt-4 flex items-center gap-2 text-[#9CAF88] hover:text-[#B8C9A8] transition-colors text-sm"
-      >
-        hello@chronogrowth.in
-        <ArrowUpRight size={12} />
-      </a>
-    ),
-  },
+/* ─────────────────────────────────────────────────────────────────────────
+   Scene ranges — aligned with camera waypoints in WorldCanvas
+   ───────────────────────────────────────────────────────────────────────── */
+const SCENES: [number, number][] = [
+  [0.00, 0.20],  // 0 — Universe: "infinite possibilities"
+  [0.20, 0.44],  // 1 — Galaxy approach: "enter the marketing galaxy"
+  [0.44, 0.64],  // 2 — Galaxy entry: discovery
+  [0.64, 0.84],  // 3 — Performance: stats, graph, counters
+  [0.84, 1.01],  // 4 — CTA: "launch your brand"
 ];
 
-const SCENE_RANGES = [
-  [0.0, 0.18],
-  [0.18, 0.38],
-  [0.38, 0.62],
-  [0.62, 0.82],
-  [0.82, 1.01],
-];
+const HALF_FADE = 0.030;
 
-function sceneOpacity(progress: number, index: number): number {
-  const [start, end] = SCENE_RANGES[index];
-  const fadeZone = 0.06;
-  if (progress < start - fadeZone || progress > end + fadeZone) return 0;
-  if (progress < start) return (progress - (start - fadeZone)) / fadeZone;
-  if (progress > end) return 1 - (progress - end) / fadeZone;
-  return 1;
+function sceneOpacity(p: number, i: number): number {
+  const [s, e] = SCENES[i];
+  const isFirst = s === 0;
+  const isLast  = e >= 1;
+
+  if (p < s - HALF_FADE || p > e + HALF_FADE) return 0;
+
+  let o = 1;
+  if (!isFirst && p < s + HALF_FADE)
+    o = Math.min(o, (p - (s - HALF_FADE)) / (2 * HALF_FADE));
+  if (!isLast && p > e - HALF_FADE)
+    o = Math.min(o, ((e + HALF_FADE) - p) / (2 * HALF_FADE));
+  return Math.max(0, o);
 }
 
+function activeScene(p: number): number {
+  let best = 0, bestO = -1;
+  for (let i = 0; i < SCENES.length; i++) {
+    const o = sceneOpacity(p, i);
+    if (o > bestO) { bestO = o; best = i; }
+  }
+  return best;
+}
+
+/* count a stat based on scroll progress within a phase */
+function countUp(p: number, max: number, phaseStart: number, phaseEnd: number): number {
+  if (p <= phaseStart) return 0;
+  if (p >= phaseEnd)   return max;
+  const t = (p - phaseStart) / (phaseEnd - phaseStart);
+  return Math.round(max * easeOut(t));
+}
+
+function easeOut(t: number): number {
+  return 1 - Math.pow(1 - t, 3);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Main export
+   ───────────────────────────────────────────────────────────────────────── */
 export default function ScrollOverlay() {
   const progress = useScrollProgress();
+  const active   = activeScene(progress);
+  const opacities = SCENES.map((_, i) => sceneOpacity(progress, i));
+
+  // Stats that count up during phase 3 (0.64 → 0.84)
+  const roas       = countUp(progress, 4,    0.64, 0.80).toFixed(0);
+  const impressions= countUp(progress, 50,   0.64, 0.80);
+  const revenue    = countUp(progress, 2.8,  0.64, 0.80).toFixed(1);
+  const conversion = countUp(progress, 340,  0.64, 0.80);
+
+  // Graph bar heights in phase 3
+  const graphPct = progress < 0.64 ? 0 : progress > 0.84 ? 1 : (progress - 0.64) / 0.20;
+  const BARS = [18, 35, 28, 52, 44, 68, 57, 80, 72, 95];
 
   return (
-    <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
-      {/* Gradient backing for text readability */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#0D0B08]/80 via-transparent to-transparent pointer-events-none" />
-      {SCENES.map((scene, i) => {
-        const opacity = sceneOpacity(progress, i);
-        const translateY = opacity < 1 ? (progress < SCENE_RANGES[i][0] ? 30 : -20) : 0;
+    <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden select-none">
+      {/* Bottom gradient for text legibility */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{ background: "linear-gradient(to top, rgba(13,11,8,0.82) 0%, rgba(13,11,8,0.18) 38%, transparent 65%)" }}
+      />
 
-        return (
-          <div
-            key={i}
-            className="absolute inset-0 flex items-end pb-16 px-8 md:px-16 lg:px-24"
-            style={{
-              opacity,
-              transform: `translateY(${translateY}px)`,
-              transition: "opacity 0.5s ease, transform 0.5s ease",
-              pointerEvents: opacity > 0.5 ? "auto" : "none",
-            }}
+      {/* ══════════════════════════════════════════════════════════════════
+          SCENE 0 — UNIVERSE
+          ════════════════════════════════════════════════════════════════ */}
+      <ScenePanel opacity={opacities[0]}>
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-8">
+          <Tag>Performance Marketing · Mumbai, India</Tag>
+          <h1
+            className="font-bold text-[#F5F1E8] mb-6"
+            style={{ fontSize: "clamp(3rem, 8vw, 8rem)", letterSpacing: "-0.04em", lineHeight: 0.95 }}
           >
-            <div className="max-w-xl">
-              {/* Tag */}
-              <p className="text-[#9CAF88] uppercase tracking-[0.2em] text-xs mb-6 font-medium">
-                {scene.tag}
-              </p>
+            The universe is
+            <br />
+            <em className="text-[#9CAF88] not-italic">full of brands.</em>
+            <br />
+            Only few shine.
+          </h1>
+          <p className="text-[#F5F1E8]/50 text-base max-w-sm leading-relaxed">
+            Scroll to enter the marketing galaxy.
+          </p>
+          {/* Animated scroll hint */}
+          <div className="mt-10 flex flex-col items-center gap-2">
+            <div
+              className="w-px bg-[#9CAF88]/60 animate-pulse"
+              style={{ height: 40 }}
+            />
+            <span className="text-[#9CAF88]/50 text-[10px] font-mono uppercase tracking-widest">scroll</span>
+          </div>
+        </div>
+        <BigNum>01</BigNum>
+      </ScenePanel>
 
-              {/* Headline */}
-              <h2 className="font-heading text-[clamp(2.5rem,6vw,5rem)] font-bold text-[#F5F1E8] leading-[1.0] tracking-tight mb-4">
-                {scene.headline}
+      {/* ══════════════════════════════════════════════════════════════════
+          SCENE 1 — GALAXY APPROACH
+          ════════════════════════════════════════════════════════════════ */}
+      <ScenePanel opacity={opacities[1]}>
+        <div className="absolute inset-0 flex flex-col justify-end pb-20 px-10 md:px-20">
+          <Tag>The Marketing Galaxy</Tag>
+          <h2
+            className="font-bold text-[#F5F1E8] mb-5"
+            style={{ fontSize: "clamp(2.5rem, 6.5vw, 6.5rem)", letterSpacing: "-0.04em", lineHeight: 0.95 }}
+          >
+            Every great brand
+            <br />
+            <em className="text-[#9CAF88] not-italic">starts with a signal</em>
+            <br />
+            in the noise.
+          </h2>
+          <p className="text-[#F5F1E8]/50 text-base max-w-md leading-relaxed">
+            We find that signal, amplify it, and put your brand in orbit
+            around your audience.
+          </p>
+        </div>
+        <BigNum>02</BigNum>
+      </ScenePanel>
+
+      {/* ══════════════════════════════════════════════════════════════════
+          SCENE 2 — GALAXY ENTRY
+          ════════════════════════════════════════════════════════════════ */}
+      <ScenePanel opacity={opacities[2]}>
+        <div className="absolute inset-0 flex flex-col justify-end pb-20 px-10 md:px-20">
+          <div className="grid md:grid-cols-2 gap-8 w-full items-end">
+            <div>
+              <Tag>Entering Orbit</Tag>
+              <h2
+                className="font-bold text-[#F5F1E8] mb-5"
+                style={{ fontSize: "clamp(2.2rem, 5.5vw, 5.5rem)", letterSpacing: "-0.04em", lineHeight: 0.96 }}
+              >
+                Strategy, creative
+                <br />
+                <em className="text-[#9CAF88] not-italic">&amp; performance</em>
+                <br />
+                — unified.
               </h2>
-
-              {/* Sub */}
-              <p className="text-[#F5F1E8]/60 text-base leading-relaxed max-w-sm">
-                {scene.sub}
+              <p className="text-[#F5F1E8]/50 text-sm max-w-xs leading-relaxed">
+                Brand strategy to paid media to analytics — all in one orbit.
               </p>
-
-              {/* Extras */}
-              {scene.extras}
-
-              {/* CTA */}
-              {scene.cta && (
-                <Link
-                  href={scene.cta.href}
-                  className={
-                    scene.cta.primary
-                      ? "mt-8 inline-flex items-center gap-2 bg-[#9CAF88] text-[#0D0B08] text-sm font-semibold px-6 py-3 rounded-full hover:bg-[#B8C9A8] transition-colors"
-                      : "mt-8 inline-flex items-center gap-3 text-[#F5F1E8] text-sm font-medium hover:text-[#9CAF88] transition-colors group"
-                  }
-                >
-                  {scene.cta.label}
-                  <ArrowDownRight
-                    size={14}
-                    className={scene.cta.primary ? "" : "group-hover:translate-x-0.5 group-hover:translate-y-0.5 transition-transform"}
-                  />
-                </Link>
-              )}
             </div>
 
-            {/* Scene number indicator */}
-            <div className="absolute right-8 md:right-16 bottom-16 flex flex-col items-end gap-1">
-              <span className="text-[#9CAF88]/40 text-xs font-mono">
-                {String(i + 1).padStart(2, "0")} / {String(SCENES.length).padStart(2, "0")}
-              </span>
+            <div className="flex flex-col gap-3">
+              {[
+                ["01", "Brand Strategy"],
+                ["02", "Performance Marketing"],
+                ["03", "Creative Direction"],
+                ["04", "Analytics & Insights"],
+                ["05", "Web Design & Dev"],
+              ].map(([n, s]) => (
+                <div key={n} className="flex items-baseline gap-4 border-b border-[#F5F1E8]/08 pb-2">
+                  <span className="text-[#9CAF88] font-mono text-xs flex-shrink-0">{n}</span>
+                  <span className="text-[#F5F1E8]/75 text-sm">{s}</span>
+                </div>
+              ))}
             </div>
           </div>
-        );
-      })}
+        </div>
+        <BigNum>03</BigNum>
+      </ScenePanel>
 
-      {/* Scroll progress bar */}
-      <div className="absolute right-6 top-1/2 -translate-y-1/2 flex flex-col gap-2">
-        {SCENES.map((_, i) => {
-          const [start, end] = SCENE_RANGES[i];
-          const center = (start + end) / 2;
-          const isActive = Math.abs(progress - center) < (end - start) / 2 + 0.05;
-          return (
-            <div
-              key={i}
-              className="w-px rounded-full transition-all duration-300"
-              style={{
-                height: isActive ? 24 : 12,
-                background: isActive ? "#9CAF88" : "rgba(156,175,136,0.3)",
-              }}
+      {/* ══════════════════════════════════════════════════════════════════
+          SCENE 3 — PERFORMANCE
+          ════════════════════════════════════════════════════════════════ */}
+      <ScenePanel opacity={opacities[3]}>
+        <div className="absolute inset-0 flex flex-col justify-end pb-16 px-10 md:px-20">
+          <Tag>Real Results. Real Growth.</Tag>
+
+          {/* Animated graph */}
+          <div className="flex items-end gap-1.5 mb-8" style={{ height: 64 }}>
+            {BARS.map((h, i) => (
+              <div
+                key={i}
+                className="flex-1 rounded-t-sm transition-none"
+                style={{
+                  height: `${h * graphPct}%`,
+                  background: i === BARS.length - 1
+                    ? "#9CAF88"
+                    : `rgba(156,175,136,${0.25 + (i / BARS.length) * 0.55})`,
+                  transition: "height 0.05s linear",
+                  minHeight: graphPct > 0 ? 2 : 0,
+                }}
+              />
+            ))}
+          </div>
+
+          {/* Counters */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-2">
+            <Stat
+              value={`${roas}×`}
+              label="Average ROAS"
+              color="#9CAF88"
             />
-          );
-        })}
+            <Stat
+              value={`${impressions}M+`}
+              label="Impressions Delivered"
+              color="#B8C9A8"
+            />
+            <Stat
+              value={`₹${revenue}Cr`}
+              label="Revenue Generated"
+              color="#9CAF88"
+            />
+            <Stat
+              value={`${conversion}%`}
+              label="Avg. Conversion Lift"
+              color="#B8C9A8"
+            />
+          </div>
+        </div>
+        <BigNum>04</BigNum>
+      </ScenePanel>
+
+      {/* ══════════════════════════════════════════════════════════════════
+          SCENE 4 — CTA
+          ════════════════════════════════════════════════════════════════ */}
+      <ScenePanel opacity={opacities[4]}>
+        <div className="absolute inset-0 flex flex-col justify-end pb-20 px-10 md:px-20">
+          <Tag>Ready to Launch</Tag>
+          <h2
+            className="font-bold text-[#F5F1E8] mb-5"
+            style={{ fontSize: "clamp(2.8rem, 7vw, 7rem)", letterSpacing: "-0.04em", lineHeight: 0.95 }}
+          >
+            Put your brand
+            <br />
+            <em className="text-[#9CAF88] not-italic">in orbit.</em>
+          </h2>
+          <p className="text-[#F5F1E8]/50 text-base max-w-sm leading-relaxed mb-8">
+            Tell us about your brand and we&apos;ll craft a strategy that delivers results.
+          </p>
+          <div className="flex items-center gap-6 pointer-events-auto flex-wrap">
+            <Link
+              href="/contact"
+              className="bg-[#9CAF88] text-[#0D0B08] font-bold px-8 py-3.5 rounded-full text-sm uppercase tracking-widest hover:bg-[#F5F1E8] transition-colors duration-200"
+            >
+              Start a Project
+            </Link>
+            <a
+              href="mailto:hello@chronogrowth.in"
+              className="text-[#9CAF88]/70 text-sm hover:text-[#9CAF88] transition-colors duration-200 font-mono"
+            >
+              hello@chronogrowth.in ↗
+            </a>
+          </div>
+        </div>
+        <BigNum>05</BigNum>
+      </ScenePanel>
+
+      {/* ── Progress dots ── */}
+      <div className="absolute right-6 top-1/2 -translate-y-1/2 flex flex-col gap-3 items-center">
+        {SCENES.map((_, i) => (
+          <div
+            key={i}
+            className="rounded-full transition-all duration-500"
+            style={{
+              width:  active === i ? 5   : 3,
+              height: active === i ? 22  : 7,
+              background: active === i ? "#9CAF88" : "rgba(156,175,136,0.22)",
+            }}
+          />
+        ))}
       </div>
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Sub-components
+   ───────────────────────────────────────────────────────────────────────── */
+
+function ScenePanel({ children, opacity }: { children: React.ReactNode; opacity: number }) {
+  return (
+    <div
+      className="absolute inset-0"
+      style={{
+        opacity,
+        transition: "opacity 0.5s cubic-bezier(0.22,1,0.36,1)",
+        pointerEvents: opacity > 0.4 ? "auto" : "none",
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+
+function Tag({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="text-[#9CAF88] text-xs font-mono uppercase tracking-[0.22em] mb-5">
+      {children}
+    </p>
+  );
+}
+
+function BigNum({ children }: { children: React.ReactNode }) {
+  return (
+    <div
+      className="absolute top-16 right-10 md:right-20 font-bold text-[#F5F1E8] leading-none pointer-events-none"
+      style={{ fontSize: "clamp(5rem, 12vw, 11rem)", letterSpacing: "-0.06em", opacity: 0.035 }}
+    >
+      {children}
+    </div>
+  );
+}
+
+function Stat({ value, label, color }: { value: string; label: string; color: string }) {
+  return (
+    <div>
+      <div
+        className="font-bold leading-none mb-1"
+        style={{ fontSize: "clamp(2rem, 4.5vw, 4rem)", letterSpacing: "-0.04em", color }}
+      >
+        {value}
+      </div>
+      <div className="text-[#8B7E6E] text-[10px] uppercase tracking-widest">{label}</div>
     </div>
   );
 }

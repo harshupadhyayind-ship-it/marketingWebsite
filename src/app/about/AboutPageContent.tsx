@@ -1,70 +1,26 @@
 "use client";
 
-import { motion } from "framer-motion";
-import AnimatedSection from "@/components/ui/AnimatedSection";
-import CTASection from "@/components/sections/CTASection";
-import { Heart, Zap, Shield, Users } from "lucide-react";
+import { useRef } from "react";
+import dynamic from "next/dynamic";
+import Link from "next/link";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+
+const AboutCanvas = dynamic(() => import("@/components/three/AboutCanvas"), { ssr: false });
 
 const team = [
-  {
-    name: "Aryan Malhotra",
-    role: "Founder & Creative Director",
-    bio: "Former creative lead at Ogilvy. 12 years building brands across FMCG, tech, and lifestyle categories.",
-    initial: "A",
-  },
-  {
-    name: "Sanya Kapoor",
-    role: "Head of Strategy",
-    bio: "Ex-BCG consultant turned marketer. Brings rigorous analytical frameworks to every brand challenge.",
-    initial: "S",
-  },
-  {
-    name: "Rahul Dev",
-    role: "Lead Developer",
-    bio: "Full-stack engineer specialising in Next.js, Three.js, and performance-first web architecture.",
-    initial: "R",
-  },
-  {
-    name: "Meera Shah",
-    role: "Head of Paid Media",
-    bio: "₹50Cr+ in managed ad spend across Meta, Google, and programmatic channels.",
-    initial: "M",
-  },
-  {
-    name: "Kabir Nair",
-    role: "Content Director",
-    bio: "Writer, photographer, and storyteller. Content creator for 20+ brands across India.",
-    initial: "K",
-  },
-  {
-    name: "Priya Joshi",
-    role: "Brand Designer",
-    bio: "Visual identity specialist and Figma wizard. Has designed 60+ brand identities from scratch.",
-    initial: "P",
-  },
+  { name: "Aryan Malhotra",  role: "Founder & Creative Director", bio: "Former creative lead at Ogilvy. 12 years building brands across FMCG, tech, and lifestyle.", initial: "A" },
+  { name: "Sanya Kapoor",    role: "Head of Strategy",            bio: "Ex-BCG consultant turned marketer. Rigorous analytical frameworks for every brand challenge.", initial: "S" },
+  { name: "Rahul Dev",       role: "Lead Developer",              bio: "Full-stack engineer specialising in Next.js, Three.js, and performance-first web architecture.", initial: "R" },
+  { name: "Meera Shah",      role: "Head of Paid Media",          bio: "₹50Cr+ in managed ad spend across Meta, Google, and programmatic channels.", initial: "M" },
+  { name: "Kabir Nair",      role: "Content Director",            bio: "Writer, photographer, and storyteller. Content creator for 20+ brands across India.", initial: "K" },
+  { name: "Priya Joshi",     role: "Brand Designer",              bio: "Visual identity specialist and Figma wizard. 60+ brand identities designed from scratch.", initial: "P" },
 ];
 
-const values = [
-  {
-    icon: Heart,
-    title: "Craft First",
-    desc: "We believe great work is the best business strategy. Quality is non-negotiable.",
-  },
-  {
-    icon: Zap,
-    title: "Relentlessly Fast",
-    desc: "Speed is a competitive advantage. We move quickly without sacrificing quality.",
-  },
-  {
-    icon: Shield,
-    title: "Radically Honest",
-    desc: "We'll tell you what you need to hear, not just what you want to hear.",
-  },
-  {
-    icon: Users,
-    title: "Partner Mentality",
-    desc: "We treat your brand like it's ours. Long-term relationships, not transactions.",
-  },
+const stats = [
+  { val: "5+",   label: "Years of excellence"   },
+  { val: "120+", label: "Projects delivered"    },
+  { val: "40+",  label: "Clients who trust us"  },
+  { val: "12",   label: "Full-time specialists" },
 ];
 
 const milestones = [
@@ -76,202 +32,201 @@ const milestones = [
   { year: "2024", event: "Named one of India's Top 25 indie agencies" },
 ];
 
+const values = [
+  { title: "Craft First",       desc: "Great work is the best business strategy. Quality is non-negotiable." },
+  { title: "Relentlessly Fast", desc: "Speed is a competitive advantage. We move quickly without sacrificing quality." },
+  { title: "Radically Honest",  desc: "We'll tell you what you need to hear, not just what you want to hear." },
+  { title: "Partner Mentality", desc: "We treat your brand like it's ours. Long-term relationships, not transactions." },
+];
+
+/* ── Team card with 3D tilt ── */
+function TeamCard({ member }: { member: (typeof team)[0] }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const rawX = useMotionValue(0);
+  const rawY = useMotionValue(0);
+  const rotateX = useSpring(useTransform(rawY, [-0.5, 0.5], [6, -6]), { stiffness: 280, damping: 28 });
+  const rotateY = useSpring(useTransform(rawX, [-0.5, 0.5], [-6, 6]), { stiffness: 280, damping: 28 });
+
+  function onMouseMove(e: React.MouseEvent<HTMLDivElement>) {
+    if (!ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    rawX.set((e.clientX - rect.left) / rect.width - 0.5);
+    rawY.set((e.clientY - rect.top) / rect.height - 0.5);
+  }
+  function onMouseLeave() {
+    rawX.set(0);
+    rawY.set(0);
+  }
+
+  return (
+    <motion.div
+      ref={ref}
+      style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+      whileHover={{ backgroundColor: "#1A1710" }}
+      className="p-8 bg-[#0D0B08] transition-colors duration-200"
+      onMouseMove={onMouseMove}
+      onMouseLeave={onMouseLeave}
+    >
+      <div
+        className="w-14 h-14 rounded-full flex items-center justify-center font-bold text-xl mb-6"
+        style={{ backgroundColor: "#9CAF8820", color: "#9CAF88", transform: "translateZ(16px)" }}
+      >
+        {member.initial}
+      </div>
+      <div className="font-bold text-[#F5F1E8] mb-1" style={{ transform: "translateZ(8px)" }}>
+        {member.name}
+      </div>
+      <div className="text-[#9CAF88] text-xs font-mono mb-4">{member.role}</div>
+      <p className="text-[#8B7E6E] text-sm leading-relaxed">{member.bio}</p>
+    </motion.div>
+  );
+}
+
 export default function AboutPageContent() {
   return (
-    <>
-      {/* Hero */}
-      <section className="pt-36 pb-20 bg-beige relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-sage/8 rounded-full blur-3xl pointer-events-none translate-x-1/2 -translate-y-1/3" />
-        <div className="max-w-7xl mx-auto px-6 relative z-10 grid lg:grid-cols-2 gap-12 items-center">
-          <div>
-            <AnimatedSection>
-              <span className="inline-block text-sage text-sm font-medium uppercase tracking-widest mb-4">
-                Our Story
-              </span>
-            </AnimatedSection>
-            <AnimatedSection delay={0.1}>
-              <h1 className="font-heading text-5xl md:text-6xl font-bold text-foreground leading-tight mb-6">
-                Marketing that feels
-                <br />
-                like <span className="text-gradient">art</span>.
-              </h1>
-            </AnimatedSection>
-            <AnimatedSection delay={0.15}>
-              <p className="text-stone text-xl leading-relaxed mb-6">
-                ChronoGrowth was born from a simple frustration: most marketing
-                looks the same. We set out to prove that strategic thinking and
-                beautiful craft aren&apos;t mutually exclusive.
-              </p>
-            </AnimatedSection>
-            <AnimatedSection delay={0.2}>
-              <p className="text-stone leading-relaxed">
-                Founded in 2019, we&apos;ve grown from a two-person studio to a
-                full-service agency of 12 specialists — all united by a
-                relentless obsession with work that moves people and moves
-                needles.
-              </p>
-            </AnimatedSection>
-          </div>
+    <div className="bg-[#0D0B08] min-h-screen">
 
-          {/* Stat cards */}
-          <AnimatedSection delay={0.2} direction="right">
-            <div className="grid grid-cols-2 gap-4">
-              {[
-                { val: "5+", label: "Years", sub: "of excellence" },
-                { val: "120+", label: "Projects", sub: "delivered" },
-                { val: "40+", label: "Clients", sub: "trust us" },
-                { val: "12", label: "Specialists", sub: "in our team" },
-              ].map((s) => (
-                <motion.div
-                  key={s.label}
-                  whileHover={{ y: -4, rotateX: 3, rotateY: -3 }}
-                  transition={{ duration: 0.2 }}
-                  style={{ transformStyle: "preserve-3d" }}
-                  className="rounded-2xl bg-white border border-beige-dark p-6 text-center shadow-warm"
-                >
-                  <div className="font-heading text-4xl font-bold text-sage mb-1">{s.val}</div>
-                  <div className="font-semibold text-foreground text-sm">{s.label}</div>
-                  <div className="text-stone text-xs">{s.sub}</div>
-                </motion.div>
-              ))}
+      {/* ── Hero with 3D orrery canvas ── */}
+      <div className="relative overflow-hidden" style={{ minHeight: "72vh" }}>
+        <div className="absolute inset-0 pointer-events-none">
+          <AboutCanvas />
+        </div>
+        <div
+          className="absolute bottom-0 left-0 right-0 h-48 pointer-events-none"
+          style={{ background: "linear-gradient(to bottom, transparent, #0D0B08)" }}
+        />
+
+        <section className="relative z-10 pt-40 pb-24 px-6 max-w-7xl mx-auto">
+          <p className="text-[#9CAF88] text-xs font-mono uppercase tracking-[0.2em] mb-6">Our Story</p>
+          <h1
+            className="font-bold text-[#F5F1E8] leading-none mb-12"
+            style={{ fontSize: "clamp(3rem, 8vw, 8rem)", letterSpacing: "-0.04em" }}
+          >
+            Marketing that
+            <br />
+            feels like{" "}
+            <em className="text-[#9CAF88] not-italic">art.</em>
+          </h1>
+          <p className="text-[#8B7E6E] text-xl max-w-2xl leading-relaxed">
+            ChronoGrowth was born from a simple frustration: most marketing looks the same.
+            We set out to prove that strategic thinking and beautiful craft aren't mutually exclusive.
+          </p>
+        </section>
+      </div>
+
+      {/* ── Stats ── */}
+      <section className="border-t border-[#F5F1E8]/10 grid grid-cols-2 md:grid-cols-4">
+        {stats.map((s, i) => (
+          <div
+            key={s.label}
+            className={`px-8 py-12 ${i < stats.length - 1 ? "border-r border-[#F5F1E8]/10" : ""}`}
+          >
+            <div
+              className="font-bold text-[#9CAF88] mb-2"
+              style={{ fontSize: "clamp(2.5rem, 5vw, 5rem)", letterSpacing: "-0.04em" }}
+            >
+              {s.val}
             </div>
-          </AnimatedSection>
-        </div>
-      </section>
-
-      {/* Mission & Vision */}
-      <section className="py-20 bg-[#2C2416]">
-        <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-8">
-          <AnimatedSection direction="left">
-            <div className="rounded-3xl bg-[#3D3222] border border-[#4D4232] p-8 h-full">
-              <div className="text-sage text-sm font-medium uppercase tracking-widest mb-4">Our Mission</div>
-              <h2 className="font-heading text-3xl font-bold text-[#F5F1E8] mb-4">
-                To make brands impossible to ignore.
-              </h2>
-              <p className="text-[#8B7E6E] leading-relaxed">
-                We exist to help ambitious brands build a presence that commands
-                attention — through strategic creativity, disciplined execution,
-                and a genuine obsession with results.
-              </p>
-            </div>
-          </AnimatedSection>
-          <AnimatedSection direction="right" delay={0.1}>
-            <div className="rounded-3xl bg-sage/10 border border-sage/20 p-8 h-full">
-              <div className="text-sage text-sm font-medium uppercase tracking-widest mb-4">Our Vision</div>
-              <h2 className="font-heading text-3xl font-bold text-[#F5F1E8] mb-4">
-                India&apos;s most trusted creative growth partner.
-              </h2>
-              <p className="text-[#8B7E6E] leading-relaxed">
-                We&apos;re building a studio that India&apos;s best brands choose not
-                because we&apos;re the cheapest, but because we&apos;re the best —
-                and because we genuinely care about their success.
-              </p>
-            </div>
-          </AnimatedSection>
-        </div>
-      </section>
-
-      {/* Values */}
-      <section className="py-20 bg-beige">
-        <div className="max-w-7xl mx-auto px-6">
-          <AnimatedSection className="text-center mb-14">
-            <span className="inline-block text-sage text-sm font-medium uppercase tracking-widest mb-4">
-              How We Work
-            </span>
-            <h2 className="font-heading text-4xl font-bold text-foreground">
-              Principles that guide us.
-            </h2>
-          </AnimatedSection>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {values.map((v, i) => (
-              <AnimatedSection key={v.title} delay={i * 0.08}>
-                <motion.div
-                  whileHover={{ y: -6, rotateX: 4, rotateY: -4 }}
-                  transition={{ duration: 0.25 }}
-                  style={{ transformStyle: "preserve-3d" }}
-                  className="rounded-2xl bg-white border border-beige-dark p-6 shadow-warm text-center"
-                >
-                  <div className="w-12 h-12 rounded-xl bg-sage/15 flex items-center justify-center mx-auto mb-4">
-                    <v.icon size={20} className="text-sage" />
-                  </div>
-                  <h3 className="font-heading font-bold text-foreground mb-2">{v.title}</h3>
-                  <p className="text-stone text-sm leading-relaxed">{v.desc}</p>
-                </motion.div>
-              </AnimatedSection>
-            ))}
+            <div className="text-[#8B7E6E] text-sm">{s.label}</div>
           </div>
+        ))}
+      </section>
+
+      {/* ── Mission / Vision ── */}
+      <section className="py-24 px-6 max-w-7xl mx-auto grid md:grid-cols-2 gap-16 border-t border-[#F5F1E8]/10">
+        <div>
+          <p className="text-[#9CAF88] text-xs font-mono uppercase tracking-[0.2em] mb-6">Mission</p>
+          <h2
+            className="font-bold text-[#F5F1E8] mb-6"
+            style={{ fontSize: "clamp(1.5rem, 3vw, 3rem)", letterSpacing: "-0.03em" }}
+          >
+            To make brands impossible to ignore.
+          </h2>
+          <p className="text-[#8B7E6E] leading-relaxed">
+            We exist to help ambitious brands build a presence that commands attention —
+            through strategic creativity, disciplined execution, and a genuine obsession with results.
+          </p>
+        </div>
+        <div>
+          <p className="text-[#9CAF88] text-xs font-mono uppercase tracking-[0.2em] mb-6">Vision</p>
+          <h2
+            className="font-bold text-[#F5F1E8] mb-6"
+            style={{ fontSize: "clamp(1.5rem, 3vw, 3rem)", letterSpacing: "-0.03em" }}
+          >
+            India's most trusted creative growth partner.
+          </h2>
+          <p className="text-[#8B7E6E] leading-relaxed">
+            We're building a studio that India's best brands choose not because we're the cheapest,
+            but because we're the best — and because we genuinely care about their success.
+          </p>
         </div>
       </section>
 
-      {/* Team */}
-      <section className="py-20 bg-beige-dark">
-        <div className="max-w-7xl mx-auto px-6">
-          <AnimatedSection className="mb-14">
-            <span className="inline-block text-sage text-sm font-medium uppercase tracking-widest mb-4">
-              The Team
-            </span>
-            <h2 className="font-heading text-4xl font-bold text-foreground">
-              The people behind the work.
-            </h2>
-          </AnimatedSection>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {team.map((member, i) => (
-              <AnimatedSection key={member.name} delay={i * 0.07}>
-                <motion.div
-                  whileHover={{ y: -6 }}
-                  transition={{ duration: 0.25 }}
-                  className="rounded-2xl bg-white border border-beige-dark p-6 shadow-warm"
-                >
-                  <div className="flex items-center gap-4 mb-4">
-                    <div className="w-14 h-14 rounded-full bg-sage/20 flex items-center justify-center font-heading text-xl font-bold text-sage">
-                      {member.initial}
-                    </div>
-                    <div>
-                      <div className="font-heading font-bold text-foreground">{member.name}</div>
-                      <div className="text-sage text-xs font-medium">{member.role}</div>
-                    </div>
-                  </div>
-                  <p className="text-stone text-sm leading-relaxed">{member.bio}</p>
-                </motion.div>
-              </AnimatedSection>
-            ))}
-          </div>
+      {/* ── Values ── */}
+      <section className="border-t border-[#F5F1E8]/10">
+        <div className="px-6 py-12 max-w-7xl mx-auto">
+          <p className="text-[#9CAF88] text-xs font-mono uppercase tracking-[0.2em] mb-2">How We Work</p>
         </div>
-      </section>
-
-      {/* Timeline */}
-      <section className="py-20 bg-beige">
-        <div className="max-w-3xl mx-auto px-6">
-          <AnimatedSection className="text-center mb-14">
-            <span className="inline-block text-sage text-sm font-medium uppercase tracking-widest mb-4">
-              Our Journey
-            </span>
-            <h2 className="font-heading text-4xl font-bold text-foreground">
-              Building since 2019.
-            </h2>
-          </AnimatedSection>
-          <div className="relative">
-            <div className="absolute left-6 top-0 bottom-0 w-px bg-beige-darker" />
-            <div className="space-y-8">
-              {milestones.map((m, i) => (
-                <AnimatedSection key={m.year} delay={i * 0.07}>
-                  <div className="flex gap-6 items-start">
-                    <div className="w-12 h-12 rounded-full bg-sage/15 border-2 border-sage/30 flex items-center justify-center flex-shrink-0 relative z-10 bg-beige">
-                      <span className="text-sage font-bold text-xs">{m.year.slice(2)}</span>
-                    </div>
-                    <div className="pt-2.5">
-                      <div className="text-stone text-xs font-medium mb-0.5">{m.year}</div>
-                      <div className="font-semibold text-foreground">{m.event}</div>
-                    </div>
-                  </div>
-                </AnimatedSection>
-              ))}
+        {values.map((v, i) => (
+          <div
+            key={v.title}
+            className="border-t border-[#F5F1E8]/10 px-6 py-10 max-w-7xl mx-auto flex gap-8 items-start"
+          >
+            <span className="text-[#9CAF88] font-mono text-sm flex-shrink-0 pt-1">0{i + 1}</span>
+            <div>
+              <h3
+                className="font-bold text-[#F5F1E8] mb-2"
+                style={{ fontSize: "clamp(1.2rem, 2.5vw, 2rem)", letterSpacing: "-0.03em" }}
+              >
+                {v.title}
+              </h3>
+              <p className="text-[#8B7E6E] leading-relaxed max-w-xl">{v.desc}</p>
             </div>
           </div>
+        ))}
+      </section>
+
+      {/* ── Team — 3D tilt cards ── */}
+      <section className="py-24 px-6 max-w-7xl mx-auto border-t border-[#F5F1E8]/10">
+        <p className="text-[#9CAF88] text-xs font-mono uppercase tracking-[0.2em] mb-16">The Team</p>
+        <div
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-[#F5F1E8]/10"
+          style={{ perspective: "1000px" }}
+        >
+          {team.map((member) => (
+            <TeamCard key={member.name} member={member} />
+          ))}
         </div>
       </section>
 
-      <CTASection />
-    </>
+      {/* ── Timeline ── */}
+      <section className="py-24 px-6 max-w-3xl mx-auto border-t border-[#F5F1E8]/10">
+        <p className="text-[#9CAF88] text-xs font-mono uppercase tracking-[0.2em] mb-16">Our Journey</p>
+        <div className="space-y-0">
+          {milestones.map((m) => (
+            <div key={m.year} className="flex gap-8 py-6 border-b border-[#F5F1E8]/10">
+              <span className="text-[#9CAF88] font-mono text-sm flex-shrink-0 w-12">{m.year}</span>
+              <span className="text-[#F5F1E8] leading-relaxed">{m.event}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── CTA ── */}
+      <section className="py-32 px-6 text-center border-t border-[#F5F1E8]/10">
+        <h2
+          className="font-bold text-[#F5F1E8] mb-10"
+          style={{ fontSize: "clamp(2rem, 5vw, 5rem)", letterSpacing: "-0.04em" }}
+        >
+          Let's build together.
+        </h2>
+        <Link
+          href="/contact"
+          className="inline-block bg-[#9CAF88] text-[#0D0B08] font-bold px-10 py-4 rounded-full text-sm uppercase tracking-widest hover:bg-[#F5F1E8] transition-colors duration-200"
+        >
+          Start a Project →
+        </Link>
+      </section>
+    </div>
   );
 }

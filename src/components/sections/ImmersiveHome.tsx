@@ -36,7 +36,7 @@ function NavCloseButton() {
 
 export default function ImmersiveHome() {
   return (
-    <div id="scroll-container" style={{ height: "600vh" }}>
+    <div id="scroll-container" style={{ height: "800vh" }}>
       <div
         className="sticky top-0 overflow-hidden relative"
         style={{ height: "100vh", background: "#0D0B08" }}

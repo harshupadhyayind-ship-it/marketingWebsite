@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 
 const NAV_LINKS = [
+  { label: "home",     href: "/"         },
   { label: "services", href: "/services" },
   { label: "work",     href: "/work"     },
   { label: "about",    href: "/about"    },
@@ -20,6 +21,7 @@ const SOCIAL_LINKS = [
 
 // Swap picsum URLs with your real images when ready
 const LINK_THEME: Record<string, { image: string }> = {
+  home:      { image: "https://picsum.photos/seed/home/1600/900"      },
   services:  { image: "https://picsum.photos/seed/services/1600/900"  },
   work:      { image: "https://picsum.photos/seed/work/1600/900"      },
   about:     { image: "https://picsum.photos/seed/about/1600/900"     },
@@ -32,9 +34,9 @@ const LINK_THEME: Record<string, { image: string }> = {
 const DRAWER_WIDTH = "20rem";
 
 export default function Navbar() {
-  const [open, setOpen]       = useState(false);
+  const [open, setOpen] = useState(false);
   const [hovered, setHovered] = useState<string | null>(null);
-  const pathname              = usePathname();
+  const pathname = usePathname();
 
   useEffect(() => { setOpen(false); }, [pathname]);
 
@@ -47,10 +49,10 @@ export default function Navbar() {
   useEffect(() => {
     if (!open) return;
     const close = () => setOpen(false);
-    window.addEventListener("wheel",     close, { passive: true });
+    window.addEventListener("wheel", close, { passive: true });
     window.addEventListener("touchmove", close, { passive: true });
     return () => {
-      window.removeEventListener("wheel",     close);
+      window.removeEventListener("wheel", close);
       window.removeEventListener("touchmove", close);
     };
   }, [open]);
@@ -205,27 +207,18 @@ function NavItem({
       initial={{ opacity: 0, x: -16 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.4, delay, ease: [0.22, 1, 0.36, 1] }}
-      className={`flex items-center justify-between group cursor-pointer ${
-        small ? "py-1" : "py-1.5"
-      }`}
+      className={`flex items-center justify-between group cursor-pointer ${small ? "py-1" : "py-1.5"
+        }`}
       onHoverStart={() => onHover(label)}
-      onHoverEnd={()  => onHover(null)}
+      onHoverEnd={() => onHover(null)}
     >
       <motion.span
-        className={`font-bold leading-tight tracking-tight ${
-          small ? "text-xl" : "text-[2.25rem]"
-        } ${active ? "text-[#9CAF88]" : "text-[#0D0B08]"}`}
+        className={`font-bold leading-tight tracking-tight ${small ? "text-xl" : "text-[2.25rem]"
+          } ${active ? "text-[#9CAF88]" : "text-[#0D0B08]"}`}
         whileHover={{ x: 8 }}
         transition={{ duration: 0.2, ease: "easeOut" }}
       >
         {label}
-      </motion.span>
-      <motion.span
-        className="text-[#0D0B08]/40 text-xs font-mono"
-        whileHover={{ x: 4 }}
-        transition={{ duration: 0.2 }}
-      >
-        →
       </motion.span>
     </motion.div>
   );
