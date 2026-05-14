@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { allProjects, type Project } from "@/lib/projects-data";
+import TiltCard from "@/components/ui/TiltCard";
 
 const allTags = ["All", ...Array.from(new Set(allProjects.flatMap((p) => p.tags)))];
 
@@ -15,13 +16,13 @@ function ProjectRow({ project, index }: { project: Project; index: number }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -10 }}
-      transition={{ duration: 0.4, delay: index * 0.05 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.4, delay: index * 0.05, ease: [0.22, 1, 0.36, 1] }}
     >
       <Link href={`/work/${project.slug}`}>
         <div
-          className="group relative border-b border-[#0A0A0F]/08 py-8 md:py-10 cursor-pointer"
+          className="group relative border-b border-[#0A0A0F]/08 py-8 md:py-10 cursor-pointer overflow-hidden"
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}
         >
@@ -31,6 +32,15 @@ function ProjectRow({ project, index }: { project: Project; index: number }) {
             animate={{ opacity: hovered ? 1 : 0 }}
             transition={{ duration: 0.25 }}
             style={{ background: `${project.color}08` }}
+          />
+
+          {/* Red left-border accent that scales in on hover */}
+          <motion.div
+            className="absolute left-0 top-0 w-0.5 bg-[#E63327] pointer-events-none"
+            style={{ height: "100%" }}
+            initial={{ scaleY: 0 }}
+            animate={{ scaleY: hovered ? 1 : 0 }}
+            transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
           />
 
           <div className="relative flex flex-col md:flex-row md:items-center gap-4 md:gap-0">
@@ -105,8 +115,7 @@ function FeaturedCard({ project }: { project: Project }) {
       className="mb-2"
     >
       <Link href={`/work/${project.slug}`}>
-        <div className="group relative overflow-hidden rounded-2xl border border-[#0A0A0F]/08 cursor-pointer"
-             style={{ minHeight: 420 }}>
+        <TiltCard className="relative overflow-hidden rounded-2xl border border-[#0A0A0F]/08 cursor-pointer">
           {/* Colour field background */}
           <div
             className="absolute inset-0 transition-transform duration-700 group-hover:scale-105"
@@ -182,7 +191,7 @@ function FeaturedCard({ project }: { project: Project }) {
               </div>
             </div>
           </div>
-        </div>
+        </TiltCard>
       </Link>
     </motion.div>
   );
@@ -298,10 +307,10 @@ export default function WorkPageContent() {
               <ArrowUpRight size={14} />
             </Link>
             <a
-              href="mailto:hello@chronogrowth.in"
+              href="mailto:hello@branddaid.com"
               className="text-[#0A0A0F]/40 text-sm font-mono hover:text-[#E63327] transition-colors"
             >
-              hello@chronogrowth.in
+              hello@branddaid.com
             </a>
           </div>
         </div>

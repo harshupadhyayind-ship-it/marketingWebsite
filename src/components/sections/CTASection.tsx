@@ -50,10 +50,10 @@ export default function CTASection() {
 
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
               <a
-                href="mailto:hello@chronogrowth.in"
+                href="mailto:hello@branddaid.com"
                 className="text-label text-[#8B7E6E] hover:text-[#E63327] transition-colors border-b border-[#4D4232] hover:border-[#E63327] pb-0.5"
               >
-                hello@chronogrowth.in
+                hello@branddaid.com
               </a>
 
               <Link

@@ -1,0 +1,11 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="200" fill="#E63327"/>
+  <!-- Upper outer triangle (pointing up) -->
+  <path d="M100 28 L168 108 L32 108 Z" stroke="white" stroke-width="8" stroke-linejoin="round" fill="none"/>
+  <!-- Upper inner triangle (pointing up) -->
+  <path d="M100 48 L148 104 L52 104 Z" stroke="white" stroke-width="7" stroke-linejoin="round" fill="none"/>
+  <!-- Lower outer downward triangle -->
+  <path d="M32 118 L168 118 L100 168 Z" stroke="white" stroke-width="8" stroke-linejoin="round" fill="none"/>
+  <!-- Lower inner small downward triangle -->
+  <path d="M54 122 L146 122 L100 152 Z" stroke="white" stroke-width="6" stroke-linejoin="round" fill="none"/>
+</svg>

@@ -1,6 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { motion } from "framer-motion";
+import dynamic from "next/dynamic";
+import TiltCard from "@/components/ui/TiltCard";
+
+const HeroShapes = dynamic(() => import("@/components/three/HeroShapes"), { ssr: false });
 
 const team = [
   { name: "Aryan Malhotra",  role: "Founder & Creative Director", bio: "Former creative lead at Ogilvy. 12 years building brands across FMCG, tech, and lifestyle.", initial: "A" },
@@ -19,7 +24,7 @@ const stats = [
 ];
 
 const milestones = [
-  { year: "2019", event: "ChronoGrowth founded in Mumbai" },
+  { year: "2019", event: "BRANDD-AID founded in Mumbai" },
   { year: "2020", event: "First 10 clients — 100% from referrals" },
   { year: "2021", event: "Launched in-house content studio" },
   { year: "2022", event: "Crossed ₹1Cr in managed media spend" },
@@ -37,14 +42,14 @@ const values = [
 /* ── Team card ── */
 function TeamCard({ member }: { member: (typeof team)[0] }) {
   return (
-    <div className="p-8 bg-white border border-[#0A0A0F]/08 hover:shadow-sm transition-shadow duration-200">
+    <TiltCard className="relative p-8 bg-white border border-[#0A0A0F]/08 hover:shadow-sm transition-shadow duration-200">
       <div className="w-14 h-14 rounded-full flex items-center justify-center font-bold text-xl mb-6 bg-[#E63327]/10 text-[#E63327]">
         {member.initial}
       </div>
       <div className="font-bold text-[#0A0A0F] mb-1">{member.name}</div>
       <div className="text-[#E63327] text-xs font-mono mb-4">{member.role}</div>
       <p className="text-[#0A0A0F]/55 text-sm leading-relaxed">{member.bio}</p>
-    </div>
+    </TiltCard>
   );
 }
 
@@ -53,30 +58,46 @@ export default function AboutPageContent() {
     <div className="bg-white min-h-screen">
 
       {/* ── Page header ── */}
-      <section className="pt-40 pb-20 px-6 md:px-10 max-w-7xl mx-auto">
-        <p className="text-[#E63327] text-[10px] font-mono uppercase tracking-[0.25em] mb-6">
-          Our Story
-        </p>
-        <h1
-          className="font-bold text-[#0A0A0F] leading-none mb-10"
-          style={{ fontSize: "clamp(3rem, 8vw, 8rem)", letterSpacing: "-0.04em" }}
-        >
-          Marketing that
-          <br />
-          feels like{" "}
-          <em className="text-[#E63327] not-italic">art.</em>
-        </h1>
-        <p className="text-[#0A0A0F]/55 text-xl max-w-2xl leading-relaxed">
-          ChronoGrowth was born from a simple frustration: most marketing looks the same.
-          We set out to prove that strategic thinking and beautiful craft aren't mutually exclusive.
-        </p>
+      <section className="relative pt-40 pb-20 overflow-hidden">
+        {/* Three.js canvas background */}
+        <div className="absolute inset-0 opacity-30 pointer-events-none">
+          <HeroShapes />
+        </div>
+        {/* White gradient fade at the bottom */}
+        <div
+          className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none"
+          style={{ background: "linear-gradient(to bottom, transparent, #ffffff)" }}
+        />
+        {/* Text on top */}
+        <div className="relative z-10 px-6 md:px-10 max-w-7xl mx-auto">
+          <p className="text-[#E63327] text-[10px] font-mono uppercase tracking-[0.25em] mb-6">
+            Our Story
+          </p>
+          <h1
+            className="font-bold text-[#0A0A0F] leading-none mb-10"
+            style={{ fontSize: "clamp(3rem, 8vw, 8rem)", letterSpacing: "-0.04em" }}
+          >
+            Marketing that
+            <br />
+            feels like{" "}
+            <em className="text-[#E63327] not-italic">art.</em>
+          </h1>
+          <p className="text-[#0A0A0F]/55 text-xl max-w-2xl leading-relaxed">
+            BRANDD-AID was born from a simple frustration: most marketing looks the same.
+            We set out to prove that strategic thinking and beautiful craft aren't mutually exclusive.
+          </p>
+        </div>
       </section>
 
       {/* ── Stats strip ── */}
       <section className="border-t border-[#0A0A0F]/08 grid grid-cols-2 md:grid-cols-4">
         {stats.map((s, i) => (
-          <div
+          <motion.div
             key={s.label}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
             className={`px-8 py-12${i < stats.length - 1 ? " border-r border-[#0A0A0F]/08" : ""}`}
           >
             <div
@@ -86,7 +107,7 @@ export default function AboutPageContent() {
               {s.val}
             </div>
             <div className="text-[#0A0A0F]/55 text-sm">{s.label}</div>
-          </div>
+          </motion.div>
         ))}
       </section>
 
@@ -132,8 +153,12 @@ export default function AboutPageContent() {
           </p>
         </div>
         {values.map((v, i) => (
-          <div
+          <motion.div
             key={v.title}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: i * 0.07, ease: [0.22, 1, 0.36, 1] }}
             className="border-t border-[#0A0A0F]/08 px-6 md:px-10 py-10 max-w-7xl mx-auto flex gap-8 items-start"
           >
             <span className="text-[#E63327] font-mono text-sm flex-shrink-0 pt-1">0{i + 1}</span>
@@ -146,7 +171,7 @@ export default function AboutPageContent() {
               </h3>
               <p className="text-[#0A0A0F]/55 leading-relaxed max-w-xl">{v.desc}</p>
             </div>
-          </div>
+          </motion.div>
         ))}
       </section>
 
@@ -168,11 +193,18 @@ export default function AboutPageContent() {
           Our Journey
         </p>
         <div className="space-y-0">
-          {milestones.map((m) => (
-            <div key={m.year} className="flex gap-8 py-6 border-b border-[#0A0A0F]/08">
+          {milestones.map((m, i) => (
+            <motion.div
+              key={m.year}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.45, delay: i * 0.06, ease: [0.22, 1, 0.36, 1] }}
+              className="flex gap-8 py-6 border-b border-[#0A0A0F]/08"
+            >
               <span className="text-[#E63327] font-mono text-sm flex-shrink-0 w-12">{m.year}</span>
               <span className="text-[#0A0A0F] leading-relaxed">{m.event}</span>
-            </div>
+            </motion.div>
           ))}
         </div>
       </section>

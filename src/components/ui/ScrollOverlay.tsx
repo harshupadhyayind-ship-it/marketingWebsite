@@ -71,7 +71,7 @@ export default function ScrollOverlay() {
           <div className="flex items-center gap-3 mb-8">
             <span className="h-px w-10 bg-[#E63327]" />
             <span className="text-[#E63327] text-[10px] font-mono uppercase tracking-[0.25em]">
-              Performance Marketing Agency
+              Marketing That Elevates
             </span>
             <span className="h-px w-10 bg-[#E63327]" />
           </div>
@@ -212,10 +212,10 @@ export default function ScrollOverlay() {
               Start a Project
             </Link>
             <a
-              href="mailto:hello@chronogrowth.in"
+              href="mailto:hello@branddaid.com"
               className="text-[#0A0A0F]/45 text-sm hover:text-[#E63327] transition-colors duration-200 font-mono tracking-wider"
             >
-              hello@chronogrowth.in ↗
+              hello@branddaid.com ↗
             </a>
           </div>
         </div>

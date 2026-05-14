@@ -5,6 +5,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { motion } from "framer-motion";
+import dynamic from "next/dynamic";
+
+const HeroShapes = dynamic(() => import("@/components/three/HeroShapes"), { ssr: false });
 
 const schema = z.object({
   name:    z.string().min(2, "Name must be at least 2 characters"),
@@ -23,6 +26,24 @@ const budgetOptions = [
   "₹3L – ₹10L",
   "₹10L+",
   "Let's discuss",
+];
+
+const contactDetails = [
+  {
+    label: "Email",
+    content: "hello@branddaid.com",
+    href: "mailto:hello@branddaid.com",
+  },
+  {
+    label: "Phone",
+    content: "+91 98765 43210",
+    href: "tel:+919876543210",
+  },
+  {
+    label: "Location",
+    content: "Mumbai, India",
+    href: null,
+  },
 ];
 
 export default function ContactPageContent() {
@@ -66,45 +87,60 @@ export default function ContactPageContent() {
 
           {/* LEFT — contact details */}
           <div className="flex flex-col gap-10">
-            <p className="text-[#0A0A0F]/55 text-lg leading-relaxed max-w-sm">
+            {/* Small floating HeroShapes canvas */}
+            <div
+              className="relative rounded-sm overflow-hidden border border-[#0A0A0F]/08"
+              style={{ height: 200 }}
+            >
+              <HeroShapes />
+            </div>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              className="text-[#0A0A0F]/55 text-lg leading-relaxed max-w-sm"
+            >
               Drop us a message and we'll put together a custom strategy for your brand.
-            </p>
+            </motion.p>
 
             <div className="space-y-8">
-              <div>
-                <p className="text-[#0A0A0F]/50 text-[10px] font-mono uppercase tracking-[0.25em] mb-2">
-                  Email
-                </p>
-                <a
-                  href="mailto:hello@chronogrowth.in"
-                  className="text-[#0A0A0F] text-xl hover:text-[#E63327] transition-colors duration-200"
+              {contactDetails.map((item, i) => (
+                <motion.div
+                  key={item.label}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.1 + i * 0.08, ease: [0.22, 1, 0.36, 1] }}
                 >
-                  hello@chronogrowth.in
-                </a>
-              </div>
-              <div>
-                <p className="text-[#0A0A0F]/50 text-[10px] font-mono uppercase tracking-[0.25em] mb-2">
-                  Phone
-                </p>
-                <a
-                  href="tel:+919876543210"
-                  className="text-[#0A0A0F] text-xl hover:text-[#E63327] transition-colors duration-200"
-                >
-                  +91 98765 43210
-                </a>
-              </div>
-              <div>
-                <p className="text-[#0A0A0F]/50 text-[10px] font-mono uppercase tracking-[0.25em] mb-2">
-                  Location
-                </p>
-                <p className="text-[#0A0A0F] text-xl">Mumbai, India</p>
-              </div>
+                  <p className="text-[#0A0A0F]/50 text-[10px] font-mono uppercase tracking-[0.25em] mb-2">
+                    {item.label}
+                  </p>
+                  {item.href ? (
+                    <a
+                      href={item.href}
+                      className="text-[#0A0A0F] text-xl hover:text-[#E63327] transition-colors duration-200"
+                    >
+                      {item.content}
+                    </a>
+                  ) : (
+                    <p className="text-[#0A0A0F] text-xl">{item.content}</p>
+                  )}
+                </motion.div>
+              ))}
             </div>
 
-            <div className="flex items-center gap-2 pt-2">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+              className="flex items-center gap-2 pt-2"
+            >
               <span className="w-2 h-2 rounded-full bg-[#E63327] animate-pulse" />
               <span className="text-[#0A0A0F]/50 text-sm">Usually responds within 24 hrs</span>
-            </div>
+            </motion.div>
           </div>
 
           {/* RIGHT — form */}

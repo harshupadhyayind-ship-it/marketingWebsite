@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -30,7 +31,6 @@ export default function Navbar() {
     document.body.classList.toggle("nav-open", open);
     return () => { document.body.classList.remove("nav-open"); };
   }, [open]);
-
 
   useEffect(() => {
     const handler = () => setOpen(false);
@@ -88,16 +88,30 @@ export default function Navbar() {
               ×
             </button>
 
-            {/* Agency mark top-left */}
+            {/* Logo mark top-left */}
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.15 }}
-              className="absolute top-5 left-6"
+              className="absolute top-4 left-6"
             >
-              <span className="text-[#0A0A0F]/30 text-[10px] font-mono uppercase tracking-[0.25em]">
-                ChronoGrowth — Performance Agency
-              </span>
+              <Link href="/" onClick={() => setOpen(false)} className="flex items-center gap-3 group">
+                <Image
+                  src="/logo.svg"
+                  alt="BRANDD-AID logo"
+                  width={44}
+                  height={44}
+                  className="rounded-sm flex-shrink-0"
+                />
+                <div className="flex flex-col">
+                  <span className="font-black text-[#0A0A0F] text-lg leading-none tracking-[0.06em]">
+                    BRANDD<span className="text-[#E63327]">-AID</span>
+                  </span>
+                  <span className="text-[#0A0A0F]/35 text-[8px] font-mono uppercase tracking-[0.24em] mt-1">
+                    Marketing That Elevates
+                  </span>
+                </div>
+              </Link>
             </motion.div>
 
             {/* Main nav content */}

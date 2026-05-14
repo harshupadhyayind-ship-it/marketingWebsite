@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { useInView, useMotionValue, useSpring, motion } from "framer-motion";
 import { useEffect } from "react";
 import AnimatedSection from "@/components/ui/AnimatedSection";
+import TiltCard from "@/components/ui/TiltCard";
 
 function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
   const ref = useRef<HTMLSpanElement>(null);
@@ -37,13 +38,15 @@ export default function StatsSection() {
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 lg:grid-cols-4 gap-8">
         {stats.map((stat, i) => (
           <AnimatedSection key={stat.label} delay={i * 0.1}>
-            <div className="text-center">
-              <div className="font-heading text-4xl md:text-5xl font-bold text-[#E63327] mb-1">
-                <Counter to={stat.value} suffix={stat.suffix} />
+            <TiltCard className="relative">
+              <div className="text-center">
+                <div className="font-heading text-4xl md:text-5xl font-bold text-[#E63327] mb-1">
+                  <Counter to={stat.value} suffix={stat.suffix} />
+                </div>
+                <div className="font-semibold text-foreground text-sm mb-1">{stat.label}</div>
+                <div className="text-[#0A0A0F]/45 text-xs">{stat.desc}</div>
               </div>
-              <div className="font-semibold text-foreground text-sm mb-1">{stat.label}</div>
-              <div className="text-[#0A0A0F]/45 text-xs">{stat.desc}</div>
-            </div>
+            </TiltCard>
           </AnimatedSection>
         ))}
       </div>

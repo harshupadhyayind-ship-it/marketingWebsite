@@ -1,10 +1,11 @@
 import Link from "next/link";
+import Image from "next/image";
 
 const links = [
   { label: "Services", href: "/services" },
   { label: "Work",     href: "/work"     },
-  { label: "About",   href: "/about"    },
-  { label: "Contact", href: "/contact"  },
+  { label: "About",    href: "/about"    },
+  { label: "Contact",  href: "/contact"  },
 ];
 
 const social = [
@@ -23,11 +24,25 @@ export default function Footer() {
 
           {/* Brand */}
           <div>
-            <span className="font-black text-2xl text-white tracking-tight">
-              Chrono<span className="text-[#E63327]">Growth</span>
-            </span>
-            <p className="text-white/35 text-sm mt-3 max-w-xs leading-relaxed">
-              Performance marketing agency crafting brands that command attention.
+            <Link href="/" className="flex items-center gap-3 mb-4 group">
+              <Image
+                src="/logo.svg"
+                alt="BRANDD-AID logo"
+                width={52}
+                height={52}
+                className="rounded-sm flex-shrink-0"
+              />
+              <div className="flex flex-col">
+                <span className="font-black text-white text-xl leading-none tracking-[0.06em] group-hover:text-[#E63327] transition-colors duration-200">
+                  BRANDD<span className="text-[#E63327]">-AID</span>
+                </span>
+                <span className="text-[#E63327]/60 text-[8px] font-mono uppercase tracking-[0.28em] mt-1">
+                  Marketing That Elevates
+                </span>
+              </div>
+            </Link>
+            <p className="text-white/35 text-sm max-w-xs leading-relaxed">
+              Elevating brands that refuse to be ignored.
               Mumbai, India.
             </p>
           </div>
@@ -49,7 +64,7 @@ export default function Footer() {
         {/* Bottom row */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <p className="text-white/25 text-xs font-mono">
-            © {new Date().getFullYear()} ChronoGrowth LLP · All rights reserved
+            © {new Date().getFullYear()} BRANDD-AID · All rights reserved
           </p>
           <div className="flex items-center gap-6 flex-wrap">
             {social.map((s) => (
@@ -64,8 +79,8 @@ export default function Footer() {
               </a>
             ))}
             <span className="text-white/15">·</span>
-            <a href="mailto:hello@chronogrowth.in" className="text-white/35 text-xs font-mono hover:text-[#E63327] transition-colors duration-200">
-              hello@chronogrowth.in
+            <a href="mailto:hello@branddaid.com" className="text-white/35 text-xs font-mono hover:text-[#E63327] transition-colors duration-200">
+              hello@branddaid.com
             </a>
           </div>
         </div>

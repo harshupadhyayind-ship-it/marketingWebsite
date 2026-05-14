@@ -4,7 +4,7 @@ import ServicesPageContent from "./ServicesPageContent";
 export const metadata: Metadata = {
   title: "Services",
   description:
-    "Explore ChronoGrowth's full suite of marketing services: brand strategy, web design, digital marketing, content creation, and more.",
+    "Explore BRANDD-AID's full suite of marketing services: brand strategy, web design, digital marketing, content creation, and more.",
 };
 
 export default function ServicesPage() {

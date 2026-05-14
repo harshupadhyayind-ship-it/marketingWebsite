@@ -28,7 +28,6 @@ export default function WorldCanvas() {
     mount.appendChild(renderer.domElement);
 
     // ── Ground grid ───────────────────────────────────────────────────
-    // A clean perspective grid — like a data-viz / dashboard floor
     const GRID_W = 60, GRID_D = 80, GRID_STEP = 4;
     const gridPts: number[] = [];
 
@@ -51,7 +50,6 @@ export default function WorldCanvas() {
     scene.add(grid);
 
     // ── Rising bar chart — 3D performance bars ─────────────────────────
-    // Two rows of bars that grow upward as you scroll into scene 3
     const BAR_DATA = [14, 28, 22, 48, 38, 62, 52, 76, 68, 92];
     const bars: THREE.Mesh[] = [];
     const barTargetH: number[] = [];
@@ -76,7 +74,6 @@ export default function WorldCanvas() {
       const geo = new THREE.BoxGeometry(2.2, 1, 2.2);
       const mesh = new THREE.Mesh(geo, mat);
       mesh.scale.y = 0.001;
-      // Space bars across X axis
       mesh.position.set((i - (BAR_DATA.length - 1) / 2) * 3.2, -8, 0);
       mesh.castShadow = true;
       bars.push(mesh);
@@ -84,7 +81,6 @@ export default function WorldCanvas() {
     });
 
     // ── Rising accent lines (vertical) ───────────────────────────────
-    // Thin vertical lines rising from grid — like a growth chart ascent
     const VLINE_COUNT = 30;
     const vlinePts: number[] = [];
     for (let i = 0; i < VLINE_COUNT; i++) {
@@ -104,7 +100,6 @@ export default function WorldCanvas() {
     scene.add(vlines);
 
     // ── Growth curve (bezier path line) ──────────────────────────────
-    // A smooth upward-trending line across the scene — like a performance chart
     const curve = new THREE.CatmullRomCurve3([
       new THREE.Vector3(-28, -6, 0),
       new THREE.Vector3(-18, -4, 0),
@@ -180,7 +175,6 @@ export default function WorldCanvas() {
     scene.add(fillLight);
 
     // ── Camera waypoints ─────────────────────────────────────────────
-    // High overview → descend into the grid → chart level → accent → past
     const WAY = [
       { z: 70, y: 22, x:  0 },  // 0%  — elevated overview
       { z: 42, y: 10, x: -2 },  // 25% — descending into grid
@@ -230,8 +224,6 @@ export default function WorldCanvas() {
     const lp = (a: number, b: number, t: number) => a + (b - a) * t;
     const fade = (p: number, s: number, e: number) =>
       p < s ? 0 : p > e ? 1 : (p - s) / (e - s);
-    const fadeOut = (p: number, s: number, e: number) =>
-      p < s ? 1 : p > e ? 0 : 1 - (p - s) / (e - s);
 
     const animate = () => {
       rafId = requestAnimationFrame(animate);

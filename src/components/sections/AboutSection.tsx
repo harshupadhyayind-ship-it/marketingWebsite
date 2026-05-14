@@ -21,7 +21,7 @@ export default function AboutSection() {
         <div className="flex items-center gap-6 mb-20 border-t border-[#0A0A0F]/8 pt-8">
           <span className="text-label text-[#0A0A0F]/45">About</span>
           <span className="flex-1 h-px bg-[#D4CAB8]" />
-          <span className="text-label text-[#0A0A0F]/45">ChronoGrowth</span>
+          <span className="text-label text-[#0A0A0F]/45">BRANDD-AID</span>
         </div>
 
         {/* Editorial two-column */}
@@ -40,7 +40,7 @@ export default function AboutSection() {
           {/* Right: text + stats */}
           <AnimatedSection delay={0.15}>
             <p className="text-[#6B5E50] text-lg leading-relaxed mb-8 max-w-md">
-              ChronoGrowth was built on a single frustration — most marketing
+              BRANDD-AID was built on a single frustration — most marketing
               looks the same. We fuse strategic rigour with cinematic execution
               to create brands that don&apos;t just compete, they lead.
             </p>

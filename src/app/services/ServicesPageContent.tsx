@@ -3,6 +3,9 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+
+const HeroShapes = dynamic(() => import("@/components/three/HeroShapes"), { ssr: false });
 
 const services = [
   {
@@ -110,7 +113,10 @@ function AccordionRow({
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
             className="overflow-hidden"
           >
-            <div className="px-6 md:px-10 pb-10 pt-2 flex flex-col gap-6 md:flex-row md:gap-16">
+            <div
+              className="px-6 md:px-10 pb-10 pt-2 flex flex-col gap-6 md:flex-row md:gap-16"
+              style={{ background: "linear-gradient(135deg, rgba(230,51,39,0.03) 0%, transparent 100%)" }}
+            >
               <p className="text-[#0A0A0F]/55 leading-relaxed md:max-w-md flex-shrink-0 md:flex-1">
                 {s.description}
               </p>
@@ -148,21 +154,33 @@ export default function ServicesPageContent() {
     <div className="bg-white min-h-screen">
 
       {/* ── Page header ── */}
-      <section className="pt-40 pb-20 px-6 md:px-10 max-w-7xl mx-auto">
-        <p className="text-[#E63327] text-[10px] font-mono uppercase tracking-[0.25em] mb-6">
-          What We Do
-        </p>
-        <h1
-          className="font-bold text-[#0A0A0F] leading-none mb-8"
-          style={{ fontSize: "clamp(3rem, 8vw, 8rem)", letterSpacing: "-0.04em" }}
-        >
-          Services designed
-          <br />
-          <em className="text-[#E63327] not-italic">to move the needle.</em>
-        </h1>
-        <p className="text-[#0A0A0F]/55 text-lg max-w-md leading-relaxed">
-          Every service delivered with craft, data, and a relentless focus on results.
-        </p>
+      <section className="relative pt-40 pb-20 overflow-hidden">
+        {/* Three.js canvas — absolutely fills the header bg */}
+        <div className="absolute inset-0 opacity-30 pointer-events-none">
+          <HeroShapes />
+        </div>
+        {/* White gradient fade at the bottom */}
+        <div
+          className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none"
+          style={{ background: "linear-gradient(to bottom, transparent, #ffffff)" }}
+        />
+        {/* Text content sits on top */}
+        <div className="relative z-10 px-6 md:px-10 max-w-7xl mx-auto">
+          <p className="text-[#E63327] text-[10px] font-mono uppercase tracking-[0.25em] mb-6">
+            What We Do
+          </p>
+          <h1
+            className="font-bold text-[#0A0A0F] leading-none mb-8"
+            style={{ fontSize: "clamp(3rem, 8vw, 8rem)", letterSpacing: "-0.04em" }}
+          >
+            Services designed
+            <br />
+            <em className="text-[#E63327] not-italic">to move the needle.</em>
+          </h1>
+          <p className="text-[#0A0A0F]/55 text-lg max-w-md leading-relaxed">
+            Every service delivered with craft, data, and a relentless focus on results.
+          </p>
+        </div>
       </section>
 
       {/* ── Accordion list ── */}

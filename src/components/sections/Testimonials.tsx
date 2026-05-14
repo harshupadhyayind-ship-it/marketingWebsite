@@ -10,7 +10,7 @@ const testimonials = [
     name: "Priya Mehta",
     role: "CEO, Verdant Wellness",
     quote:
-      "ChronoGrowth completely transformed our digital presence. Our organic traffic tripled in 6 months, and the brand identity they built is something we're genuinely proud of.",
+      "BRANDD-AID completely transformed our digital presence. Our organic traffic tripled in 6 months, and the brand identity they built is something we're genuinely proud of.",
   },
   {
     name: "Arjun Singh",
@@ -22,7 +22,7 @@ const testimonials = [
     name: "Rhea Kapoor",
     role: "Head of Marketing, Artisan & Co.",
     quote:
-      "From our e-commerce rebuild to ongoing paid media management, ChronoGrowth has been a true partner. Our ROAS went from 1.1× to 4.2× — that changes a business.",
+      "From our e-commerce rebuild to ongoing paid media management, BRANDD-AID has been a true partner. Our ROAS went from 1.1× to 4.2× — that changes a business.",
   },
   {
     name: "Vikram Nair",
