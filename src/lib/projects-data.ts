@@ -9,7 +9,7 @@ export const allProjects = [
     year: "2024",
     description:
       "A complete brand transformation for India's fastest-growing wellness startup — new identity, website, and content strategy that tripled their organic reach.",
-    color: "#9CAF88",
+    color: "#E63327",
   },
   {
     slug: "lumina-launch",
@@ -21,7 +21,7 @@ export const allProjects = [
     year: "2024",
     description:
       "End-to-end product launch campaign across Meta, Google, and influencer channels that generated ₹2 crore in revenue within the first month.",
-    color: "#7A9068",
+    color: "#B5261B",
   },
   {
     slug: "artisan-co",
@@ -33,7 +33,7 @@ export const allProjects = [
     year: "2023",
     description:
       "Full e-commerce rebuild with custom Shopify theme, SEO overhaul, and paid media management that improved ROAS from 1.1× to 4.2×.",
-    color: "#B8C9A8",
+    color: "#FF5349",
   },
   {
     slug: "horizon-fin",
@@ -45,7 +45,7 @@ export const allProjects = [
     year: "2023",
     description:
       "A year-long organic content programme for a fintech brand that built a loyal community of 180,000 followers across LinkedIn and Instagram.",
-    color: "#9CAF88",
+    color: "#E63327",
   },
   {
     slug: "bloom-beauty",
@@ -57,7 +57,7 @@ export const allProjects = [
     year: "2024",
     description:
       "Brand identity and social media launch for an indie beauty brand that reached 50,000 followers in its first three months.",
-    color: "#7A9068",
+    color: "#B5261B",
   },
   {
     slug: "nexus-saas",
@@ -69,7 +69,7 @@ export const allProjects = [
     year: "2024",
     description:
       "A combined SEO, content, and analytics programme for a B2B SaaS company that tripled monthly recurring revenue in under a year.",
-    color: "#B8C9A8",
+    color: "#FF5349",
   },
 ];
 

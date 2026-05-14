@@ -44,7 +44,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable} h-full`}>
-      <body className="min-h-full flex flex-col antialiased bg-beige">
+      <body className="min-h-full flex flex-col antialiased ">
         <Navbar />
         <PageTransition>
           <main className="flex-1">{children}</main>

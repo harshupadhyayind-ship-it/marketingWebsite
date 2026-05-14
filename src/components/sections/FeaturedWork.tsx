@@ -10,26 +10,26 @@ const featured = allProjects.slice(0, 4);
 
 // Colour fill per project (rich, warm tones — no black/red)
 const fills = [
-  "bg-[#9CAF88]",
+  "bg-[#E63327]",
   "bg-[#C5B99A]",
-  "bg-[#7A9068]",
+  "bg-[#B5261B]",
   "bg-[#B8A88A]",
 ];
 
 export default function FeaturedWork() {
   return (
-    <section className="bg-[#F5F1E8] py-32">
+    <section className="bg-white py-32">
       <div className="max-w-[1440px] mx-auto px-8">
 
         {/* Header */}
-        <div className="flex items-end justify-between mb-16 border-t border-[#D4CAB8] pt-8">
+        <div className="flex items-end justify-between mb-16 border-t border-[#0A0A0F]/8 pt-8">
           <AnimatedSection>
-            <span className="text-label text-stone">Selected Work</span>
+            <span className="text-label text-[#0A0A0F]/45">Selected Work</span>
           </AnimatedSection>
           <AnimatedSection delay={0.1}>
             <Link
               href="/work"
-              className="group inline-flex items-center gap-1.5 text-label text-foreground border-b border-foreground/20 hover:border-sage hover:text-sage pb-0.5 transition-all"
+              className="group inline-flex items-center gap-1.5 text-label text-foreground border-b border-foreground/20 hover:border-[#E63327] hover:text-[#E63327] pb-0.5 transition-all"
             >
               All Projects
               <ArrowUpRight size={11} />
@@ -57,18 +57,18 @@ export default function FeaturedWork() {
                       <motion.div
                         animate={{ rotate: 360 }}
                         transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
-                        className="absolute top-[-30%] right-[-10%] w-[60%] aspect-square rounded-full border border-white/10"
+                        className="absolute top-[-30%] right-[-10%] w-[60%] aspect-square rounded-full border border-[#0A0A0F]/10"
                       />
                       <motion.div
                         animate={{ rotate: -360 }}
                         transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
                         className="absolute bottom-[-20%] left-[5%] w-[40%] aspect-square rounded-full border border-white/8"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-[#2C2416]/20" />
+                      <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-[#F5F5FA]/20" />
                     </div>
 
                     {/* Large letter initial */}
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-heading text-[clamp(120px,20vw,280px)] font-bold text-white/10 leading-none select-none pointer-events-none">
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-heading text-[clamp(120px,20vw,280px)] font-bold text-[#0A0A0F]/10 leading-none select-none pointer-events-none">
                       {project.client.charAt(0)}
                     </div>
 
@@ -78,16 +78,16 @@ export default function FeaturedWork() {
                     </div>
 
                     {/* Arrow */}
-                    <div className="absolute top-6 left-6 w-10 h-10 rounded-full border border-white/30 flex items-center justify-center opacity-0 group-hover:opacity-100 group-hover:bg-white/20 -translate-y-2 group-hover:translate-y-0 transition-all duration-300 backdrop-blur-sm">
+                    <div className="absolute top-6 left-6 w-10 h-10 rounded-full border border-[#0A0A0F]/30 flex items-center justify-center opacity-0 group-hover:opacity-100 group-hover:bg-white/20 -translate-y-2 group-hover:translate-y-0 transition-all duration-300 backdrop-blur-sm">
                       <ArrowUpRight size={14} className="text-white" />
                     </div>
                   </div>
 
                   {/* Info strip */}
-                  <div className="bg-[#FDFAF4] border-t border-[#E8E2D4] px-6 py-5 flex items-center justify-between gap-4">
+                  <div className="bg-[#F8F8F8] border-t border-[#E8E2D4] px-6 py-5 flex items-center justify-between gap-4">
                     <div>
-                      <div className="text-label text-stone mb-1">{project.category} · {project.year}</div>
-                      <h3 className="font-heading text-xl font-bold text-foreground group-hover:text-sage transition-colors">
+                      <div className="text-label text-[#0A0A0F]/45 mb-1">{project.category} · {project.year}</div>
+                      <h3 className="font-heading text-xl font-bold text-foreground group-hover:text-[#E63327] transition-colors">
                         {project.title}
                       </h3>
                     </div>
@@ -95,7 +95,7 @@ export default function FeaturedWork() {
                       {project.tags.slice(0, 2).map((tag) => (
                         <span
                           key={tag}
-                          className="text-label text-stone border border-[#D4CAB8] rounded-full px-3 py-1"
+                          className="text-label text-[#0A0A0F]/45 border border-[#0A0A0F]/8 rounded-full px-3 py-1"
                         >
                           {tag}
                         </span>

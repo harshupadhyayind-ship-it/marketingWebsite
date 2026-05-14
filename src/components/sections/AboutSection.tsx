@@ -14,14 +14,14 @@ const stats = [
 
 export default function AboutSection() {
   return (
-    <section className="py-32 bg-[#F5F1E8]">
+    <section className="py-32 bg-white">
       <div className="max-w-[1440px] mx-auto px-8">
 
         {/* Top rule + label */}
-        <div className="flex items-center gap-6 mb-20 border-t border-[#D4CAB8] pt-8">
-          <span className="text-label text-stone">About</span>
+        <div className="flex items-center gap-6 mb-20 border-t border-[#0A0A0F]/8 pt-8">
+          <span className="text-label text-[#0A0A0F]/45">About</span>
           <span className="flex-1 h-px bg-[#D4CAB8]" />
-          <span className="text-label text-stone">ChronoGrowth</span>
+          <span className="text-label text-[#0A0A0F]/45">ChronoGrowth</span>
         </div>
 
         {/* Editorial two-column */}
@@ -33,7 +33,7 @@ export default function AboutSection() {
               Marketing that
               <br />
               feels like{" "}
-              <span className="italic text-sage">art.</span>
+              <span className="italic text-[#E63327]">art.</span>
             </h2>
           </AnimatedSection>
 
@@ -50,7 +50,7 @@ export default function AboutSection() {
             </p>
 
             {/* Inline stats row */}
-            <div className="grid grid-cols-4 gap-0 border-t border-[#D4CAB8]">
+            <div className="grid grid-cols-4 gap-0 border-t border-[#0A0A0F]/8">
               {stats.map((s, i) => (
                 <motion.div
                   key={s.label}
@@ -58,10 +58,10 @@ export default function AboutSection() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.08 + 0.2, duration: 0.5 }}
-                  className="pt-5 pr-4 border-r border-[#D4CAB8] last:border-r-0"
+                  className="pt-5 pr-4 border-r border-[#0A0A0F]/8 last:border-r-0"
                 >
                   <div className="font-heading text-2xl font-bold text-foreground">{s.value}</div>
-                  <div className="text-label text-stone mt-1">{s.label}</div>
+                  <div className="text-label text-[#0A0A0F]/45 mt-1">{s.label}</div>
                 </motion.div>
               ))}
             </div>
@@ -69,7 +69,7 @@ export default function AboutSection() {
             <div className="mt-10">
               <Link
                 href="/about"
-                className="group inline-flex items-center gap-2 text-label text-foreground border-b border-foreground/30 hover:border-sage hover:text-sage pb-0.5 transition-all"
+                className="group inline-flex items-center gap-2 text-label text-foreground border-b border-foreground/30 hover:border-[#E63327] hover:text-[#E63327] pb-0.5 transition-all"
               >
                 Our Story
                 <ArrowUpRight size={12} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />

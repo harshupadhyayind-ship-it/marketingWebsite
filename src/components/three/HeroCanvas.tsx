@@ -11,7 +11,7 @@ function FloatingOrb({
   position,
   scale = 1,
   speed = 1,
-  color = "#9CAF88",
+  color = "#E63327",
 }: {
   position: [number, number, number];
   scale?: number;
@@ -41,7 +41,7 @@ function FloatingTorus({
   rotation,
   scale = 1,
   speed = 1,
-  color = "#B8C9A8",
+  color = "#FF5349",
 }: {
   position: [number, number, number];
   rotation?: [number, number, number];
@@ -135,7 +135,7 @@ function Particles({ count = 120 }: { count?: number }) {
       <bufferGeometry>
         <bufferAttribute attach="attributes-position" args={[positions, 3]} />
       </bufferGeometry>
-      <pointsMaterial size={0.04} color="#9CAF88" transparent opacity={0.5} sizeAttenuation />
+      <pointsMaterial size={0.04} color="#E63327" transparent opacity={0.5} sizeAttenuation />
     </points>
   );
 }
@@ -153,17 +153,17 @@ function Scene() {
   return (
     <group ref={groupRef}>
       {/* Main central orb */}
-      <FloatingOrb position={[0, 0, 0]} scale={1.8} speed={0.8} color="#9CAF88" />
+      <FloatingOrb position={[0, 0, 0]} scale={1.8} speed={0.8} color="#E63327" />
 
       {/* Orbiting elements */}
-      <FloatingOrb position={[3.5, 1.5, -1]} scale={0.7} speed={1.4} color="#B8C9A8" />
-      <FloatingOrb position={[-3.2, -1, -2]} scale={0.9} speed={1.1} color="#7A9068" />
-      <FloatingOrb position={[1.5, -2.8, -1]} scale={0.5} speed={1.8} color="#9CAF88" />
+      <FloatingOrb position={[3.5, 1.5, -1]} scale={0.7} speed={1.4} color="#FF5349" />
+      <FloatingOrb position={[-3.2, -1, -2]} scale={0.9} speed={1.1} color="#B5261B" />
+      <FloatingOrb position={[1.5, -2.8, -1]} scale={0.5} speed={1.8} color="#E63327" />
 
       {/* Tori */}
-      <FloatingTorus position={[3, -2, 0]} scale={0.6} speed={0.9} color="#9CAF88" />
+      <FloatingTorus position={[3, -2, 0]} scale={0.6} speed={0.9} color="#E63327" />
       <FloatingTorus position={[-2.5, 2, -1]} rotation={[Math.PI / 4, 0, 0]} scale={0.5} speed={1.3} color="#D4CAB8" />
-      <FloatingTorus position={[0, 3, -3]} rotation={[0, Math.PI / 4, 0]} scale={0.8} speed={0.7} color="#B8C9A8" />
+      <FloatingTorus position={[0, 3, -3]} rotation={[0, Math.PI / 4, 0]} scale={0.8} speed={0.7} color="#FF5349" />
 
       {/* Cubes */}
       <FloatingCube position={[-4, 0.5, -2]} scale={0.45} speed={0.8} />
@@ -175,9 +175,9 @@ function Scene() {
 
       {/* Lighting */}
       <ambientLight intensity={0.6} />
-      <directionalLight position={[5, 5, 5]} intensity={1.2} color="#F5F1E8" />
-      <pointLight position={[-5, -5, 5]} intensity={0.8} color="#9CAF88" />
-      <pointLight position={[5, 5, -5]} intensity={0.6} color="#B8C9A8" />
+      <directionalLight position={[5, 5, 5]} intensity={1.2} color="#F5F5FA" />
+      <pointLight position={[-5, -5, 5]} intensity={0.8} color="#E63327" />
+      <pointLight position={[5, 5, -5]} intensity={0.6} color="#FF5349" />
       <Environment preset="forest" />
     </group>
   );

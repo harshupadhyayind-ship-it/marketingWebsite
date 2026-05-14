@@ -6,36 +6,21 @@ import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 
 const NAV_LINKS = [
-  { label: "home",     href: "/"         },
-  { label: "services", href: "/services" },
-  { label: "work",     href: "/work"     },
-  { label: "about",    href: "/about"    },
-  { label: "contact",  href: "/contact"  },
+  { label: "Home",     href: "/",        index: "01" },
+  { label: "Services", href: "/services", index: "02" },
+  { label: "Work",     href: "/work",     index: "03" },
+  { label: "About",    href: "/about",    index: "04" },
+  { label: "Contact",  href: "/contact",  index: "05" },
 ];
 
-const SOCIAL_LINKS = [
-  { label: "instagram", href: "https://instagram.com" },
-  { label: "linkedin",  href: "https://linkedin.com"  },
-  { label: "twitter",   href: "https://twitter.com"   },
+const SOCIAL = [
+  { label: "Instagram", href: "https://instagram.com" },
+  { label: "LinkedIn",  href: "https://linkedin.com"  },
+  { label: "Twitter",   href: "https://twitter.com"   },
 ];
-
-// Swap picsum URLs with your real images when ready
-const LINK_THEME: Record<string, { image: string }> = {
-  home:      { image: "https://picsum.photos/seed/home/1600/900"      },
-  services:  { image: "https://picsum.photos/seed/services/1600/900"  },
-  work:      { image: "https://picsum.photos/seed/work/1600/900"      },
-  about:     { image: "https://picsum.photos/seed/about/1600/900"     },
-  contact:   { image: "https://picsum.photos/seed/contact/1600/900"   },
-  instagram: { image: "https://picsum.photos/seed/instagram/1600/900" },
-  linkedin:  { image: "https://picsum.photos/seed/linkedin/1600/900"  },
-  twitter:   { image: "https://picsum.photos/seed/twitter/1600/900"   },
-};
-
-const DRAWER_WIDTH = "20rem";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
-  const [hovered, setHovered] = useState<string | null>(null);
   const pathname = usePathname();
 
   useEffect(() => { setOpen(false); }, [pathname]);
@@ -46,16 +31,6 @@ export default function Navbar() {
     return () => { document.body.classList.remove("nav-open"); };
   }, [open]);
 
-  useEffect(() => {
-    if (!open) return;
-    const close = () => setOpen(false);
-    window.addEventListener("wheel", close, { passive: true });
-    window.addEventListener("touchmove", close, { passive: true });
-    return () => {
-      window.removeEventListener("wheel", close);
-      window.removeEventListener("touchmove", close);
-    };
-  }, [open]);
 
   useEffect(() => {
     const handler = () => setOpen(false);
@@ -63,168 +38,190 @@ export default function Navbar() {
     return () => window.removeEventListener("navClose", handler);
   }, []);
 
-  const activeImage = hovered ? LINK_THEME[hovered]?.image : null;
-
   return (
     <>
-      {/* ── Corner trigger (always visible) ── */}
+      {/* ── Trigger ── */}
       <div className="fixed top-0 right-0 z-50 flex flex-col items-end px-6 pt-5 select-none">
         <button
           onClick={() => setOpen(true)}
-          className="flex items-baseline gap-1.5 group cursor-pointer"
+          className="group flex items-baseline gap-2 cursor-pointer"
           aria-label="Open menu"
         >
-          <span className="text-[#9CAF88]/70 text-[10px] font-mono leading-none">(08)</span>
-          <span className="text-white font-bold text-4xl leading-none tracking-tight group-hover:text-[#9CAF88] transition-colors duration-200">
+          <span className="text-[#E63327]/60 text-[10px] font-mono leading-none">(08)</span>
+          <span className="text-[#0A0A0F] font-bold text-4xl leading-none tracking-tight group-hover:text-[#E63327] transition-colors duration-200">
             menu
           </span>
         </button>
-
         <Link href="/contact" className="flex items-baseline gap-1.5 group mt-0.5">
-          <span className="text-[#9CAF88]/70 text-[10px] font-mono leading-none">(01)</span>
-          <span className="text-white/60 text-sm font-medium leading-snug group-hover:text-white transition-colors duration-200">
-            contact
-          </span>
+          <span className="text-[#E63327]/60 text-[10px] font-mono leading-none">(01)</span>
+          <span className="text-[#0A0A0F]/50 text-sm font-medium group-hover:text-[#0A0A0F] transition-colors duration-200">contact</span>
         </Link>
-
-        <a
-          href="https://instagram.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-baseline gap-1.5 group mt-0.5"
-        >
-          <span className="text-[#9CAF88]/70 text-[10px] font-mono leading-none">(01)</span>
-          <span className="text-white/60 text-sm font-medium leading-snug group-hover:text-white transition-colors duration-200">
-            instagram
-          </span>
-        </a>
       </div>
 
+      {/* ── Full-screen overlay ── */}
       <AnimatePresence>
         {open && (
-          <>
-            {/* ── Full-page background image (z-0, sits behind dark card at z-1) ── */}
-            <AnimatePresence>
-              {activeImage && (
-                <motion.div
-                  key={activeImage}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.4, ease: "easeOut" }}
-                  style={{
-                    position: "fixed",
-                    inset: 0,
-                    zIndex: 0,
-                    backgroundImage: `url(${activeImage})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    pointerEvents: "none",
-                  }}
-                />
-              )}
-            </AnimatePresence>
-
-            {/* ── Left drawer — transparent, just floats the menu text ── */}
+          <motion.div
+            key="nav-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.35, ease: "easeOut" }}
+            className="fixed inset-0 z-[100] flex flex-col"
+            style={{ background: "#FFFFFF" }}
+          >
+            {/* Red scan line at top */}
             <motion.div
-              key="drawer"
-              initial={{ x: "-100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "-100%" }}
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
               transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-              className="fixed top-0 left-0 bottom-0 z-50"
-              style={{ width: DRAWER_WIDTH }}
+              className="absolute top-0 left-0 right-0 h-[2px] bg-[#E63327] origin-left"
+            />
+
+            {/* Close button */}
+            <button
+              onClick={() => setOpen(false)}
+              className="absolute top-5 right-6 text-[#0A0A0F]/45 hover:text-[#E63327] transition-colors duration-200 cursor-pointer z-10"
+              style={{ fontSize: "2.8rem", lineHeight: 1, fontWeight: 200 }}
+              aria-label="Close menu"
             >
-              {/* Grain texture overlay */}
-              <div
-                className="absolute inset-0 pointer-events-none"
-                style={{
-                  backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.06'/%3E%3C/svg%3E")`,
-                  backgroundSize: "200px 200px",
-                  opacity: 0.4,
-                }}
-              />
+              ×
+            </button>
 
-              {/* Panel content */}
-              <div className="relative z-10 h-full flex flex-col px-8 py-8">
-                {/* Nav links — vertically centered, no logo */}
-                <nav className="flex flex-col gap-0 flex-1 justify-center">
-                  {NAV_LINKS.map((link, i) => (
-                    <NavItem
-                      key={link.href}
-                      label={link.label}
-                      href={link.href}
-                      active={pathname === link.href}
-                      onHover={setHovered}
-                      onClick={() => setOpen(false)}
-                      delay={i * 0.04}
-                    />
-                  ))}
+            {/* Agency mark top-left */}
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.15 }}
+              className="absolute top-5 left-6"
+            >
+              <span className="text-[#0A0A0F]/30 text-[10px] font-mono uppercase tracking-[0.25em]">
+                ChronoGrowth — Performance Agency
+              </span>
+            </motion.div>
 
-                  <div className="my-6" />
+            {/* Main nav content */}
+            <div className="flex flex-1 flex-col justify-between px-8 md:px-16 lg:px-24 pt-20 pb-6">
+              <nav className="flex flex-col justify-between flex-1">
+                {NAV_LINKS.map((link, i) => (
+                  <NavLink
+                    key={link.href}
+                    {...link}
+                    active={pathname === link.href}
+                    delay={0.15 + i * 0.07}
+                    onClick={() => setOpen(false)}
+                  />
+                ))}
+              </nav>
+            </div>
 
-                  {SOCIAL_LINKS.map((link, i) => (
-                    <NavItem
-                      key={link.href}
-                      label={link.label}
-                      href={link.href}
-                      external
-                      small
-                      onHover={setHovered}
-                      onClick={() => setOpen(false)}
-                      delay={(NAV_LINKS.length + i) * 0.04}
-                    />
-                  ))}
-                </nav>
-
-                {/* Footer */}
-                <p className="text-[#0D0B08]/40 text-[10px] font-mono uppercase tracking-widest">
-                  Mumbai · India · 2025
-                </p>
+            {/* Footer row */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.5 }}
+              className="flex items-end justify-between px-8 md:px-16 lg:px-24 pb-8"
+            >
+              <p className="text-[#0A0A0F]/25 text-[10px] font-mono uppercase tracking-[0.2em]">
+                Mumbai · India · 2025
+              </p>
+              <div className="flex items-center gap-6">
+                {SOCIAL.map((s) => (
+                  <a
+                    key={s.href}
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#0A0A0F]/35 text-xs font-mono uppercase tracking-widest hover:text-[#E63327] transition-colors duration-200"
+                  >
+                    {s.label}
+                  </a>
+                ))}
               </div>
             </motion.div>
-          </>
+          </motion.div>
         )}
       </AnimatePresence>
     </>
   );
 }
 
-function NavItem({
-  label, href, active, external, small, onHover, onClick, delay = 0,
-}: {
-  label: string;
-  href: string;
-  active?: boolean;
-  external?: boolean;
-  small?: boolean;
-  onHover: (v: string | null) => void;
-  onClick: () => void;
-  delay?: number;
-}) {
-  const inner = (
-    <motion.div
-      initial={{ opacity: 0, x: -16 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.4, delay, ease: [0.22, 1, 0.36, 1] }}
-      className={`flex items-center justify-between group cursor-pointer ${small ? "py-1" : "py-1.5"
-        }`}
-      onHoverStart={() => onHover(label)}
-      onHoverEnd={() => onHover(null)}
-    >
-      <motion.span
-        className={`font-bold leading-tight tracking-tight ${small ? "text-xl" : "text-[2.25rem]"
-          } ${active ? "text-[#9CAF88]" : "text-[#0D0B08]"}`}
-        whileHover={{ x: 8 }}
-        transition={{ duration: 0.2, ease: "easeOut" }}
-      >
-        {label}
-      </motion.span>
-    </motion.div>
-  );
+const NAV_DESCRIPTIONS: Record<string, string> = {
+  "/":         "Start here",
+  "/services": "Brand · Performance · Web",
+  "/work":     "120+ projects",
+  "/about":    "Our story",
+  "/contact":  "Let's talk",
+};
 
-  if (external) {
-    return <a href={href} target="_blank" rel="noopener noreferrer" onClick={onClick}>{inner}</a>;
-  }
-  return <Link href={href} onClick={onClick}>{inner}</Link>;
+function NavLink({
+  label, href, index, active, delay, onClick,
+}: {
+  label: string; href: string; index: string;
+  active?: boolean; delay: number; onClick: () => void;
+}) {
+  const [hovered, setHovered] = useState(false);
+
+  return (
+    <Link href={href} onClick={onClick} className="flex-1 flex items-center border-b border-[#0A0A0F]/08 last:border-b-0">
+      <motion.div
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.45, delay, ease: [0.22, 1, 0.36, 1] }}
+        className="w-full flex items-center justify-between group cursor-pointer py-2"
+        onHoverStart={() => setHovered(true)}
+        onHoverEnd={() => setHovered(false)}
+      >
+        {/* Left: index + label */}
+        <div className="flex items-center gap-6">
+          <span className="text-[#E63327] font-mono text-xs leading-none flex-shrink-0 w-6 opacity-70">
+            {index}
+          </span>
+
+          {/* Roll-up label */}
+          <div className="relative overflow-hidden">
+            <motion.span
+              animate={{ y: hovered ? "-100%" : "0%" }}
+              transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+              className="block font-bold text-[#0A0A0F] leading-none"
+              style={{ fontSize: "clamp(2.2rem, 7vh, 5.5rem)", letterSpacing: "-0.04em" }}
+            >
+              {label}
+            </motion.span>
+            <motion.span
+              animate={{ y: hovered ? "0%" : "100%" }}
+              transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+              className="absolute inset-0 block font-bold text-[#E63327] leading-none"
+              style={{ fontSize: "clamp(2.2rem, 7vh, 5.5rem)", letterSpacing: "-0.04em" }}
+            >
+              {label}
+            </motion.span>
+          </div>
+
+          {/* Active indicator */}
+          {active && (
+            <span className="w-1.5 h-1.5 rounded-full bg-[#E63327] flex-shrink-0" />
+          )}
+        </div>
+
+        {/* Right: description + arrow */}
+        <div className="flex items-center gap-4 flex-shrink-0">
+          <motion.span
+            animate={{ opacity: hovered ? 1 : 0, x: hovered ? 0 : 8 }}
+            transition={{ duration: 0.2 }}
+            className="text-[#0A0A0F]/35 text-xs font-mono uppercase tracking-widest hidden md:block"
+          >
+            {NAV_DESCRIPTIONS[href]}
+          </motion.span>
+          <motion.span
+            animate={{ opacity: hovered ? 1 : 0.15, x: hovered ? 0 : -6 }}
+            transition={{ duration: 0.25 }}
+            className="text-[#E63327] text-lg font-light"
+          >
+            →
+          </motion.span>
+        </div>
+      </motion.div>
+    </Link>
+  );
 }

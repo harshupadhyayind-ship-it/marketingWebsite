@@ -6,9 +6,9 @@ import { Float, RoundedBox, Torus } from "@react-three/drei";
 import * as THREE from "three";
 
 const SERVICE_COLORS = [
-  "#9CAF88",
-  "#B8C9A8",
-  "#7A9068",
+  "#E63327",
+  "#FF5349",
+  "#B5261B",
   "#D4CAB8",
   "#A89888",
   "#C5B99A",
@@ -82,13 +82,13 @@ export default function ServicesScene() {
       {/* Central accent */}
       <Float speed={0.4} floatIntensity={0.3}>
         <Torus args={[2, 0.03, 16, 100]} position={[0, 0, 0]} rotation={[Math.PI / 2, 0, 0]}>
-          <meshStandardMaterial color="#9CAF88" roughness={0} metalness={1} emissive="#9CAF88" emissiveIntensity={0.5} transparent opacity={0.6} />
+          <meshStandardMaterial color="#E63327" roughness={0} metalness={1} emissive="#E63327" emissiveIntensity={0.5} transparent opacity={0.6} />
         </Torus>
       </Float>
 
-      <pointLight position={[0, 5, 3]} intensity={3} color="#9CAF88" distance={18} />
-      <pointLight position={[0, -5, 3]} intensity={2} color="#B8C9A8" distance={15} />
-      <pointLight position={[5, 0, 3]} intensity={1.5} color="#F5F1E8" distance={12} />
+      <pointLight position={[0, 5, 3]} intensity={3} color="#E63327" distance={18} />
+      <pointLight position={[0, -5, 3]} intensity={2} color="#FF5349" distance={15} />
+      <pointLight position={[5, 0, 3]} intensity={1.5} color="#F5F5FA" distance={12} />
     </group>
   );
 }

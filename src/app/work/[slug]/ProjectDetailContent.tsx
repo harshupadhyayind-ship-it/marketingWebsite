@@ -104,7 +104,7 @@ export default function ProjectDetailContent({ project }: { project: Project }) 
   return (
     <>
       {/* Hero */}
-      <section className="pt-32 pb-16 bg-[#2C2416] relative overflow-hidden">
+      <section className="pt-32 pb-16 bg-white relative overflow-hidden">
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
@@ -115,7 +115,7 @@ export default function ProjectDetailContent({ project }: { project: Project }) 
           <AnimatedSection>
             <Link
               href="/work"
-              className="inline-flex items-center gap-2 text-[#8B7E6E] hover:text-[#9CAF88] text-sm mb-8 transition-colors"
+              className="inline-flex items-center gap-2 text-[#8B7E6E] hover:text-[#E63327] text-sm mb-8 transition-colors"
             >
               <ArrowLeft size={14} />
               Back to Work
@@ -124,7 +124,7 @@ export default function ProjectDetailContent({ project }: { project: Project }) 
 
           <AnimatedSection delay={0.1}>
             <div className="flex flex-wrap items-center gap-3 mb-4">
-              <span className="text-sage text-sm font-medium uppercase tracking-widest">
+              <span className="text-[#E63327] text-sm font-medium uppercase tracking-widest">
                 {project.category}
               </span>
               <span className="text-[#4D4232]">·</span>
@@ -133,7 +133,7 @@ export default function ProjectDetailContent({ project }: { project: Project }) 
           </AnimatedSection>
 
           <AnimatedSection delay={0.15}>
-            <h1 className="font-heading text-4xl md:text-6xl font-bold text-[#F5F1E8] leading-tight mb-6 max-w-4xl">
+            <h1 className="font-heading text-4xl md:text-6xl font-bold text-[#F5F5FA] leading-tight mb-6 max-w-4xl">
               {project.title}
             </h1>
           </AnimatedSection>
@@ -143,7 +143,7 @@ export default function ProjectDetailContent({ project }: { project: Project }) 
               {project.tags.map((tag) => (
                 <Badge
                   key={tag}
-                  className="bg-[#3D3222] border-[#4D4232] text-[#9CAF88] text-xs"
+                  className="bg-[#3D3222] border-[#4D4232] text-[#E63327] text-xs"
                 >
                   {tag}
                 </Badge>
@@ -167,15 +167,15 @@ export default function ProjectDetailContent({ project }: { project: Project }) 
       </section>
 
       {/* Hero visual */}
-      <section className="bg-beige-dark py-12">
+      <section className="bg-[#F8F8F8] py-12">
         <div className="max-w-7xl mx-auto px-6">
           <AnimatedSection>
             <div
-              className="w-full rounded-3xl h-72 md:h-96 flex items-center justify-center relative overflow-hidden shadow-warm-lg"
+              className="w-full rounded-3xl h-72 md:h-96 flex items-center justify-center relative overflow-hidden "
               style={{ background: `linear-gradient(135deg, ${project.color}40, ${project.color}15)` }}
             >
               <div
-                className="w-28 h-28 rounded-3xl flex items-center justify-center text-5xl font-heading font-bold text-white shadow-warm-lg"
+                className="w-28 h-28 rounded-3xl flex items-center justify-center text-5xl font-heading font-bold text-white "
                 style={{ backgroundColor: project.color }}
               >
                 {project.client.charAt(0)}
@@ -200,17 +200,17 @@ export default function ProjectDetailContent({ project }: { project: Project }) 
       </section>
 
       {/* Case study content */}
-      <section className="py-20 bg-beige">
+      <section className="py-20 bg-white">
         <div className="max-w-4xl mx-auto px-6">
           {detail && (
             <div className="grid md:grid-cols-2 gap-12 mb-20">
               <AnimatedSection direction="left">
                 <h2 className="font-heading text-2xl font-bold text-foreground mb-4">The Challenge</h2>
-                <p className="text-stone leading-relaxed">{detail.challenge}</p>
+                <p className="text-[#0A0A0F]/45 leading-relaxed">{detail.challenge}</p>
               </AnimatedSection>
               <AnimatedSection direction="right" delay={0.1}>
                 <h2 className="font-heading text-2xl font-bold text-foreground mb-4">Our Solution</h2>
-                <p className="text-stone leading-relaxed">{detail.solution}</p>
+                <p className="text-[#0A0A0F]/45 leading-relaxed">{detail.solution}</p>
               </AnimatedSection>
             </div>
           )}
@@ -223,10 +223,10 @@ export default function ProjectDetailContent({ project }: { project: Project }) 
                 {detail.results.map((r) => (
                   <div
                     key={r.metric}
-                    className="rounded-2xl bg-white border border-beige-dark p-5 text-center shadow-warm"
+                    className="rounded-2xl bg-[#F8F8F8] border border-white/06 p-5 text-center "
                   >
-                    <div className="font-heading text-2xl font-bold text-sage mb-1">{r.value}</div>
-                    <div className="text-stone text-xs">{r.metric}</div>
+                    <div className="font-heading text-2xl font-bold text-[#E63327] mb-1">{r.value}</div>
+                    <div className="text-[#0A0A0F]/45 text-xs">{r.metric}</div>
                   </div>
                 ))}
               </div>
@@ -241,7 +241,7 @@ export default function ProjectDetailContent({ project }: { project: Project }) 
                 {detail.services.map((s) => (
                   <Badge
                     key={s}
-                    className="bg-sage/10 text-sage border-sage/20"
+                    className="bg-[#E63327]/10 text-[#E63327] border-[#E63327]/20"
                   >
                     {s}
                   </Badge>
@@ -253,7 +253,7 @@ export default function ProjectDetailContent({ project }: { project: Project }) 
       </section>
 
       {/* Related projects */}
-      <section className="py-16 bg-beige-dark border-t border-beige-darker">
+      <section className="py-16 bg-[#F8F8F8] border-t border-white/06">
         <div className="max-w-7xl mx-auto px-6">
           <AnimatedSection>
             <h2 className="font-heading text-2xl font-bold text-foreground mb-8">More Work</h2>
@@ -264,16 +264,16 @@ export default function ProjectDetailContent({ project }: { project: Project }) 
                 <Link href={`/work/${p.slug}`} className="block group">
                   <motion.div
                     whileHover={{ y: -4 }}
-                    className="rounded-2xl bg-white border border-beige-dark p-6 shadow-warm hover:shadow-warm-lg transition-shadow"
+                    className="rounded-2xl bg-[#F8F8F8] border border-white/06 p-6  hover: transition-shadow"
                   >
                     <div className="flex items-center justify-between mb-3">
-                      <span className="text-stone text-xs font-medium uppercase tracking-wider">{p.category}</span>
-                      <ArrowUpRight size={14} className="text-stone group-hover:text-sage transition-colors" />
+                      <span className="text-[#0A0A0F]/45 text-xs font-medium uppercase tracking-wider">{p.category}</span>
+                      <ArrowUpRight size={14} className="text-[#0A0A0F]/45 group-hover:text-[#E63327] transition-colors" />
                     </div>
-                    <h3 className="font-heading text-lg font-bold text-foreground group-hover:text-sage transition-colors">
+                    <h3 className="font-heading text-lg font-bold text-foreground group-hover:text-[#E63327] transition-colors">
                       {p.title}
                     </h3>
-                    <div className="mt-2 text-xs font-semibold text-sage">{p.result}</div>
+                    <div className="mt-2 text-xs font-semibold text-[#E63327]">{p.result}</div>
                   </motion.div>
                 </Link>
               </AnimatedSection>

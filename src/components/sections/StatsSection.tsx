@@ -33,16 +33,16 @@ const stats = [
 
 export default function StatsSection() {
   return (
-    <section className="py-20 bg-sage/10 border-y border-sage/15">
+    <section className="py-20 bg-[#E63327]/10 border-y border-[#E63327]/15">
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 lg:grid-cols-4 gap-8">
         {stats.map((stat, i) => (
           <AnimatedSection key={stat.label} delay={i * 0.1}>
             <div className="text-center">
-              <div className="font-heading text-4xl md:text-5xl font-bold text-sage mb-1">
+              <div className="font-heading text-4xl md:text-5xl font-bold text-[#E63327] mb-1">
                 <Counter to={stat.value} suffix={stat.suffix} />
               </div>
               <div className="font-semibold text-foreground text-sm mb-1">{stat.label}</div>
-              <div className="text-stone text-xs">{stat.desc}</div>
+              <div className="text-[#0A0A0F]/45 text-xs">{stat.desc}</div>
             </div>
           </AnimatedSection>
         ))}

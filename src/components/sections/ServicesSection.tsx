@@ -49,20 +49,20 @@ export default function ServicesSection() {
   const [hovered, setHovered] = useState<number | null>(null);
 
   return (
-    <section className="bg-[#2C2416] py-32">
+    <section className="bg-white py-32">
       <div className="max-w-[1440px] mx-auto px-8">
 
         {/* Header row */}
         <div className="flex items-end justify-between mb-16 border-b border-[#3D3222] pb-8">
           <AnimatedSection>
-            <h2 className="font-heading text-display-md font-bold text-[#F5F1E8] leading-none tracking-[-0.03em]">
+            <h2 className="font-heading text-display-md font-bold text-[#F5F5FA] leading-none tracking-[-0.03em]">
               What we do
             </h2>
           </AnimatedSection>
           <AnimatedSection delay={0.1}>
             <Link
               href="/services"
-              className="text-label text-[#8B7E6E] border-b border-[#4D4232] hover:border-[#9CAF88] hover:text-[#9CAF88] pb-0.5 transition-all"
+              className="text-label text-[#8B7E6E] border-b border-[#4D4232] hover:border-[#E63327] hover:text-[#E63327] pb-0.5 transition-all"
             >
               All Services
             </Link>
@@ -86,7 +86,7 @@ export default function ServicesSection() {
                       animate={{ scaleX: 1 }}
                       exit={{ scaleX: 0 }}
                       transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                      className="absolute inset-0 bg-[#9CAF88]/8 rounded-none pointer-events-none"
+                      className="absolute inset-0 bg-[#E63327]/8 rounded-none pointer-events-none"
                     />
                   )}
                 </AnimatePresence>
@@ -101,7 +101,7 @@ export default function ServicesSection() {
                   </span>
 
                   {/* Title */}
-                  <span className="font-heading text-2xl md:text-3xl font-bold text-[#F5F1E8] flex-1 group-hover:text-[#9CAF88] transition-colors duration-300">
+                  <span className="font-heading text-2xl md:text-3xl font-bold text-[#F5F5FA] flex-1 group-hover:text-[#E63327] transition-colors duration-300">
                     {service.title}
                   </span>
 
@@ -123,7 +123,7 @@ export default function ServicesSection() {
                     transition={{ duration: 0.2 }}
                     className="w-8 h-8 flex items-center justify-center flex-shrink-0"
                   >
-                    <ArrowUpRight size={16} className="text-[#9CAF88]" />
+                    <ArrowUpRight size={16} className="text-[#E63327]" />
                   </motion.div>
                 </Link>
               </motion.div>

@@ -37,7 +37,7 @@ function WormholeTunnel() {
     });
   });
 
-  const colors = ["#9CAF88", "#B8C9A8", "#7A9068"];
+  const colors = ["#E63327", "#FF5349", "#B5261B"];
 
   return (
     <group>
@@ -67,7 +67,7 @@ function WormholeTunnel() {
       {/* Central glowing orb at the vanishing point */}
       <mesh position={[0, 0, -TOTAL_DEPTH]}>
         <sphereGeometry args={[1.2, 32, 32]} />
-        <meshBasicMaterial color="#9CAF88" transparent opacity={0.6} />
+        <meshBasicMaterial color="#E63327" transparent opacity={0.6} />
       </mesh>
     </group>
   );
@@ -90,7 +90,7 @@ function AccentOrbs() {
         return (
           <mesh key={i} position={[Math.cos(angle) * r, Math.sin(angle) * r * 0.6, 0]}>
             <sphereGeometry args={[0.055, 12, 12]} />
-            <meshBasicMaterial color="#9CAF88" transparent opacity={0.8} />
+            <meshBasicMaterial color="#E63327" transparent opacity={0.8} />
           </mesh>
         );
       })}
