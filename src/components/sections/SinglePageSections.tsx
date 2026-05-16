@@ -707,8 +707,8 @@ function ContactSection({ settings }: { settings: Settings }) {
 
   /* shared field row classes */
   const row   = "flex flex-col sm:flex-row sm:items-center gap-3 border-t border-[#1C1C1C]/08 py-6";
-  const lbl   = "w-36 flex-shrink-0 text-[#1C1C1C]/45 text-xs font-mono uppercase tracking-widest";
-  const input = "flex-1 bg-transparent text-[#1C1C1C] text-lg outline-none placeholder:text-[#1C1C1C]/25 border-none";
+  const lbl   = "sm:w-36 flex-shrink-0 text-[#1C1C1C]/45 text-xs font-mono uppercase tracking-widest";
+  const input = "w-full min-w-0 bg-transparent text-[#1C1C1C] text-lg outline-none placeholder:text-[#1C1C1C]/25 border-none";
 
   return (
     <section id="contact" className="bg-[#F5EFE6]">
@@ -812,7 +812,7 @@ function ContactSection({ settings }: { settings: Settings }) {
               {/* Name */}
               <div className={row}>
                 <label className={lbl}>Name *</label>
-                <div className="flex-1">
+                <div className="flex-1 min-w-0">
                   <input {...register("name")} placeholder="Your name" className={input} />
                   {errors.name && <p className="text-[#D64545] text-xs mt-1">{errors.name.message}</p>}
                 </div>
@@ -821,7 +821,7 @@ function ContactSection({ settings }: { settings: Settings }) {
               {/* Email */}
               <div className={row}>
                 <label className={lbl}>Email *</label>
-                <div className="flex-1">
+                <div className="flex-1 min-w-0">
                   <input {...register("email")} type="email" placeholder="your@email.com" className={input} />
                   {errors.email && <p className="text-[#D64545] text-xs mt-1">{errors.email.message}</p>}
                 </div>
@@ -839,12 +839,12 @@ function ContactSection({ settings }: { settings: Settings }) {
               {/* Project Brief */}
               <div className={`${row} sm:items-start`}>
                 <label className={`${lbl} pt-1`}>Brief *</label>
-                <div className="flex-1">
+                <div className="flex-1 min-w-0">
                   <textarea
                     {...register("message")}
                     rows={5}
                     placeholder="Tell us about your project goals, timeline, and challenges…"
-                    className={`${input} resize-none w-full`}
+                    className={`${input} resize-none`}
                   />
                   {errors.message && <p className="text-[#D64545] text-xs mt-1">{errors.message.message}</p>}
                 </div>

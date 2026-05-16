@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Inbox, Trash2, Mail, Building2, DollarSign, Calendar, Tag, RefreshCw } from "lucide-react";
+import { useEffect, useRef, useState, useCallback } from "react";
+import { Inbox, Trash2, Mail, Building2, DollarSign, Calendar, RefreshCw, Loader2 } from "lucide-react";
 import { Toast, type ToastState } from "../_components/Toast";
 import { PageHeader } from "../_components/PageHeader";
 
@@ -16,6 +16,8 @@ type Lead = {
   createdAt: string;
 };
 
+type Counts = { all: number; new: number; contacted: number; converted: number; archived: number };
+
 const STATUS_CONFIG = {
   new:       { label: "New",       color: "#E63327", bg: "rgba(230,51,39,0.1)"  },
   contacted: { label: "Contacted", color: "#D97706", bg: "rgba(217,119,6,0.1)"  },
@@ -25,6 +27,7 @@ const STATUS_CONFIG = {
 
 const ALL_STATUSES = Object.keys(STATUS_CONFIG) as Lead["status"][];
 
+// ── Status badge ─────────────────────────────────────────────────────────────
 function StatusBadge({ status, onChange }: { status: Lead["status"]; onChange: (s: Lead["status"]) => void }) {
   const [open, setOpen] = useState(false);
   const cfg = STATUS_CONFIG[status];
@@ -59,6 +62,7 @@ function StatusBadge({ status, onChange }: { status: Lead["status"]; onChange: (
   );
 }
 
+// ── Lead card ─────────────────────────────────────────────────────────────────
 function LeadCard({ lead, onStatusChange, onDelete }: {
   lead: Lead;
   onStatusChange: (id: string, status: Lead["status"]) => void;
@@ -132,21 +136,81 @@ function LeadCard({ lead, onStatusChange, onDelete }: {
   );
 }
 
+// ── Main page ─────────────────────────────────────────────────────────────────
 export default function LeadsPage() {
-  const [leads, setLeads] = useState<Lead[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState<Lead["status"] | "all">("all");
-  const [toast, setToast] = useState<ToastState>(null);
+  const [leads, setLeads]       = useState<Lead[]>([]);
+  const [counts, setCounts]     = useState<Counts>({ all: 0, new: 0, contacted: 0, converted: 0, archived: 0 });
+  const [filter, setFilter]     = useState<Lead["status"] | "all">("all");
+  const [page, setPage]         = useState(1);
+  const [hasMore, setHasMore]   = useState(true);
+  const [initialLoad, setInitialLoad] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [toast, setToast]       = useState<ToastState>(null);
+  const sentinelRef             = useRef<HTMLDivElement>(null);
+  const filterRef               = useRef(filter);
+  filterRef.current = filter;
 
-  const load = async () => {
-    setLoading(true);
-    const res = await fetch("/api/admin/leads");
-    const data = await res.json();
-    setLeads(Array.isArray(data) ? data : []);
-    setLoading(false);
-  };
+  // Fetch one page of leads
+  const fetchPage = useCallback(async (pageNum: number, status: Lead["status"] | "all", replace: boolean) => {
+    if (pageNum === 1) setInitialLoad(true); else setLoadingMore(true);
+    try {
+      const res = await fetch(`/api/admin/leads?page=${pageNum}&status=${status}`);
+      const data = await res.json();
+      setLeads((prev) => replace ? data.leads : [...prev, ...data.leads]);
+      setHasMore(data.hasMore);
+      setPage(pageNum);
+    } finally {
+      setInitialLoad(false);
+      setLoadingMore(false);
+    }
+  }, []);
 
-  useEffect(() => { load(); }, []);
+  // Fetch counts separately (always unfiltered)
+  const fetchCounts = useCallback(async () => {
+    try {
+      const res = await fetch("/api/admin/leads?counts=1");
+      const data = await res.json();
+      setCounts(data);
+    } catch { /* silent */ }
+  }, []);
+
+  // Initial load + counts
+  useEffect(() => {
+    fetchPage(1, filter, true);
+    fetchCounts();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Re-fetch when filter changes
+  useEffect(() => {
+    fetchPage(1, filter, true);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filter]);
+
+  // IntersectionObserver — fires when sentinel enters viewport
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !loadingMore && !initialLoad) {
+          setHasMore((more) => {
+            if (more) {
+              setPage((p) => {
+                const next = p + 1;
+                fetchPage(next, filterRef.current, false);
+                return next;
+              });
+            }
+            return more;
+          });
+        }
+      },
+      { rootMargin: "200px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [loadingMore, initialLoad, fetchPage]);
 
   const handleStatusChange = async (id: string, status: Lead["status"]) => {
     setLeads((prev) => prev.map((l) => (l._id === id ? { ...l, status } : l)));
@@ -155,6 +219,7 @@ export default function LeadsPage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id, status }),
     });
+    if (res.ok) fetchCounts();
     setToast(res.ok
       ? { message: "Status updated", type: "success" }
       : { message: "Update failed", type: "error" }
@@ -169,20 +234,16 @@ export default function LeadsPage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id }),
     });
+    if (res.ok) fetchCounts();
     setToast(res.ok
       ? { message: "Lead deleted", type: "success" }
       : { message: "Delete failed", type: "error" }
     );
   };
 
-  const filtered = filter === "all" ? leads : leads.filter((l) => l.status === filter);
-
-  const counts = {
-    all: leads.length,
-    new: leads.filter((l) => l.status === "new").length,
-    contacted: leads.filter((l) => l.status === "contacted").length,
-    converted: leads.filter((l) => l.status === "converted").length,
-    archived: leads.filter((l) => l.status === "archived").length,
+  const handleRefresh = () => {
+    fetchPage(1, filter, true);
+    fetchCounts();
   };
 
   return (
@@ -194,66 +255,78 @@ export default function LeadsPage() {
         subtitle="All enquiries submitted through the contact form."
         action={
           <button
-            onClick={load}
+            onClick={handleRefresh}
             className="flex items-center gap-2 text-sm text-[#0A0A0F]/50 hover:text-[#0A0A0F] transition-colors font-mono"
           >
-            <RefreshCw size={13} className={loading ? "animate-spin" : ""} />
+            <RefreshCw size={13} className={initialLoad ? "animate-spin" : ""} />
             Refresh
           </button>
         }
       />
 
-      {/* Summary stats */}
+      {/* Summary counts */}
       <div className="grid grid-cols-3 sm:grid-cols-5 gap-2 md:gap-3 mb-6 md:mb-8">
-        {[
-          { key: "all",       label: "Total"     },
-          { key: "new",       label: "New"       },
-          { key: "contacted", label: "Contacted" },
-          { key: "converted", label: "Converted" },
-          { key: "archived",  label: "Archived"  },
-        ].map(({ key, label }) => (
+        {(["all", "new", "contacted", "converted", "archived"] as const).map((key) => (
           <button
             key={key}
-            onClick={() => setFilter(key as Lead["status"] | "all")}
+            onClick={() => setFilter(key)}
             className={`rounded-xl border px-3 md:px-4 py-3 text-left transition-all ${
               filter === key
                 ? "bg-[#E63327] border-[#E63327] text-white"
                 : "bg-white border-[#0A0A0F]/06 text-[#0A0A0F] hover:border-[#E63327]/30"
             }`}
           >
-            <div className="text-xl md:text-2xl font-bold leading-none mb-1">
-              {counts[key as keyof typeof counts]}
-            </div>
-            <div className={`text-[10px] md:text-xs font-mono ${filter === key ? "text-white/70" : "text-[#0A0A0F]/40"}`}>
-              {label}
+            <div className="text-xl md:text-2xl font-bold leading-none mb-1">{counts[key]}</div>
+            <div className={`text-[10px] md:text-xs font-mono capitalize ${filter === key ? "text-white/70" : "text-[#0A0A0F]/40"}`}>
+              {key === "all" ? "Total" : key}
             </div>
           </button>
         ))}
       </div>
 
-      {/* Filter tabs */}
-      {loading ? (
+      {/* Lead list */}
+      {initialLoad ? (
         <div className="flex items-center gap-3 text-[#0A0A0F]/40 py-20 justify-center">
           <div className="w-5 h-5 border-2 border-[#E63327]/30 border-t-[#E63327] rounded-full animate-spin" />
           Loading leads…
         </div>
-      ) : filtered.length === 0 ? (
+      ) : leads.length === 0 ? (
         <div className="text-center py-24 text-[#0A0A0F]/30">
           <Inbox size={40} className="mx-auto mb-4 opacity-30" />
           <p className="font-mono text-sm">No leads yet.</p>
           <p className="text-xs mt-1">They&apos;ll appear here when someone submits the contact form.</p>
         </div>
       ) : (
-        <div className="space-y-4">
-          {filtered.map((lead) => (
-            <LeadCard
-              key={lead._id}
-              lead={lead}
-              onStatusChange={handleStatusChange}
-              onDelete={handleDelete}
-            />
-          ))}
-        </div>
+        <>
+          <div className="space-y-4">
+            {leads.map((lead) => (
+              <LeadCard
+                key={lead._id}
+                lead={lead}
+                onStatusChange={handleStatusChange}
+                onDelete={handleDelete}
+              />
+            ))}
+          </div>
+
+          {/* Sentinel — triggers next page load when visible */}
+          <div ref={sentinelRef} className="h-1" />
+
+          {/* Loading more indicator */}
+          {loadingMore && (
+            <div className="flex items-center justify-center gap-2 py-8 text-[#0A0A0F]/40 text-sm">
+              <Loader2 size={16} className="animate-spin text-[#E63327]" />
+              Loading more…
+            </div>
+          )}
+
+          {/* End of list */}
+          {!hasMore && leads.length > 0 && (
+            <p className="text-center text-xs font-mono text-[#0A0A0F]/25 py-8">
+              — {leads.length} lead{leads.length !== 1 ? "s" : ""} total —
+            </p>
+          )}
+        </>
       )}
     </div>
   );
