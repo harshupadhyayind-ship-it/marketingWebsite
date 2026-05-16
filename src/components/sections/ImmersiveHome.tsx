@@ -39,7 +39,7 @@ export default function ImmersiveHome() {
   const [data, setData] = useState<HomepageData>(homepageJson as HomepageData);
 
   useEffect(() => {
-    fetch("/api/content/homepage")
+    fetch("/api/content/homepage", { cache: "no-store" })
       .then((r) => r.ok ? r.json() : null)
       .then((d) => { if (d) setData(d); })
       .catch(() => {});
