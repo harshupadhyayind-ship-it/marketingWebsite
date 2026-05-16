@@ -1,35 +1,132 @@
 {
+  "sectionHeader": {
+    "label": "Who We Are",
+    "heading1": "We make brands",
+    "heading2": "impossible to ignore.",
+    "subtitle": "A full-service creative growth studio for ambitious Indian brands."
+  },
   "story": {
     "heading": "Marketing that feels like art.",
     "paragraph1": "BRANDD-AID was born from a simple frustration: most marketing looks the same. We set out to prove that strategic thinking and beautiful craft aren't mutually exclusive.",
     "paragraph2": "Founded in 2019, we've grown into a full-service creative growth studio trusted by ambitious brands across India."
   },
   "stats": [
-    { "val": "5+", "label": "Years of excellence" },
-    { "val": "120+", "label": "Projects delivered" },
-    { "val": "40+", "label": "Clients who trust us" },
-    { "val": "12", "label": "Full-time specialists" }
+    {
+      "val": "5+",
+      "label": "Years of excellence"
+    },
+    {
+      "val": "120+",
+      "label": "Projects delivered"
+    },
+    {
+      "val": "40+",
+      "label": "Clients who trust us"
+    },
+    {
+      "val": "12",
+      "label": "Full-time specialists"
+    }
+  ],
+  "mission": {
+    "heading": "To make brands impossible to ignore.",
+    "text": "We exist to help ambitious brands build a presence that commands attention — through strategic creativity, disciplined execution, and a genuine obsession with results."
+  },
+  "vision": {
+    "heading": "India's most trusted creative growth partner.",
+    "text": "We're building a studio that India's best brands choose not because we're the cheapest, but because we're the best — and because we genuinely care about their success."
+  },
+  "howWeWork": {
+    "heading": "Four principles",
+    "headingRed": "we never compromise.",
+    "label": "How We Work"
+  },
+  "values": [
+    {
+      "title": "Craft First",
+      "desc": "Great work is the best business strategy. Quality is non-negotiable."
+    },
+    {
+      "title": "Relentlessly Fast",
+      "desc": "Speed is a competitive advantage. We move quickly without sacrificing quality."
+    },
+    {
+      "title": "Radically Honest",
+      "desc": "We'll tell you what you need to hear, not just what you want to hear."
+    },
+    {
+      "title": "Partner Mentality",
+      "desc": "We treat your brand like it's ours. Long-term relationships, not transactions."
+    }
   ],
   "team": [
-    { "name": "Aryan Malhotra", "role": "Founder & Creative Director", "bio": "Former creative lead at Ogilvy. 12 years building brands across FMCG, tech, and lifestyle.", "initial": "A" },
-    { "name": "Sanya Kapoor", "role": "Head of Strategy", "bio": "Ex-BCG consultant turned marketer. Rigorous analytical frameworks for every brand challenge.", "initial": "S" },
-    { "name": "Rahul Dev", "role": "Lead Developer", "bio": "Full-stack engineer specialising in Next.js, Three.js, and performance-first web architecture.", "initial": "R" },
-    { "name": "Meera Shah", "role": "Head of Paid Media", "bio": "₹50Cr+ in managed ad spend across Meta, Google, and programmatic channels.", "initial": "M" },
-    { "name": "Kabir Nair", "role": "Content Director", "bio": "Writer, photographer, and storyteller. Content creator for 20+ brands across India.", "initial": "K" },
-    { "name": "Priya Joshi", "role": "Brand Designer", "bio": "Visual identity specialist and Figma wizard. 60+ brand identities designed from scratch.", "initial": "P" }
+    {
+      "name": "Aryan Malhotra",
+      "role": "Founder & Creative Director",
+      "bio": "Former creative lead at Ogilvy. 12 years building brands across FMCG, tech, and lifestyle.",
+      "initial": "A"
+    },
+    {
+      "name": "Sanya Kapoor",
+      "role": "Head of Strategy",
+      "bio": "Ex-BCG consultant turned marketer. Rigorous analytical frameworks for every brand challenge.",
+      "initial": "S"
+    },
+    {
+      "name": "Rahul Dev",
+      "role": "Lead Developer",
+      "bio": "Full-stack engineer specialising in Next.js, Three.js, and performance-first web architecture.",
+      "initial": "R"
+    },
+    {
+      "name": "Meera Shah",
+      "role": "Head of Paid Media",
+      "bio": "₹50Cr+ in managed ad spend across Meta, Google, and programmatic channels.",
+      "initial": "M"
+    },
+    {
+      "name": "Kabir Nair",
+      "role": "Content Director",
+      "bio": "Writer, photographer, and storyteller. Content creator for 20+ brands across India.",
+      "initial": "K"
+    },
+    {
+      "name": "Priya Joshi",
+      "role": "Brand Designer",
+      "bio": "Visual identity specialist and Figma wizard. 60+ brand identities designed from scratch.",
+      "initial": "P"
+    }
   ],
   "milestones": [
-    { "year": "2019", "event": "BRANDD-AID founded in Mumbai" },
-    { "year": "2020", "event": "First 10 clients — 100% from referrals" },
-    { "year": "2021", "event": "Launched in-house content studio" },
-    { "year": "2022", "event": "Crossed ₹1Cr in managed media spend" },
-    { "year": "2023", "event": "Expanded team to 12 full-time specialists" },
-    { "year": "2024", "event": "Named one of India's Top 25 indie agencies" }
+    {
+      "year": "2019",
+      "event": "BRANDD-AID founded in Mumbai"
+    },
+    {
+      "year": "2020",
+      "event": "First 10 clients — 100% from referrals"
+    },
+    {
+      "year": "2021",
+      "event": "Launched in-house content studio"
+    },
+    {
+      "year": "2022",
+      "event": "Crossed ₹1Cr in managed media spend"
+    },
+    {
+      "year": "2023",
+      "event": "Expanded team to 12 full-time specialists"
+    },
+    {
+      "year": "2024",
+      "event": "Named one of India's Top 25 indie agencies"
+    }
   ],
-  "values": [
-    { "title": "Craft First", "desc": "Great work is the best business strategy. Quality is non-negotiable." },
-    { "title": "Relentlessly Fast", "desc": "Speed is a competitive advantage. We move quickly without sacrificing quality." },
-    { "title": "Radically Honest", "desc": "We'll tell you what you need to hear, not just what you want to hear." },
-    { "title": "Partner Mentality", "desc": "We treat your brand like it's ours. Long-term relationships, not transactions." }
-  ]
+  "cta": {
+    "heading1": "Let's build",
+    "heading2": "together.",
+    "subtitle": "Ready to build a brand that can't be ignored? We'd love to hear about your project.",
+    "buttonText": "Start a Project →"
+  }
 }

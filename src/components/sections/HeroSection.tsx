@@ -96,7 +96,7 @@ export default function HeroSection({ hero }: { hero: HeroData }) {
           </p>
 
           <Link
-            href="/work"
+            href="/#work"
             className="group inline-flex items-center gap-3 text-foreground font-medium hover:text-[#D64545] transition-colors"
           >
             <span className="text-label">View Our Work</span>

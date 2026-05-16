@@ -3,10 +3,10 @@ import Image from "next/image";
 import settingsData from "@/data/settings.json";
 
 const links = [
-  { label: "Services", href: "/services" },
-  { label: "Work",     href: "/work"     },
-  { label: "About",    href: "/about"    },
-  { label: "Contact",  href: "/contact"  },
+  { label: "Services", href: "/#services" },
+  { label: "Work",     href: "/#work"     },
+  { label: "About",    href: "/#about"    },
+  { label: "Contact",  href: "/#contact"  },
 ];
 
 export default function Footer() {

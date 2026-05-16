@@ -57,7 +57,7 @@ export default function CTASection() {
               </a>
 
               <Link
-                href="/contact"
+                href="/#contact"
                 className="group inline-flex items-center gap-3 bg-[#D64545] text-white font-semibold px-7 py-3.5 rounded-full hover:bg-[#E05555] transition-colors"
               >
                 Start a Project

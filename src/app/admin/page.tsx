@@ -2,9 +2,16 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { FolderOpen, Briefcase, Users, Home, Settings, ArrowRight } from "lucide-react";
+import { FolderOpen, Briefcase, Users, Home, Settings, ArrowRight, Inbox } from "lucide-react";
 
 const SECTIONS = [
+  {
+    label: "Leads",
+    desc: "Contact form submissions from visitors",
+    href: "/admin/leads",
+    icon: Inbox,
+    color: "#E63327",
+  },
   {
     label: "Homepage",
     desc: "Hero headline, subtitle, stats",
@@ -28,7 +35,7 @@ const SECTIONS = [
   },
   {
     label: "About",
-    desc: "Team, milestones, values, stats",
+    desc: "Team, values, stats",
     href: "/admin/about",
     icon: Users,
     color: "#E63327",

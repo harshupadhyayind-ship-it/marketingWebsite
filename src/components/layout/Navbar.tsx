@@ -8,11 +8,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import settingsData from "@/data/settings.json";
 
 const NAV_LINKS = [
-  { label: "Home",     href: "/",        index: "01" },
-  { label: "Services", href: "/services", index: "02" },
-  { label: "Work",     href: "/work",     index: "03" },
-  { label: "About",    href: "/about",    index: "04" },
-  { label: "Contact",  href: "/contact",  index: "05" },
+  { label: "Home",     href: "/",         anchor: "",         index: "01" },
+  { label: "Services", href: "/#services", anchor: "services", index: "02" },
+  { label: "Work",     href: "/#work",     anchor: "work",     index: "03" },
+  { label: "About",    href: "/#about",    anchor: "about",         index: "04" },
+  { label: "Contact",  href: "/#contact",  anchor: "contact",  index: "05" },
 ];
 
 const SOCIAL = [
@@ -53,10 +53,19 @@ export default function Navbar() {
             menu
           </span>
         </button>
-        <Link href="/contact" className="flex items-baseline gap-1.5 group mt-0.5">
+        <a
+          href="#contact"
+          onClick={(e) => {
+            e.preventDefault();
+            const el = document.getElementById("contact");
+            if (el) el.scrollIntoView({ behavior: "smooth" });
+            else window.location.href = "/#contact";
+          }}
+          className="flex items-baseline gap-1.5 group mt-0.5 cursor-pointer"
+        >
           <span className="text-[#D64545]/60 text-[10px] font-mono leading-none">(01)</span>
           <span className="text-[#1C1C1C]/50 text-sm font-medium group-hover:text-[#1C1C1C] transition-colors duration-200">contact</span>
-        </Link>
+        </a>
       </div>
 
       {/* ── Full-screen overlay ── */}
@@ -122,7 +131,7 @@ export default function Navbar() {
                   <NavLink
                     key={link.href}
                     {...link}
-                    active={pathname === link.href}
+                    active={pathname === "/" && link.href === "/" || pathname !== "/" && pathname.startsWith(link.href.replace("#", "").replace("/#", "/"))}
                     delay={0.15 + i * 0.07}
                     onClick={() => setOpen(false)}
                   />
@@ -162,23 +171,37 @@ export default function Navbar() {
 }
 
 const NAV_DESCRIPTIONS: Record<string, string> = {
-  "/":         "Start here",
-  "/services": "Brand · Performance · Web",
-  "/work":     "120+ projects",
-  "/about":    "Our story",
-  "/contact":  "Let's talk",
+  "/":          "Start here",
+  "/#services": "Brand · Performance · Web",
+  "/#work":     "120+ projects",
+  "/about":     "Our story",
+  "/#contact":  "Let's talk",
 };
 
 function NavLink({
-  label, href, index, active, delay, onClick,
+  label, href, anchor, index, active, delay, onClick,
 }: {
-  label: string; href: string; index: string;
+  label: string; href: string; anchor: string; index: string;
   active?: boolean; delay: number; onClick: () => void;
 }) {
   const [hovered, setHovered] = useState(false);
 
+  const handleClick = (e: React.MouseEvent) => {
+    onClick();
+    if (anchor) {
+      e.preventDefault();
+      const el = document.getElementById(anchor);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      } else {
+        // Navigate to home then scroll after load
+        window.location.href = href;
+      }
+    }
+  };
+
   return (
-    <Link href={href} onClick={onClick} className="flex-1 flex items-center border-b border-[#1C1C1C]/08 last:border-b-0">
+    <Link href={href} onClick={handleClick} className="flex-1 flex items-center border-b border-[#1C1C1C]/08 last:border-b-0">
       <motion.div
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}

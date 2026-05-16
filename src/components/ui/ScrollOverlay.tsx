@@ -205,7 +205,7 @@ export default function ScrollOverlay() {
           </p>
           <div className="flex items-center gap-5 pointer-events-auto flex-wrap">
             <Link
-              href="/contact"
+              href="/#contact"
               className="group relative overflow-hidden bg-[#D64545] text-white font-bold px-8 py-4 rounded-sm text-sm uppercase tracking-widest hover:bg-[#E05555] transition-colors duration-200"
               style={{ boxShadow: "0 0 30px rgba(214,69,69,0.4)" }}
             >

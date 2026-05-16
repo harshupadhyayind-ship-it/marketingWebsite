@@ -12,6 +12,24 @@
     "linkedin": "https://linkedin.com",
     "twitter": "https://twitter.com"
   },
+  "contactSection": {
+    "label": "Get In Touch",
+    "heading1": "Let's build something",
+    "heading2": "extraordinary.",
+    "responseTime": "Usually responds within 24 hrs"
+  },
+  "workSection": {
+    "label": "Selected Work",
+    "heading1": "Work that",
+    "heading2": "speaks.",
+    "subtitle": "projects across brand, performance, web & content."
+  },
+  "servicesSection": {
+    "label": "What We Do",
+    "heading1": "Services designed",
+    "heading2": "to move the needle.",
+    "subtitle": "Every service delivered with craft, data, and a relentless focus on results."
+  },
   "marquee": [
     "Brand Strategy",
     "Web Design",

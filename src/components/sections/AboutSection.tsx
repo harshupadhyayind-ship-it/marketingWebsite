@@ -68,7 +68,7 @@ export default function AboutSection() {
 
             <div className="mt-10">
               <Link
-                href="/about"
+                href="/#about"
                 className="group inline-flex items-center gap-2 text-label text-foreground border-b border-foreground/30 hover:border-[#D64545] hover:text-[#D64545] pb-0.5 transition-all"
               >
                 Our Story

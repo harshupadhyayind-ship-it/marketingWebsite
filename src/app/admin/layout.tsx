@@ -3,10 +3,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { LayoutDashboard, FolderOpen, Briefcase, Users, Home, Settings, LogOut } from "lucide-react";
+import { LayoutDashboard, FolderOpen, Briefcase, Users, Home, Settings, LogOut, Inbox } from "lucide-react";
 
 const NAV = [
   { label: "Dashboard",  href: "/admin",          icon: LayoutDashboard },
+  { label: "Leads",      href: "/admin/leads",     icon: Inbox },
   { label: "Homepage",   href: "/admin/homepage",  icon: Home },
   { label: "Projects",   href: "/admin/projects",  icon: FolderOpen },
   { label: "Services",   href: "/admin/services",  icon: Briefcase },

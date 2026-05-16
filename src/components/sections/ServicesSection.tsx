@@ -29,7 +29,7 @@ export default function ServicesSection({ services }: { services: ServiceItem[] 
           </AnimatedSection>
           <AnimatedSection delay={0.1}>
             <Link
-              href="/services"
+              href="/#services"
               className="text-label text-[#1C1C1C]/45 border-b border-[#1C1C1C]/20 hover:border-[#D64545] hover:text-[#D64545] pb-0.5 transition-all"
             >
               All Services
@@ -60,7 +60,7 @@ export default function ServicesSection({ services }: { services: ServiceItem[] 
                 </AnimatePresence>
 
                 <Link
-                  href={`/services#${service.slug}`}
+                  href="/#services"
                   className="relative flex items-center justify-between py-7 gap-6"
                 >
                   {/* Number */}

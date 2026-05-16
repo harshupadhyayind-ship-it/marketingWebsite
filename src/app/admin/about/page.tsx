@@ -6,11 +6,16 @@ import { PageHeader } from "../_components/PageHeader";
 import { Plus, Trash2, Save } from "lucide-react";
 
 type AboutData = {
+  sectionHeader: { label: string; heading1: string; heading2: string; subtitle: string };
   story: { heading: string; paragraph1: string; paragraph2: string };
   stats: { val: string; label: string }[];
+  mission: { heading: string; text: string };
+  vision: { heading: string; text: string };
+  howWeWork: { heading: string; headingRed: string; label: string };
+  values: { title: string; desc: string }[];
   team: { name: string; role: string; bio: string; initial: string }[];
   milestones: { year: string; event: string }[];
-  values: { title: string; desc: string }[];
+  cta: { heading1: string; heading2: string; subtitle: string; buttonText: string };
 };
 
 export default function AboutEditor() {
@@ -43,9 +48,25 @@ export default function AboutEditor() {
       <Toast toast={toast} onClose={() => setToast(null)} />
       <PageHeader
         title="About Page"
-        subtitle="Story, team members, milestones and values."
+        subtitle="Hero header, story, stats, mission, vision, how we work, values, team, and CTA."
         action={<SaveBtn saving={saving} onClick={save} />}
       />
+
+      {/* Hero Header */}
+      <Section title="Hero Header">
+        <Field label="Label (small uppercase text)">
+          <Input value={data.sectionHeader.label} onChange={(v) => setData((d) => d ? { ...d, sectionHeader: { ...d.sectionHeader, label: v } } : d)} />
+        </Field>
+        <Field label="Heading Line 1">
+          <Input value={data.sectionHeader.heading1} onChange={(v) => setData((d) => d ? { ...d, sectionHeader: { ...d.sectionHeader, heading1: v } } : d)} />
+        </Field>
+        <Field label="Heading Line 2 (shown in red)">
+          <Input value={data.sectionHeader.heading2} onChange={(v) => setData((d) => d ? { ...d, sectionHeader: { ...d.sectionHeader, heading2: v } } : d)} />
+        </Field>
+        <Field label="Subtitle">
+          <Textarea value={data.sectionHeader.subtitle} onChange={(v) => setData((d) => d ? { ...d, sectionHeader: { ...d.sectionHeader, subtitle: v } } : d)} rows={2} />
+        </Field>
+      </Section>
 
       {/* Story */}
       <Section title="Our Story">
@@ -86,6 +107,73 @@ export default function AboutEditor() {
                 className="p-1.5 text-[#0A0A0F]/25 hover:text-red-500 transition-colors flex-shrink-0">
                 <Trash2 size={13} />
               </button>
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      {/* Mission */}
+      <Section title="Mission">
+        <Field label="Heading">
+          <Input value={data.mission.heading} onChange={(v) => setData((d) => d ? { ...d, mission: { ...d.mission, heading: v } } : d)} />
+        </Field>
+        <Field label="Text">
+          <Textarea value={data.mission.text} onChange={(v) => setData((d) => d ? { ...d, mission: { ...d.mission, text: v } } : d)} rows={3} />
+        </Field>
+      </Section>
+
+      {/* Vision */}
+      <Section title="Vision">
+        <Field label="Heading">
+          <Input value={data.vision.heading} onChange={(v) => setData((d) => d ? { ...d, vision: { ...d.vision, heading: v } } : d)} />
+        </Field>
+        <Field label="Text">
+          <Textarea value={data.vision.text} onChange={(v) => setData((d) => d ? { ...d, vision: { ...d.vision, text: v } } : d)} rows={3} />
+        </Field>
+      </Section>
+
+      {/* How We Work */}
+      <Section title="How We Work">
+        <Field label="Label (small uppercase text)">
+          <Input value={data.howWeWork.label} onChange={(v) => setData((d) => d ? { ...d, howWeWork: { ...d.howWeWork, label: v } } : d)} />
+        </Field>
+        <Field label="Heading (black text)">
+          <Input value={data.howWeWork.heading} onChange={(v) => setData((d) => d ? { ...d, howWeWork: { ...d.howWeWork, heading: v } } : d)} />
+        </Field>
+        <Field label="Heading Red (second line, shown in red)">
+          <Input value={data.howWeWork.headingRed} onChange={(v) => setData((d) => d ? { ...d, howWeWork: { ...d.howWeWork, headingRed: v } } : d)} />
+        </Field>
+      </Section>
+
+      {/* Values */}
+      <Section title="Our Values (How We Work grid)" action={
+        <button onClick={() => setData((d) => d ? { ...d, values: [...d.values, { title: "", desc: "" }] } : d)}
+          className="flex items-center gap-1.5 text-xs text-[#E63327] font-mono hover:underline">
+          <Plus size={12} /> Add Value
+        </button>
+      }>
+        <div className="grid grid-cols-2 gap-3">
+          {data.values.map((v, i) => (
+            <div key={i} className="bg-[#F7F7F8] rounded-xl p-4 space-y-2">
+              <div className="flex gap-2">
+                <input
+                  value={v.title}
+                  onChange={(e) => setData((d) => { if (!d) return d; const values = [...d.values]; values[i] = { ...values[i], title: e.target.value }; return { ...d, values }; })}
+                  className={`${inputCls} flex-1 font-semibold`}
+                  placeholder="Value title"
+                />
+                <button onClick={() => setData((d) => d ? { ...d, values: d.values.filter((_, idx) => idx !== i) } : d)}
+                  className="p-1.5 text-[#0A0A0F]/25 hover:text-red-500 transition-colors">
+                  <Trash2 size={13} />
+                </button>
+              </div>
+              <textarea
+                value={v.desc}
+                rows={2}
+                onChange={(e) => setData((d) => { if (!d) return d; const values = [...d.values]; values[i] = { ...values[i], desc: e.target.value }; return { ...d, values }; })}
+                className={`${inputCls} resize-none`}
+                placeholder="Description"
+              />
             </div>
           ))}
         </div>
@@ -146,69 +234,20 @@ export default function AboutEditor() {
         </div>
       </Section>
 
-      {/* Milestones */}
-      <Section title="Company Milestones" action={
-        <button onClick={() => setData((d) => d ? { ...d, milestones: [...d.milestones, { year: "2025", event: "" }] } : d)}
-          className="flex items-center gap-1.5 text-xs text-[#E63327] font-mono hover:underline">
-          <Plus size={12} /> Add
-        </button>
-      }>
-        <div className="space-y-2">
-          {data.milestones.map((m, i) => (
-            <div key={i} className="flex gap-2">
-              <input
-                value={m.year}
-                onChange={(e) => setData((d) => { if (!d) return d; const milestones = [...d.milestones]; milestones[i] = { ...milestones[i], year: e.target.value }; return { ...d, milestones }; })}
-                className={`${inputCls} w-20 flex-shrink-0 font-mono`}
-                placeholder="2024"
-              />
-              <input
-                value={m.event}
-                onChange={(e) => setData((d) => { if (!d) return d; const milestones = [...d.milestones]; milestones[i] = { ...milestones[i], event: e.target.value }; return { ...d, milestones }; })}
-                className={`${inputCls} flex-1`}
-                placeholder="Milestone description"
-              />
-              <button onClick={() => setData((d) => d ? { ...d, milestones: d.milestones.filter((_, idx) => idx !== i) } : d)}
-                className="p-2 text-[#0A0A0F]/25 hover:text-red-500 transition-colors flex-shrink-0">
-                <Trash2 size={13} />
-              </button>
-            </div>
-          ))}
-        </div>
-      </Section>
-
-      {/* Values */}
-      <Section title="Our Values" action={
-        <button onClick={() => setData((d) => d ? { ...d, values: [...d.values, { title: "", desc: "" }] } : d)}
-          className="flex items-center gap-1.5 text-xs text-[#E63327] font-mono hover:underline">
-          <Plus size={12} /> Add Value
-        </button>
-      }>
-        <div className="grid grid-cols-2 gap-3">
-          {data.values.map((v, i) => (
-            <div key={i} className="bg-[#F7F7F8] rounded-xl p-4 space-y-2">
-              <div className="flex gap-2">
-                <input
-                  value={v.title}
-                  onChange={(e) => setData((d) => { if (!d) return d; const values = [...d.values]; values[i] = { ...values[i], title: e.target.value }; return { ...d, values }; })}
-                  className={`${inputCls} flex-1 font-semibold`}
-                  placeholder="Value title"
-                />
-                <button onClick={() => setData((d) => d ? { ...d, values: d.values.filter((_, idx) => idx !== i) } : d)}
-                  className="p-1.5 text-[#0A0A0F]/25 hover:text-red-500 transition-colors">
-                  <Trash2 size={13} />
-                </button>
-              </div>
-              <textarea
-                value={v.desc}
-                rows={2}
-                onChange={(e) => setData((d) => { if (!d) return d; const values = [...d.values]; values[i] = { ...values[i], desc: e.target.value }; return { ...d, values }; })}
-                className={`${inputCls} resize-none`}
-                placeholder="Description"
-              />
-            </div>
-          ))}
-        </div>
+      {/* CTA */}
+      <Section title="CTA (Call to Action)">
+        <Field label="Heading Line 1">
+          <Input value={data.cta.heading1} onChange={(v) => setData((d) => d ? { ...d, cta: { ...d.cta, heading1: v } } : d)} />
+        </Field>
+        <Field label="Heading Line 2 (shown in red)">
+          <Input value={data.cta.heading2} onChange={(v) => setData((d) => d ? { ...d, cta: { ...d.cta, heading2: v } } : d)} />
+        </Field>
+        <Field label="Subtitle">
+          <Textarea value={data.cta.subtitle} onChange={(v) => setData((d) => d ? { ...d, cta: { ...d.cta, subtitle: v } } : d)} rows={2} />
+        </Field>
+        <Field label="Button Text">
+          <Input value={data.cta.buttonText} onChange={(v) => setData((d) => d ? { ...d, cta: { ...d.cta, buttonText: v } } : d)} />
+        </Field>
       </Section>
 
       <SaveBtn saving={saving} onClick={save} />

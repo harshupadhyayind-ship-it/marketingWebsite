@@ -5,9 +5,21 @@ import { Toast, type ToastState } from "../_components/Toast";
 import { PageHeader } from "../_components/PageHeader";
 import { Plus, Trash2, Save } from "lucide-react";
 
+type SectionTextBlock = {
+  label: string;
+  heading1: string;
+  heading2: string;
+  subtitle?: string;
+};
+
+type ContactSectionText = SectionTextBlock & { responseTime: string };
+
 type Settings = {
   company: { name: string; tagline: string; email: string; phone: string; location: string; year: string };
   social: { instagram: string; linkedin: string; twitter: string };
+  contactSection: ContactSectionText;
+  workSection: SectionTextBlock;
+  servicesSection: SectionTextBlock;
   marquee: string[];
 };
 
@@ -40,6 +52,15 @@ export default function SettingsEditor() {
   const setSocial = (k: keyof Settings["social"], v: string) =>
     setData((d) => d ? { ...d, social: { ...d.social, [k]: v } } : d);
 
+  const setContact = (k: keyof ContactSectionText, v: string) =>
+    setData((d) => d ? { ...d, contactSection: { ...d.contactSection, [k]: v } } : d);
+
+  const setWork = (k: keyof SectionTextBlock, v: string) =>
+    setData((d) => d ? { ...d, workSection: { ...d.workSection, [k]: v } } : d);
+
+  const setServices = (k: keyof SectionTextBlock, v: string) =>
+    setData((d) => d ? { ...d, servicesSection: { ...d.servicesSection, [k]: v } } : d);
+
   const setMarquee = (i: number, v: string) =>
     setData((d) => { if (!d) return d; const m = [...d.marquee]; m[i] = v; return { ...d, marquee: m }; });
 
@@ -56,7 +77,7 @@ export default function SettingsEditor() {
       <Toast toast={toast} onClose={() => setToast(null)} />
       <PageHeader
         title="Site Settings"
-        subtitle="Company info, social links, and marquee text."
+        subtitle="Company info, social links, section text, and marquee."
         action={<SaveBtn saving={saving} onClick={save} />}
       />
 
@@ -94,6 +115,57 @@ export default function SettingsEditor() {
         </Field>
         <Field label="Twitter / X URL">
           <Input value={data.social.twitter} onChange={(v) => setSocial("twitter", v)} />
+        </Field>
+      </Section>
+
+      {/* Contact Section Text */}
+      <Section title="Contact Section Text">
+        <p className="text-xs text-[#0A0A0F]/35 font-mono -mt-1 mb-2">Controls the &quot;Get In Touch&quot; section heading and response time.</p>
+        <Field label="Label (small uppercase text)">
+          <Input value={data.contactSection.label} onChange={(v) => setContact("label", v)} />
+        </Field>
+        <Field label="Heading Line 1">
+          <Input value={data.contactSection.heading1} onChange={(v) => setContact("heading1", v)} />
+        </Field>
+        <Field label="Heading Line 2 (shown in red)">
+          <Input value={data.contactSection.heading2} onChange={(v) => setContact("heading2", v)} />
+        </Field>
+        <Field label="Response Time Text">
+          <Input value={data.contactSection.responseTime} onChange={(v) => setContact("responseTime", v)} />
+        </Field>
+      </Section>
+
+      {/* Work Section Text */}
+      <Section title="Work Section Text">
+        <p className="text-xs text-[#0A0A0F]/35 font-mono -mt-1 mb-2">Controls the &quot;Selected Work&quot; section heading and subtitle.</p>
+        <Field label="Label (small uppercase text)">
+          <Input value={data.workSection.label} onChange={(v) => setWork("label", v)} />
+        </Field>
+        <Field label="Heading Line 1">
+          <Input value={data.workSection.heading1} onChange={(v) => setWork("heading1", v)} />
+        </Field>
+        <Field label="Heading Line 2 (shown in red)">
+          <Input value={data.workSection.heading2} onChange={(v) => setWork("heading2", v)} />
+        </Field>
+        <Field label="Subtitle (appended after project count)">
+          <Input value={data.workSection.subtitle ?? ""} onChange={(v) => setWork("subtitle", v)} />
+        </Field>
+      </Section>
+
+      {/* Services Section Text */}
+      <Section title="Services Section Text">
+        <p className="text-xs text-[#0A0A0F]/35 font-mono -mt-1 mb-2">Controls the &quot;What We Do&quot; section heading and subtitle.</p>
+        <Field label="Label (small uppercase text)">
+          <Input value={data.servicesSection.label} onChange={(v) => setServices("label", v)} />
+        </Field>
+        <Field label="Heading Line 1">
+          <Input value={data.servicesSection.heading1} onChange={(v) => setServices("heading1", v)} />
+        </Field>
+        <Field label="Heading Line 2 (shown in red)">
+          <Input value={data.servicesSection.heading2} onChange={(v) => setServices("heading2", v)} />
+        </Field>
+        <Field label="Subtitle">
+          <Input value={data.servicesSection.subtitle ?? ""} onChange={(v) => setServices("subtitle", v)} />
         </Field>
       </Section>
 
