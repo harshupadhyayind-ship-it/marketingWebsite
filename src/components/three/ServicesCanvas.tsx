@@ -15,12 +15,12 @@ const SHAPES: {
   color: string;
   opacity: number;
 }[] = [
-  { type: "icosahedron", position: [-5.2,  2.5, -1], distort: 0.45, floatSpeed: 1.4, color: "#9CAF88", opacity: 0.55 },
-  { type: "torusKnot",   position: [ 4.8,  2.0, -2], distort: 0.30, floatSpeed: 2.0, color: "#B8C9A8", opacity: 0.50 },
-  { type: "octahedron",  position: [-4.2, -2.5, -1], distort: 0.50, floatSpeed: 1.2, color: "#7A9068", opacity: 0.55 },
-  { type: "torus",       position: [ 4.2, -2.0, -2], distort: 0.35, floatSpeed: 1.8, color: "#9CAF88", opacity: 0.50 },
-  { type: "tetrahedron", position: [ 0.5,  3.8, -3], distort: 0.45, floatSpeed: 2.2, color: "#B8C9A8", opacity: 0.45 },
-  { type: "box",         position: [-0.5, -3.8, -2], distort: 0.40, floatSpeed: 1.6, color: "#9CAF88", opacity: 0.50 },
+  { type: "icosahedron", position: [-5.2,  2.5, -1], distort: 0.45, floatSpeed: 1.4, color: "#D64545", opacity: 0.55 },
+  { type: "torusKnot",   position: [ 4.8,  2.0, -2], distort: 0.30, floatSpeed: 2.0, color: "#E05555", opacity: 0.50 },
+  { type: "octahedron",  position: [-4.2, -2.5, -1], distort: 0.50, floatSpeed: 1.2, color: "#8B3232", opacity: 0.55 },
+  { type: "torus",       position: [ 4.2, -2.0, -2], distort: 0.35, floatSpeed: 1.8, color: "#D64545", opacity: 0.50 },
+  { type: "tetrahedron", position: [ 0.5,  3.8, -3], distort: 0.45, floatSpeed: 2.2, color: "#E05555", opacity: 0.45 },
+  { type: "box",         position: [-0.5, -3.8, -2], distort: 0.40, floatSpeed: 1.6, color: "#D64545", opacity: 0.50 },
 ];
 
 function DistortShape({

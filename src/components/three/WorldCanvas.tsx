@@ -14,252 +14,267 @@ export default function WorldCanvas() {
     const H = mount.clientHeight;
 
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color("#0D0B08");
+    scene.background = new THREE.Color("#F5EFE6");
+    scene.fog = new THREE.Fog(0xf5efe6, 60, 200);
 
-    const camera = new THREE.PerspectiveCamera(60, W / H, 0.1, 2000);
-    camera.position.set(-10, 5, 180);
+    const camera = new THREE.PerspectiveCamera(60, W / H, 0.1, 500);
+    camera.position.set(0, 26, 70);
+    camera.lookAt(0, 0, 0);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
     renderer.setSize(W, H);
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 0.9;
+    renderer.shadowMap.enabled = true;
     mount.appendChild(renderer.domElement);
 
-    // ── Phase 0: Deep starfield (universe view) ──────────────────────
-    const STAR_COUNT = 14000;
-    const starPos   = new Float32Array(STAR_COUNT * 3);
-    const starColor = new Float32Array(STAR_COUNT * 3);
+    // ── Ground grid (main) ───────────────────────────────────────────────
+    const GRID_W = 60, GRID_D = 80, GRID_STEP = 4;
+    const gridPts: number[] = [];
 
-    for (let i = 0; i < STAR_COUNT; i++) {
-      const theta = Math.random() * Math.PI * 2;
-      const phi   = Math.acos(2 * Math.random() - 1);
-      const r     = 90 + Math.random() * 280;
+    for (let x = -GRID_W / 2; x <= GRID_W / 2; x += GRID_STEP) {
+      gridPts.push(x, 0, -GRID_D / 2, x, 0, GRID_D / 2);
+    }
+    for (let z = -GRID_D / 2; z <= GRID_D / 2; z += GRID_STEP) {
+      gridPts.push(-GRID_W / 2, 0, z, GRID_W / 2, 0, z);
+    }
 
-      starPos[i * 3]     = Math.sin(phi) * Math.cos(theta) * r;
-      starPos[i * 3 + 1] = Math.sin(phi) * Math.sin(theta) * r;
-      starPos[i * 3 + 2] = Math.cos(phi) * r;
+    const gridGeo = new THREE.BufferGeometry();
+    gridGeo.setAttribute("position", new THREE.BufferAttribute(new Float32Array(gridPts), 3));
+    const gridMat = new THREE.LineBasicMaterial({
+      color: new THREE.Color("#D64545"),
+      transparent: true,
+      opacity: 0.10,
+    });
+    const grid = new THREE.LineSegments(gridGeo, gridMat);
+    grid.position.y = -8;
+    scene.add(grid);
 
-      const c = Math.random();
-      if (c < 0.65) {
-        starColor[i * 3] = 0.88 + Math.random() * 0.12;
-        starColor[i * 3 + 1] = 0.9  + Math.random() * 0.1;
-        starColor[i * 3 + 2] = 1.0;
-      } else if (c < 0.83) {
-        starColor[i * 3] = 0.6;
-        starColor[i * 3 + 1] = 0.72;
-        starColor[i * 3 + 2] = 1.0;
-      } else {
-        starColor[i * 3] = 1.0;
-        starColor[i * 3 + 1] = 0.92;
-        starColor[i * 3 + 2] = 0.72;
+    // ── Inner fine grid (half step) ─────────────────────────────────────
+    const fineGridPts: number[] = [];
+    const FINE_STEP = GRID_STEP / 2;
+    for (let x = -GRID_W / 2; x <= GRID_W / 2; x += FINE_STEP) {
+      fineGridPts.push(x, 0, -GRID_D / 2, x, 0, GRID_D / 2);
+    }
+    for (let z = -GRID_D / 2; z <= GRID_D / 2; z += FINE_STEP) {
+      fineGridPts.push(-GRID_W / 2, 0, z, GRID_W / 2, 0, z);
+    }
+    const fineGridGeo = new THREE.BufferGeometry();
+    fineGridGeo.setAttribute("position", new THREE.BufferAttribute(new Float32Array(fineGridPts), 3));
+    const fineGridMat = new THREE.LineBasicMaterial({
+      color: new THREE.Color("#D64545"),
+      transparent: true,
+      opacity: 0.05,
+    });
+    const fineGrid = new THREE.LineSegments(fineGridGeo, fineGridMat);
+    fineGrid.position.y = -8;
+    scene.add(fineGrid);
+
+    // ── Triangulated diagonal grid ──────────────────────────────────────
+    const triPts: number[] = [];
+    for (let x = -GRID_W / 2; x < GRID_W / 2; x += GRID_STEP) {
+      for (let z = -GRID_D / 2; z < GRID_D / 2; z += GRID_STEP) {
+        triPts.push(x, 0, z, x + GRID_STEP, 0, z + GRID_STEP); // diagonal
       }
     }
+    const triGeo = new THREE.BufferGeometry();
+    triGeo.setAttribute("position", new THREE.BufferAttribute(new Float32Array(triPts), 3));
+    const triMat = new THREE.LineBasicMaterial({ color: new THREE.Color("#D64545"), transparent: true, opacity: 0.04 });
+    const triLines = new THREE.LineSegments(triGeo, triMat);
+    triLines.position.y = -8;
+    scene.add(triLines);
 
-    const starGeo = new THREE.BufferGeometry();
-    starGeo.setAttribute("position", new THREE.BufferAttribute(starPos, 3));
-    starGeo.setAttribute("color",    new THREE.BufferAttribute(starColor, 3));
+    // ── Rising bar chart — 3D performance bars ─────────────────────────
+    const BAR_DATA = [14, 28, 22, 48, 38, 62, 52, 76, 68, 92];
+    const bars: THREE.Mesh[] = [];
+    const barCaps: THREE.Mesh[] = [];
+    const barTargetH: number[] = [];
+    const barMats: THREE.MeshStandardMaterial[] = [];
+    const capMats: THREE.MeshStandardMaterial[] = [];
 
-    const starMat = new THREE.PointsMaterial({
-      size: 0.55,
-      vertexColors: true,
-      transparent: true,
-      opacity: 1,
-      sizeAttenuation: true,
+    BAR_DATA.forEach((pct, i) => {
+      const maxH = (pct / 100) * 18 * 1.3;
+      barTargetH.push(maxH);
+
+      const isLast = i === BAR_DATA.length - 1;
+      const mat = new THREE.MeshStandardMaterial({
+        color:    new THREE.Color(isLast ? "#D64545" : "#C87070"),
+        emissive: new THREE.Color(isLast ? "#D64545" : "#C87070"),
+        emissiveIntensity: isLast ? 0.6 : 0.2,
+        transparent: true,
+        opacity: 0,
+        roughness: 0.3,
+        metalness: 0.1,
+      });
+      barMats.push(mat);
+
+      const geo = new THREE.BoxGeometry(2.8, 1, 2.8);
+      const mesh = new THREE.Mesh(geo, mat);
+      mesh.scale.y = 0.001;
+      mesh.position.set((i - (BAR_DATA.length - 1) / 2) * 3.2, -8, 0);
+      mesh.castShadow = true;
+      bars.push(mesh);
+      scene.add(mesh);
+
+      // Glow cap on top of each bar
+      const capMat = new THREE.MeshStandardMaterial({
+        color:    new THREE.Color(isLast ? "#D64545" : "#C87070"),
+        emissive: new THREE.Color(isLast ? "#D64545" : "#C87070"),
+        emissiveIntensity: 2.0,
+        transparent: true,
+        opacity: 0,
+        roughness: 0.1,
+        metalness: 0.3,
+      });
+      capMats.push(capMat);
+      const capGeo = new THREE.BoxGeometry(2.9, 0.15, 2.9);
+      const cap = new THREE.Mesh(capGeo, capMat);
+      cap.scale.y = 0.001;
+      cap.position.set((i - (BAR_DATA.length - 1) / 2) * 3.2, -8, 0);
+      barCaps.push(cap);
+      scene.add(cap);
     });
-    const stars = new THREE.Points(starGeo, starMat);
-    scene.add(stars);
 
-    // ── Milky Way band (denser mid-plane stars) ───────────────────────
-    const BAND_COUNT = 3500;
-    const bandPos   = new Float32Array(BAND_COUNT * 3);
-    const bandColor = new Float32Array(BAND_COUNT * 3);
-
-    for (let i = 0; i < BAND_COUNT; i++) {
-      const theta = Math.random() * Math.PI * 2;
-      const r     = 60 + Math.random() * 200;
-      const h     = (Math.random() - 0.5) * 30;
-
-      bandPos[i * 3]     = Math.cos(theta) * r;
-      bandPos[i * 3 + 1] = h;
-      bandPos[i * 3 + 2] = Math.sin(theta) * r;
-
-      const t = Math.random();
-      bandColor[i * 3]     = 0.55 + t * 0.2;
-      bandColor[i * 3 + 1] = 0.68 + t * 0.2;
-      bandColor[i * 3 + 2] = 0.52 + t * 0.1;
+    // ── Rising accent lines (vertical) ───────────────────────────────
+    const VLINE_COUNT = 30;
+    const vlinePts: number[] = [];
+    for (let i = 0; i < VLINE_COUNT; i++) {
+      const x = (Math.random() - 0.5) * GRID_W * 0.9;
+      const z = (Math.random() - 0.5) * 40;
+      const h = 2 + Math.random() * 16;
+      vlinePts.push(x, -8, z, x, -8 + h, z);
     }
-
-    const bandGeo = new THREE.BufferGeometry();
-    bandGeo.setAttribute("position", new THREE.BufferAttribute(bandPos, 3));
-    bandGeo.setAttribute("color",    new THREE.BufferAttribute(bandColor, 3));
-
-    const bandMat = new THREE.PointsMaterial({
-      size: 0.35,
-      vertexColors: true,
-      transparent: true,
-      opacity: 0.6,
-      sizeAttenuation: true,
-    });
-    const band = new THREE.Points(bandGeo, bandMat);
-    scene.add(band);
-
-    // ── Phase 1–2: Galaxy spiral (centered at origin) ─────────────────
-    const GALAXY_COUNT = 6000;
-    const galPos   = new Float32Array(GALAXY_COUNT * 3);
-    const galColor = new Float32Array(GALAXY_COUNT * 3);
-
-    for (let i = 0; i < GALAXY_COUNT; i++) {
-      const arm   = Math.floor(Math.random() * 3);
-      const angle = (arm * 2 * Math.PI) / 3;
-      const r     = Math.pow(Math.random(), 0.5) * 32 + 0.3;
-      const theta = angle + r * 0.28 + (Math.random() - 0.5) * 0.5;
-      const scatter = Math.max(0, 1 - r / 32);
-
-      galPos[i * 3]     = Math.cos(theta) * r;
-      galPos[i * 3 + 1] = (Math.random() - 0.5) * 1.8 * scatter;
-      galPos[i * 3 + 2] = Math.sin(theta) * r;
-
-      const d = r / 32;
-      if (d < 0.15) {
-        galColor[i * 3]     = 0.95;
-        galColor[i * 3 + 1] = 1.0;
-        galColor[i * 3 + 2] = 0.92;
-      } else {
-        const t = Math.random();
-        galColor[i * 3]     = 0.38 + t * 0.22;
-        galColor[i * 3 + 1] = 0.52 + t * 0.22;
-        galColor[i * 3 + 2] = 0.34 + t * 0.12;
-      }
-    }
-
-    const galGeo = new THREE.BufferGeometry();
-    galGeo.setAttribute("position", new THREE.BufferAttribute(galPos, 3));
-    galGeo.setAttribute("color",    new THREE.BufferAttribute(galColor, 3));
-
-    const galMat = new THREE.PointsMaterial({
-      size: 0.28,
-      vertexColors: true,
-      transparent: true,
-      opacity: 0,
-      sizeAttenuation: true,
-    });
-    const galaxy = new THREE.Points(galGeo, galMat);
-    scene.add(galaxy);
-
-    // ── Phase 2: Galaxy core glow ─────────────────────────────────────
-    const coreMat = new THREE.MeshStandardMaterial({
-      color: new THREE.Color("#9CAF88"),
-      emissive: new THREE.Color("#9CAF88"),
-      emissiveIntensity: 2.5,
-      transparent: true,
-      opacity: 0,
-      roughness: 0.05,
-      metalness: 0.2,
-    });
-    const core = new THREE.Mesh(new THREE.SphereGeometry(2.5, 32, 32), coreMat);
-    scene.add(core);
-
-    const haloMat = new THREE.MeshBasicMaterial({
-      color: new THREE.Color("#B8C9A8"),
+    const vlineGeo = new THREE.BufferGeometry();
+    vlineGeo.setAttribute("position", new THREE.BufferAttribute(new Float32Array(vlinePts), 3));
+    const vlineMat = new THREE.LineBasicMaterial({
+      color: new THREE.Color("#D64545"),
       transparent: true,
       opacity: 0,
     });
-    const halo = new THREE.Mesh(new THREE.SphereGeometry(7, 16, 16), haloMat);
-    scene.add(halo);
+    const vlines = new THREE.LineSegments(vlineGeo, vlineMat);
+    scene.add(vlines);
 
-    // ── Phase 3: Burst particles (shoot outward from core) ───────────
-    const BURST_COUNT = 1200;
-    const burstPos  = new Float32Array(BURST_COUNT * 3);
-    const burstDir  = new Float32Array(BURST_COUNT * 3);
-    const burstSpeed = new Float32Array(BURST_COUNT);
-    const burstColor = new Float32Array(BURST_COUNT * 3);
-
-    for (let i = 0; i < BURST_COUNT; i++) {
-      // Random direction in a sphere
-      const theta = Math.random() * Math.PI * 2;
-      const phi   = Math.acos(2 * Math.random() - 1);
-      const dx = Math.sin(phi) * Math.cos(theta);
-      const dy = Math.sin(phi) * Math.sin(theta);
-      const dz = Math.cos(phi);
-
-      burstPos[i * 3]     = dx * 0.5;
-      burstPos[i * 3 + 1] = dy * 0.5;
-      burstPos[i * 3 + 2] = dz * 0.5;
-
-      burstDir[i * 3]     = dx;
-      burstDir[i * 3 + 1] = dy;
-      burstDir[i * 3 + 2] = dz;
-      burstSpeed[i] = 0.04 + Math.random() * 0.06;
-
-      // Sage / gold spectrum
-      const t = Math.random();
-      burstColor[i * 3]     = 0.35 + t * 0.45;
-      burstColor[i * 3 + 1] = 0.50 + t * 0.35;
-      burstColor[i * 3 + 2] = 0.28 + t * 0.25;
-    }
-
-    const burstGeo = new THREE.BufferGeometry();
-    burstGeo.setAttribute("position", new THREE.BufferAttribute(burstPos, 3));
-    burstGeo.setAttribute("color",    new THREE.BufferAttribute(burstColor, 3));
-
-    const burstMat = new THREE.PointsMaterial({
-      size: 0.22,
-      vertexColors: true,
+    // ── Growth curves ─────────────────────────────────────────────────
+    // Curve 1 (main)
+    const curve = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(-28, -6, 0),
+      new THREE.Vector3(-18, -4, 0),
+      new THREE.Vector3(-8,  -1, 0),
+      new THREE.Vector3( 0,   3, 0),
+      new THREE.Vector3( 10,  6, 0),
+      new THREE.Vector3( 20, 10, 0),
+      new THREE.Vector3( 28, 14, 0),
+    ]);
+    const curvePts = curve.getPoints(120);
+    const curveGeo = new THREE.BufferGeometry().setFromPoints(curvePts);
+    const curveMat = new THREE.LineBasicMaterial({
+      color: new THREE.Color("#D64545"),
       transparent: true,
       opacity: 0,
-      sizeAttenuation: true,
     });
-    const burst = new THREE.Points(burstGeo, burstMat);
-    scene.add(burst);
+    const curveLine = new THREE.Line(curveGeo, curveMat);
+    scene.add(curveLine);
 
-    // ── Phase 3: Rising glow particles (centered on origin) ──────────
-    const RISE_COUNT = 800;
-    const risePos = new Float32Array(RISE_COUNT * 3);
-    const riseVel = new Float32Array(RISE_COUNT);
-
-    for (let i = 0; i < RISE_COUNT; i++) {
-      risePos[i * 3]     = (Math.random() - 0.5) * 20;
-      risePos[i * 3 + 1] = (Math.random() - 0.5) * 16;
-      risePos[i * 3 + 2] = (Math.random() - 0.5) * 12;
-      riseVel[i]         = 0.018 + Math.random() * 0.04;
-    }
-
-    const riseGeo = new THREE.BufferGeometry();
-    riseGeo.setAttribute("position", new THREE.BufferAttribute(risePos, 3));
-
-    const riseMat = new THREE.PointsMaterial({
-      color: 0x9caf88,
-      size: 0.14,
+    // Curve 2 — behind and fainter
+    const curve2 = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(-28, -8, -6),
+      new THREE.Vector3(-16, -6, -6),
+      new THREE.Vector3( -4, -2, -6),
+      new THREE.Vector3(  8,  2, -6),
+      new THREE.Vector3( 20,  7, -6),
+      new THREE.Vector3( 28, 10, -6),
+    ]);
+    const curve2Pts = curve2.getPoints(100);
+    const curve2Geo = new THREE.BufferGeometry().setFromPoints(curve2Pts);
+    const curve2Mat = new THREE.LineBasicMaterial({
+      color: new THREE.Color("#D64545"),
       transparent: true,
       opacity: 0,
-      sizeAttenuation: true,
     });
-    const riseParticles = new THREE.Points(riseGeo, riseMat);
-    scene.add(riseParticles);
+    const curveLine2 = new THREE.Line(curve2Geo, curve2Mat);
+    scene.add(curveLine2);
+
+    // Curve 3 — highlight, slightly in front (z=4), opacity 0.25 max
+    const curve3 = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(-28, -5, 4),
+      new THREE.Vector3(-18, -3, 4),
+      new THREE.Vector3(-6,   0, 4),
+      new THREE.Vector3( 4,   4, 4),
+      new THREE.Vector3( 14,  8, 4),
+      new THREE.Vector3( 28, 13, 4),
+    ]);
+    const curve3Pts = curve3.getPoints(110);
+    const curve3Geo = new THREE.BufferGeometry().setFromPoints(curve3Pts);
+    const curve3Mat = new THREE.LineBasicMaterial({
+      color: new THREE.Color("#D64545"),
+      transparent: true,
+      opacity: 0,
+    });
+    const curveLine3 = new THREE.Line(curve3Geo, curve3Mat);
+    scene.add(curveLine3);
+
+    // ── Central red geometric accent — rotating octahedron ───────────
+    const accentMat = new THREE.MeshStandardMaterial({
+      color:   new THREE.Color("#D64545"),
+      emissive: new THREE.Color("#D64545"),
+      emissiveIntensity: 1.2,
+      transparent: true,
+      opacity: 0,
+      roughness: 0.1,
+      metalness: 0.6,
+    });
+    const accent = new THREE.Mesh(new THREE.OctahedronGeometry(2.8, 0), accentMat);
+    accent.position.set(0, 4, 0);
+    scene.add(accent);
+
+    // Inner wireframe overlay
+    const wireMat = new THREE.MeshBasicMaterial({
+      color: new THREE.Color("#D64545"),
+      wireframe: true,
+      transparent: true,
+      opacity: 0,
+    });
+    const wire = new THREE.Mesh(new THREE.OctahedronGeometry(3.0, 1), wireMat);
+    wire.position.copy(accent.position);
+    scene.add(wire);
+
+    // Outer wireframe octahedron — slower rotation, nested ring effect
+    const outerWireMat = new THREE.MeshBasicMaterial({
+      color: new THREE.Color("#D64545"),
+      wireframe: true,
+      transparent: true,
+      opacity: 0,
+    });
+    const outerWire = new THREE.Mesh(new THREE.OctahedronGeometry(3.4, 1), outerWireMat);
+    outerWire.position.copy(accent.position);
+    scene.add(outerWire);
 
     // ── Lights ───────────────────────────────────────────────────────
-    scene.add(new THREE.AmbientLight(0xffffff, 1.4));
-    const sun = new THREE.DirectionalLight(0x9caf88, 1.8);
-    sun.position.set(5, 8, 5);
-    scene.add(sun);
-    const coreLight = new THREE.PointLight(0x9caf88, 10, 35);
-    coreLight.position.set(0, 0, 0);
-    scene.add(coreLight);
+    const ambLight = new THREE.AmbientLight(0xffffff, 1.0);
+    scene.add(ambLight);
+    const dirLight = new THREE.DirectionalLight(0xD64545, 1.5);
+    dirLight.position.set(10, 20, 10);
+    dirLight.castShadow = true;
+    scene.add(dirLight);
+    const fillLight = new THREE.DirectionalLight(0xffffff, 0.6);
+    fillLight.position.set(-10, 5, -10);
+    scene.add(fillLight);
+    // Warm red glow on bars
+    const redPoint = new THREE.PointLight(0xD64545, 2.5, 30);
+    redPoint.position.set(0, 8, 2);
+    scene.add(redPoint);
 
-    // ── Camera waypoints (5 stops over 0→1 scroll) ──────────────────
+    // ── Camera waypoints ─────────────────────────────────────────────
     const WAY = [
-      { z: 180, y:  5,  x: -10 },  // 0%   — universe wide shot
-      { z:  75, y:  3,  x:  -4 },  // 25%  — approaching galaxy
-      { z:  18, y:  1,  x:   1 },  // 50%  — entering galaxy
-      { z:  -3, y: -1,  x: 0.5 },  // 75%  — inside / transition
-      { z: -22, y:  0,  x:   0 },  // 100% — settled performance view
+      { z: 70, y: 26, x:  0 },  // 0%  — elevated overview (y bumped from 22→26)
+      { z: 42, y: 10, x: -2 },  // 25% — descending into grid
+      { z: 18, y:  2, x:  0 },  // 50% — at grid level, curves visible
+      { z:  4, y:  2, x:  0 },  // 75% — bars & accent close
+      { z: -8, y:  1, x:  0 },  // 100% — past the accent
     ];
 
-    let camTX = WAY[0].x;
-    let camTY = WAY[0].y;
-    let camTZ = WAY[0].z;
+    let camTX = WAY[0].x, camTY = WAY[0].y, camTZ = WAY[0].z;
     let progress = 0;
+    let mouseX = 0, mouseY = 0;
 
     const onScroll = () => {
       const el = document.getElementById("scroll-container");
@@ -267,19 +282,22 @@ export default function WorldCanvas() {
       const scrollable = el.offsetHeight - window.innerHeight;
       if (scrollable <= 0) return;
       progress = Math.max(0, Math.min(1, window.scrollY / scrollable));
-
       const seg = WAY.length - 1;
       const raw = progress * seg;
       const idx = Math.min(Math.floor(raw), seg - 1);
       const t   = raw - idx;
-      const a   = WAY[idx];
-      const b   = WAY[idx + 1];
-
+      const a   = WAY[idx], b = WAY[idx + 1];
       camTX = a.x + (b.x - a.x) * t;
       camTY = a.y + (b.y - a.y) * t;
       camTZ = a.z + (b.z - a.z) * t;
     };
     window.addEventListener("scroll", onScroll, { passive: true });
+
+    const onMouse = (e: MouseEvent) => {
+      mouseX = (e.clientX / window.innerWidth  - 0.5) * 2;
+      mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+    };
+    window.addEventListener("mousemove", onMouse);
 
     const onResize = () => {
       if (!mount) return;
@@ -289,19 +307,12 @@ export default function WorldCanvas() {
     };
     window.addEventListener("resize", onResize);
 
-    // ── Animate ──────────────────────────────────────────────────────
+    // ── Animation loop ────────────────────────────────────────────────
     const clock = new THREE.Clock();
     let rafId: number;
-
     const lp = (a: number, b: number, t: number) => a + (b - a) * t;
-
-    const fade = (p: number, inStart: number, inEnd: number, outStart: number, outEnd: number) => {
-      if (p < inStart)  return 0;
-      if (p < inEnd)    return (p - inStart) / (inEnd - inStart);
-      if (p < outStart) return 1;
-      if (p < outEnd)   return 1 - (p - outStart) / (outEnd - outStart);
-      return 0;
-    };
+    const fade = (p: number, s: number, e: number) =>
+      p < s ? 0 : p > e ? 1 : (p - s) / (e - s);
 
     const animate = () => {
       rafId = requestAnimationFrame(animate);
@@ -309,59 +320,68 @@ export default function WorldCanvas() {
       const p = progress;
 
       // Camera
-      camera.position.x = lp(camera.position.x, camTX, 0.045);
-      camera.position.y = lp(camera.position.y, camTY, 0.045);
-      camera.position.z = lp(camera.position.z, camTZ, 0.045);
+      camera.position.x = lp(camera.position.x, camTX + mouseX * 1.2, 0.04);
+      camera.position.y = lp(camera.position.y, camTY - mouseY * 0.8, 0.04);
+      camera.position.z = lp(camera.position.z, camTZ, 0.04);
       camera.lookAt(0, 0, 0);
 
-      // Stars — always visible, slowly rotate, dim inside galaxy
-      stars.rotation.y = t * 0.012;
-      stars.rotation.x = t * 0.004;
-      starMat.opacity  = lp(1, 0.25, Math.max(0, (p - 0.55) / 0.25));
-      bandMat.opacity  = 0.6 * lp(1, 0.15, Math.max(0, (p - 0.55) / 0.25));
+      // Grid — always visible, max opacity 0.15
+      const gridApproach = Math.min(1, p / 0.4);
+      gridMat.opacity = 0.04 + gridApproach * 0.11;   // max = 0.15
+      fineGridMat.opacity = 0.02 + gridApproach * 0.03; // stays subtle
 
-      // Galaxy — fade in 0.18→0.50, hold, fade out 0.75→0.88
-      galMat.opacity = fade(p, 0.18, 0.50, 0.75, 0.88) * 0.9;
-      galaxy.rotation.y = t * 0.025;
+      // Growth curves — fade in 0.20→0.45, hold, fade 0.72→0.84
+      const curveFade = p < 0.20 ? 0
+        : p < 0.45 ? (p - 0.20) / 0.25
+        : p < 0.72 ? 1
+        : p < 0.84 ? 1 - (p - 0.72) / 0.12
+        : 0;
+      curveMat.opacity  = curveFade * 0.85;
+      curve2Mat.opacity = curveFade * 0.40;
+      curve3Mat.opacity = curveFade * 0.25;  // highlight curve
 
-      // Core orb — fade in 0.40→0.58, full from there
-      const coreFade = p < 0.40 ? 0 : p < 0.58 ? (p - 0.40) / 0.18 : 1;
-      coreMat.opacity  = coreFade * 0.88;
-      haloMat.opacity  = coreFade * 0.09;
-      core.position.y  = Math.sin(t * 0.55) * 0.5;
-      halo.position.copy(core.position);
-      coreLight.intensity = coreFade * 10;
-
-      // Burst particles — explode outward from 0.65
-      const perfFade = p < 0.65 ? 0 : p < 0.82 ? (p - 0.65) / 0.17 : 1;
-      burstMat.opacity = perfFade * 0.85;
-      if (perfFade > 0) {
-        const bArr = burstGeo.attributes.position.array as Float32Array;
-        for (let i = 0; i < BURST_COUNT; i++) {
-          bArr[i * 3]     += burstDir[i * 3]     * burstSpeed[i] * perfFade;
-          bArr[i * 3 + 1] += burstDir[i * 3 + 1] * burstSpeed[i] * perfFade;
-          bArr[i * 3 + 2] += burstDir[i * 3 + 2] * burstSpeed[i] * perfFade;
-          // Reset when too far
-          const dx = bArr[i * 3], dy = bArr[i * 3 + 1], dz = bArr[i * 3 + 2];
-          if (dx*dx + dy*dy + dz*dz > 400) {
-            bArr[i * 3]     = burstDir[i * 3]     * 0.5;
-            bArr[i * 3 + 1] = burstDir[i * 3 + 1] * 0.5;
-            bArr[i * 3 + 2] = burstDir[i * 3 + 2] * 0.5;
-          }
-        }
-        burstGeo.attributes.position.needsUpdate = true;
+      // Vertical accent lines — fade 0.15→0.40
+      vlineMat.opacity = lp(0, 0.55, Math.min(1, Math.max(0, (p - 0.15) / 0.25)));
+      // Slowly drift them upward
+      const vArr = vlineGeo.attributes.position.array as Float32Array;
+      for (let i = 1; i < vArr.length / 3; i += 2) {
+        vArr[i * 3 + 1] += 0.004;
+        if (vArr[i * 3 + 1] > 14) vArr[i * 3 + 1] = -8;
       }
+      vlineGeo.attributes.position.needsUpdate = true;
 
-      // Rising particles — upward stream around origin from 0.65
-      riseMat.opacity = perfFade * 0.7;
-      if (perfFade > 0) {
-        const arr = riseGeo.attributes.position.array as Float32Array;
-        for (let i = 0; i < RISE_COUNT; i++) {
-          arr[i * 3 + 1] += riseVel[i] * perfFade;
-          if (arr[i * 3 + 1] > 10) arr[i * 3 + 1] = -8;
-        }
-        riseGeo.attributes.position.needsUpdate = true;
-      }
+      // Bars — fade in 0.55→0.75, grow height
+      const barFade = fade(p, 0.55, 0.75);
+      const barGrow = fade(p, 0.60, 0.82);
+      bars.forEach((bar, i) => {
+        barMats[i].opacity = barFade * 0.9;
+        const targetH = barTargetH[i] * barGrow;
+        bar.scale.y = lp(bar.scale.y, Math.max(0.001, targetH), 0.06);
+        // Keep bar sitting on grid floor
+        bar.position.y = -8 + (bar.scale.y * barTargetH[i]) / 2;
+
+        // Glow cap: position at top of bar, fade with bar
+        capMats[i].opacity = barFade * 0.95;
+        barCaps[i].scale.y = lp(barCaps[i].scale.y, Math.max(0.001, targetH * 0.5), 0.06);
+        barCaps[i].position.y = bar.position.y + (bar.scale.y * barTargetH[i]) / 2;
+      });
+
+      // Accent octahedra — fade in 0.40→0.60
+      const accentFade = fade(p, 0.40, 0.60);
+      accentMat.opacity    = accentFade * 0.80;
+      wireMat.opacity      = accentFade * 0.30;
+      outerWireMat.opacity = accentFade * 0.18;
+
+      // Inner accent: normal speed rotation
+      accent.rotation.y = t * 0.55;
+      accent.rotation.x = t * 0.28;
+      wire.rotation.copy(accent.rotation);
+      wire.position.copy(accent.position);
+
+      // Outer wireframe: slightly slower rotation for nested ring effect
+      outerWire.rotation.y = t * 0.35;
+      outerWire.rotation.x = t * 0.18;
+      outerWire.position.copy(accent.position);
 
       renderer.render(scene, camera);
     };
@@ -370,6 +390,7 @@ export default function WorldCanvas() {
     return () => {
       cancelAnimationFrame(rafId);
       window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("mousemove", onMouse);
       window.removeEventListener("resize", onResize);
       if (mount.contains(renderer.domElement)) mount.removeChild(renderer.domElement);
       renderer.dispose();

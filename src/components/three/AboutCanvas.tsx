@@ -45,19 +45,19 @@ function DNAHelix() {
   return (
     <group ref={groupRef}>
       {/* Strand lines */}
-      <Line points={strand1} color="#9CAF88" lineWidth={2}  transparent opacity={0.65} />
-      <Line points={strand2} color="#B8C9A8" lineWidth={2}  transparent opacity={0.65} />
+      <Line points={strand1} color="#D64545" lineWidth={2}  transparent opacity={0.65} />
+      <Line points={strand2} color="#E05555" lineWidth={2}  transparent opacity={0.65} />
 
       {/* Rung cross-links */}
       {rungs.map((pair, i) => (
-        <Line key={i} points={pair as THREE.Vector3[]} color="#9CAF8855" lineWidth={0.7} transparent opacity={0.3} />
+        <Line key={i} points={pair as THREE.Vector3[]} color="#D6454555" lineWidth={0.7} transparent opacity={0.3} />
       ))}
 
       {/* Strand 1 nodes */}
       {strand1.map((pos, i) => (
         <mesh key={`a${i}`} position={pos}>
           <sphereGeometry args={[0.11, 16, 16]} />
-          <meshStandardMaterial color="#9CAF88" emissive="#9CAF88" emissiveIntensity={1.2} roughness={0.1} metalness={0.4} />
+          <meshStandardMaterial color="#D64545" emissive="#D64545" emissiveIntensity={1.2} roughness={0.1} metalness={0.4} />
         </mesh>
       ))}
 
@@ -65,7 +65,7 @@ function DNAHelix() {
       {strand2.map((pos, i) => (
         <mesh key={`b${i}`} position={pos}>
           <sphereGeometry args={[0.11, 16, 16]} />
-          <meshStandardMaterial color="#B8C9A8" emissive="#B8C9A8" emissiveIntensity={1.2} roughness={0.1} metalness={0.4} />
+          <meshStandardMaterial color="#E05555" emissive="#E05555" emissiveIntensity={1.2} roughness={0.1} metalness={0.4} />
         </mesh>
       ))}
 
@@ -73,7 +73,7 @@ function DNAHelix() {
       {rungs.map((pair, i) => (
         <mesh key={`rr${i}`} position={(pair[1] as THREE.Vector3)}>
           <sphereGeometry args={[0.07, 12, 12]} />
-          <meshStandardMaterial color="#F5F1E8" emissive="#F5F1E8" emissiveIntensity={0.8} roughness={0.2} />
+          <meshStandardMaterial color="#F5F5FA" emissive="#F5F5FA" emissiveIntensity={0.8} roughness={0.2} />
         </mesh>
       ))}
     </group>
@@ -98,8 +98,8 @@ export default function AboutCanvas() {
     >
       <CameraRig />
       <ambientLight intensity={0.4} />
-      <pointLight position={[5, 5, 5]}   color="#9CAF88" intensity={4} distance={20} />
-      <pointLight position={[-5, -5, 5]} color="#F5F1E8" intensity={2} distance={18} />
+      <pointLight position={[5, 5, 5]}   color="#D64545" intensity={4} distance={20} />
+      <pointLight position={[-5, -5, 5]} color="#F5F5FA" intensity={2} distance={18} />
       <Stars radius={40} depth={20} count={900} factor={1.5} saturation={0} fade speed={0.25} />
       <DNAHelix />
     </Canvas>

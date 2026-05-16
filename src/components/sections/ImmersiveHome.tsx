@@ -25,7 +25,7 @@ function NavCloseButton() {
   return (
     <button
       onClick={() => window.dispatchEvent(new CustomEvent("navClose"))}
-      className="absolute top-6 left-6 z-50 text-white hover:text-[#9CAF88] transition-colors duration-200 cursor-pointer"
+      className="absolute top-6 left-6 z-50 text-[#1C1C1C] hover:text-[#D64545] transition-colors duration-200 cursor-pointer"
       style={{ fontSize: "2.5rem", lineHeight: 1, fontWeight: 300 }}
       aria-label="Close menu"
     >
@@ -39,7 +39,7 @@ export default function ImmersiveHome() {
     <div id="scroll-container" style={{ height: "800vh" }}>
       <div
         className="sticky top-0 overflow-hidden relative"
-        style={{ height: "100vh", background: "#0D0B08" }}
+        style={{ height: "100vh", background: "#F5EFE6" }}
       >
         <WorldCanvas />
         <ScrollOverlay />

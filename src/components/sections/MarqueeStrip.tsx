@@ -29,8 +29,8 @@ export default function MarqueeStrip({
     <div
       className={`w-full overflow-hidden border-y py-4 ${
         dark
-          ? "bg-[#2C2416] border-[#3D3222]"
-          : "bg-[#F5F1E8] border-[#D4CAB8]"
+          ? "bg-[#F5EFE6] border-[#3D3222]"
+          : "bg-[#F5EFE6] border-[#1C1C1C]/8"
       }`}
     >
       <div
@@ -42,11 +42,11 @@ export default function MarqueeStrip({
           <span
             key={i}
             className={`inline-flex items-center gap-6 px-6 text-label ${
-              dark ? "text-[#8B7E6E]" : "text-stone"
+              dark ? "text-[#8B7E6E]" : "text-[#1C1C1C]/45"
             }`}
           >
             {item}
-            <span className={`inline-block w-1 h-1 rounded-full ${dark ? "bg-[#4D4232]" : "bg-[#D4CAB8]"}`} />
+            <span className={`inline-block w-1 h-1 rounded-full ${dark ? "bg-[#4D4232]" : "bg-[#6B4F3A]/30"}`} />
           </span>
         ))}
       </div>

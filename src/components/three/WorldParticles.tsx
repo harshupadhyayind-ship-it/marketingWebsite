@@ -29,7 +29,7 @@ export default function WorldParticles({ count = 1000 }: { count?: number }) {
       </bufferGeometry>
       <pointsMaterial
         size={0.04}
-        color="#9CAF88"
+        color="#D64545"
         transparent
         opacity={0.5}
         sizeAttenuation

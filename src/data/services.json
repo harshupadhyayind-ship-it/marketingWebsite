@@ -1,0 +1,62 @@
+[
+  {
+    "num": "01",
+    "title": "Brand Strategy",
+    "tagline": "Position your brand to lead.",
+    "description": "A strong brand is your most valuable asset. We develop comprehensive brand strategies that define who you are, who you serve, and why you matter — then translate that into a visual and verbal identity that turns heads.",
+    "tags": ["Identity", "Positioning", "Guidelines"],
+    "slug": "brand-strategy",
+    "deliveryTime": "3–4 weeks",
+    "features": ["Brand Audit & Competitive Analysis", "Brand Identity & Visual System", "Tone of Voice & Messaging", "Brand Guidelines Document", "Logo & Typography Design"]
+  },
+  {
+    "num": "02",
+    "title": "Web Design & Development",
+    "tagline": "Websites that convert and captivate.",
+    "description": "We build cinematic web experiences using Next.js, Three.js, and a relentless focus on performance and conversion. Every site is custom-designed, fully responsive, and engineered for speed.",
+    "tags": ["Next.js", "3D / Three.js", "CMS"],
+    "slug": "web-design",
+    "deliveryTime": "2–3 weeks",
+    "features": ["Custom UI/UX Design (Figma)", "Next.js Development (App Router)", "Three.js 3D Experiences", "CMS Integration (Sanity)", "Performance Optimization (Lighthouse ≥ 90)"]
+  },
+  {
+    "num": "03",
+    "title": "Digital Marketing",
+    "tagline": "Full-funnel growth, measurably.",
+    "description": "From paid media to SEO and email — we build and run data-driven marketing programs that fill your pipeline and reduce your cost per acquisition over time.",
+    "tags": ["Meta", "Google Ads", "SEO"],
+    "slug": "digital-marketing",
+    "deliveryTime": "Ongoing retainer",
+    "features": ["Meta & Google Ads Management", "Search Engine Optimisation (SEO)", "Email Marketing & Automation", "Growth Hacking & Experiments", "Monthly Performance Reports"]
+  },
+  {
+    "num": "04",
+    "title": "Performance Analytics",
+    "tagline": "Turn data into decisions.",
+    "description": "Most brands are flying blind. We implement robust tracking, build custom dashboards, and deliver monthly insights so you always know what's working and why.",
+    "tags": ["Dashboards", "A/B Testing", "Attribution"],
+    "slug": "analytics",
+    "deliveryTime": "1–2 weeks setup",
+    "features": ["GA4 & GTM Setup", "Custom Looker Studio Dashboards", "Conversion Funnel Analysis", "A/B Testing Programme", "Monthly Insights Reports"]
+  },
+  {
+    "num": "05",
+    "title": "Content Creation",
+    "tagline": "Stories that stop the scroll.",
+    "description": "From product photography to viral social content — our creative team produces visually stunning, strategically crafted content for every platform and format.",
+    "tags": ["Photography", "Video", "Copywriting"],
+    "slug": "content",
+    "deliveryTime": "Ongoing retainer",
+    "features": ["Product & Brand Photography", "Video Production & Editing", "Long-form Copywriting", "Social Media Management", "Content Calendar Planning"]
+  },
+  {
+    "num": "06",
+    "title": "Creative Direction",
+    "tagline": "Campaigns that live in culture.",
+    "description": "End-to-end creative strategy and art direction for brand campaigns, product launches, and high-impact moments that create lasting cultural relevance.",
+    "tags": ["Campaigns", "Art Direction", "Launches"],
+    "slug": "creative-direction",
+    "deliveryTime": "Project-based",
+    "features": ["Campaign Concept Development", "Art Direction", "Print & Out-of-Home", "Launch Campaigns", "Creative QA & Production Oversight"]
+  }
+]

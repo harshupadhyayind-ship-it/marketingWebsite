@@ -82,18 +82,18 @@ export default function AboutScene() {
   return (
     <group ref={groupRef} position={[0, 0, -25]}>
       {/* Three glass panels */}
-      <GlassPanel position={[-3.2, 0, 0]} rotation={[0, 0.35, 0]} color="#9CAF88" />
-      <GlassPanel position={[0, 0, 0.5]} rotation={[0, 0, 0]} color="#B8C9A8" />
+      <GlassPanel position={[-3.2, 0, 0]} rotation={[0, 0.35, 0]} color="#D64545" />
+      <GlassPanel position={[0, 0, 0.5]} rotation={[0, 0, 0]} color="#E05555" />
       <GlassPanel position={[3.2, 0, 0]} rotation={[0, -0.35, 0]} color="#D4CAB8" />
 
       {/* Floating geometric accents */}
-      <FloatingSphere position={[-5, 2.5, 1]} scale={0.4} color="#9CAF88" speed={0.8} />
-      <FloatingSphere position={[5, -2, 0.5]} scale={0.35} color="#B8C9A8" speed={1.2} />
+      <FloatingSphere position={[-5, 2.5, 1]} scale={0.4} color="#D64545" speed={0.8} />
+      <FloatingSphere position={[5, -2, 0.5]} scale={0.35} color="#E05555" speed={1.2} />
       <FloatingSphere position={[0, 3, -1]} scale={0.3} color="#D4CAB8" speed={1} />
-      <FloatingSphere position={[-1.5, -3, 1]} scale={0.25} color="#9CAF88" speed={1.4} />
+      <FloatingSphere position={[-1.5, -3, 1]} scale={0.25} color="#D64545" speed={1.4} />
 
-      <pointLight position={[0, 4, 4]} intensity={2.5} color="#9CAF88" distance={15} />
-      <pointLight position={[0, -4, 3]} intensity={1.5} color="#F5F1E8" distance={12} />
+      <pointLight position={[0, 4, 4]} intensity={2.5} color="#D64545" distance={15} />
+      <pointLight position={[0, -4, 3]} intensity={1.5} color="#F5F5FA" distance={12} />
     </group>
   );
 }
