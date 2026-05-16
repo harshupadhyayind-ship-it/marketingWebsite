@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getContent, setContent } from "@/lib/content";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 import homepageJson from "@/data/homepage.json";
 import aboutJson from "@/data/about.json";
 import settingsJson from "@/data/settings.json";

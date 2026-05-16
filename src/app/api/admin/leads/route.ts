@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import clientPromise from "@/lib/mongodb";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 async function isAuthed() {
   const cookieStore = await cookies();
   return cookieStore.get("admin_auth")?.value === "1";
