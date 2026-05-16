@@ -3,7 +3,6 @@
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import ScrollOverlay, { type HomepageData } from "@/components/ui/ScrollOverlay";
-import homepageJson from "@/data/homepage.json";
 
 const WorldCanvas = dynamic(() => import("@/components/three/WorldCanvas"), {
   ssr: false,
@@ -35,16 +34,7 @@ function NavCloseButton() {
   );
 }
 
-export default function ImmersiveHome() {
-  const [data, setData] = useState<HomepageData>(homepageJson as HomepageData);
-
-  useEffect(() => {
-    fetch("/api/content/homepage", { cache: "no-store" })
-      .then((r) => r.ok ? r.json() : null)
-      .then((d) => { if (d) setData(d); })
-      .catch(() => {});
-  }, []);
-
+export default function ImmersiveHome({ data }: { data: HomepageData }) {
   return (
     <div id="scroll-container" style={{ height: "800vh" }}>
       <div

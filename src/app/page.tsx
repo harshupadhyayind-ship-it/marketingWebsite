@@ -6,6 +6,7 @@ import servicesJson from "@/data/services.json";
 import aboutJson from "@/data/about.json";
 import settingsJson from "@/data/settings.json";
 import projectsJson from "@/data/projects.json";
+import homepageJson from "@/data/homepage.json";
 
 export const metadata: Metadata = {
   title: "BRANDD-AID — Premium Marketing Agency",
@@ -16,19 +17,21 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const [servicesRaw, about, settings, projectsRaw] = await Promise.all([
+  const [homepageRaw, servicesRaw, about, settings, projectsRaw] = await Promise.all([
+    getContent("homepage").catch(() => null),
     getContent("services").catch(() => null),
     getContent("about").catch(() => null),
     getContent("settings").catch(() => null),
     getContent("projects").catch(() => null),
   ]);
 
+  const homepage = (homepageRaw ?? homepageJson) as any;
   const services = (servicesRaw as any)?.items ?? servicesJson;
   const projects = (projectsRaw as any)?.items ?? projectsJson;
 
   return (
     <>
-      <ImmersiveHome />
+      <ImmersiveHome data={homepage} />
       <SinglePageSections
         services={services as any}
         about={(about ?? aboutJson) as any}

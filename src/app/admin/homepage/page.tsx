@@ -50,7 +50,7 @@ export default function HomepageEditor() {
   if (!data) return <LoadingState />;
 
   return (
-    <div className="p-8 max-w-3xl">
+    <div className="p-4 md:p-8 max-w-3xl">
       <Toast toast={toast} onClose={() => setToast(null)} />
       <PageHeader
         title="Homepage"
@@ -260,32 +260,36 @@ export default function HomepageEditor() {
       }>
         <div className="space-y-3">
           {data.stats.map((stat, i) => (
-            <div key={i} className="grid grid-cols-12 gap-2 items-start bg-[#F7F7F8] rounded-xl p-3">
-              <div className="col-span-3">
-                <label className="text-[10px] font-mono text-[#0A0A0F]/40 uppercase block mb-1">Number</label>
-                <input type="number" value={stat.value}
-                  onChange={(e) => { const s = [...data.stats]; s[i] = { ...s[i], value: Number(e.target.value) }; set("stats", s); }}
-                  className={inputCls} />
+            <div key={i} className="bg-[#F7F7F8] rounded-xl p-3 space-y-2">
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="text-[10px] font-mono text-[#0A0A0F]/40 uppercase block mb-1">Number</label>
+                  <input type="number" value={stat.value}
+                    onChange={(e) => { const s = [...data.stats]; s[i] = { ...s[i], value: Number(e.target.value) }; set("stats", s); }}
+                    className={inputCls} />
+                </div>
+                <div>
+                  <label className="text-[10px] font-mono text-[#0A0A0F]/40 uppercase block mb-1">Suffix</label>
+                  <input value={stat.suffix}
+                    onChange={(e) => { const s = [...data.stats]; s[i] = { ...s[i], suffix: e.target.value }; set("stats", s); }}
+                    className={inputCls} />
+                </div>
               </div>
-              <div className="col-span-2">
-                <label className="text-[10px] font-mono text-[#0A0A0F]/40 uppercase block mb-1">Suffix</label>
-                <input value={stat.suffix}
-                  onChange={(e) => { const s = [...data.stats]; s[i] = { ...s[i], suffix: e.target.value }; set("stats", s); }}
-                  className={inputCls} />
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="text-[10px] font-mono text-[#0A0A0F]/40 uppercase block mb-1">Label</label>
+                  <input value={stat.label}
+                    onChange={(e) => { const s = [...data.stats]; s[i] = { ...s[i], label: e.target.value }; set("stats", s); }}
+                    className={inputCls} />
+                </div>
+                <div>
+                  <label className="text-[10px] font-mono text-[#0A0A0F]/40 uppercase block mb-1">Sub-label</label>
+                  <input value={stat.desc}
+                    onChange={(e) => { const s = [...data.stats]; s[i] = { ...s[i], desc: e.target.value }; set("stats", s); }}
+                    className={inputCls} />
+                </div>
               </div>
-              <div className="col-span-4">
-                <label className="text-[10px] font-mono text-[#0A0A0F]/40 uppercase block mb-1">Label</label>
-                <input value={stat.label}
-                  onChange={(e) => { const s = [...data.stats]; s[i] = { ...s[i], label: e.target.value }; set("stats", s); }}
-                  className={inputCls} />
-              </div>
-              <div className="col-span-2">
-                <label className="text-[10px] font-mono text-[#0A0A0F]/40 uppercase block mb-1">Sub</label>
-                <input value={stat.desc}
-                  onChange={(e) => { const s = [...data.stats]; s[i] = { ...s[i], desc: e.target.value }; set("stats", s); }}
-                  className={inputCls} />
-              </div>
-              <div className="col-span-1 flex items-end justify-end pb-0.5">
+              <div className="flex justify-end">
                 <button onClick={() => set("stats", data.stats.filter((_, idx) => idx !== i))}
                   className="p-1.5 text-[#0A0A0F]/25 hover:text-red-500 transition-colors">
                   <Trash2 size={14} />
@@ -324,9 +328,9 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 
 function Section({ title, badge, children, action }: { title: string; badge?: string; children: React.ReactNode; action?: React.ReactNode }) {
   return (
-    <div className="bg-white rounded-2xl border border-[#0A0A0F]/06 p-6 mb-6">
-      <div className="flex items-center justify-between mb-5">
-        <div className="flex items-center gap-3">
+    <div className="bg-white rounded-2xl border border-[#0A0A0F]/06 p-4 md:p-6 mb-4 md:mb-6">
+      <div className="flex flex-wrap items-center justify-between gap-2 mb-5">
+        <div className="flex flex-wrap items-center gap-2 md:gap-3">
           <h2 className="font-semibold text-[#0A0A0F] text-base">{title}</h2>
           {badge && <span className="text-[9px] font-mono text-[#0A0A0F]/35 bg-[#0A0A0F]/05 px-2 py-0.5 rounded-full uppercase tracking-widest">{badge}</span>}
         </div>
@@ -349,7 +353,7 @@ function SaveBtn({ saving, onClick }: { saving: boolean; onClick: () => void }) 
 
 function LoadingState() {
   return (
-    <div className="p-8 flex items-center gap-3 text-[#0A0A0F]/40">
+    <div className="p-4 md:p-8 flex items-center gap-3 text-[#0A0A0F]/40">
       <div className="w-4 h-4 border-2 border-[#E63327]/30 border-t-[#E63327] rounded-full animate-spin" />
       Loading…
     </div>

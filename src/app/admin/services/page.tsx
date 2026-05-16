@@ -45,14 +45,14 @@ export default function ServicesAdmin() {
   };
 
   if (loading) return (
-    <div className="p-8 flex items-center gap-3 text-[#0A0A0F]/40">
+    <div className="p-4 md:p-8 flex items-center gap-3 text-[#0A0A0F]/40">
       <div className="w-4 h-4 border-2 border-[#E63327]/30 border-t-[#E63327] rounded-full animate-spin" />
       Loading…
     </div>
   );
 
   return (
-    <div className="p-8 max-w-4xl">
+    <div className="p-4 md:p-8 max-w-4xl">
       <Toast toast={toast} onClose={() => setToast(null)} />
       <PageHeader
         title="Services"

@@ -89,26 +89,26 @@ export default function AdminDashboard() {
   }, []);
 
   return (
-    <div className="p-8 max-w-4xl">
+    <div className="p-4 md:p-8 max-w-4xl">
       {/* Header */}
-      <div className="mb-10">
+      <div className="mb-6 md:mb-10">
         <p className="text-[#E63327] text-[10px] font-mono uppercase tracking-[0.25em] mb-2">
           Admin Panel
         </p>
-        <h1 className="text-3xl font-bold text-[#0A0A0F] tracking-tight">Dashboard</h1>
-        <p className="text-[#0A0A0F]/45 mt-1">Manage all content on the BRANDD-AID website.</p>
+        <h1 className="text-2xl md:text-3xl font-bold text-[#0A0A0F] tracking-tight">Dashboard</h1>
+        <p className="text-[#0A0A0F]/45 mt-1 text-sm md:text-base">Manage all content on the BRANDD-AID website.</p>
       </div>
 
       {/* Stats row */}
-      <div className="grid grid-cols-3 gap-4 mb-10">
+      <div className="grid grid-cols-3 gap-2 md:gap-4 mb-6 md:mb-10">
         {[
           { label: "Projects", val: counts.projects },
           { label: "Services", val: counts.services },
           { label: "Team Members", val: counts.team },
         ].map((s) => (
-          <div key={s.label} className="bg-white rounded-xl border border-[#0A0A0F]/06 px-6 py-5">
-            <div className="text-3xl font-bold text-[#0A0A0F] mb-1">{s.val}</div>
-            <div className="text-[#0A0A0F]/45 text-sm">{s.label}</div>
+          <div key={s.label} className="bg-white rounded-xl border border-[#0A0A0F]/06 px-3 md:px-6 py-4 md:py-5">
+            <div className="text-2xl md:text-3xl font-bold text-[#0A0A0F] mb-1">{s.val}</div>
+            <div className="text-[#0A0A0F]/45 text-xs md:text-sm">{s.label}</div>
           </div>
         ))}
       </div>
@@ -140,7 +140,7 @@ export default function AdminDashboard() {
 
       {/* Seed Database */}
       <div className="mt-8 pt-6 border-t border-[#0A0A0F]/06">
-        <div className="flex items-center justify-between mb-2">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-2">
           <div>
             <p className="text-sm font-semibold text-[#0A0A0F]">Seed Database</p>
             <p className="text-xs text-[#0A0A0F]/45">Migrate JSON files → MongoDB (run once)</p>

@@ -74,7 +74,7 @@ function LeadCard({ lead, onStatusChange, onDelete }: {
   return (
     <div className="bg-white rounded-2xl border border-[#0A0A0F]/06 overflow-hidden hover:shadow-sm transition-shadow">
       {/* Header */}
-      <div className="px-6 py-4 flex items-center justify-between gap-4 border-b border-[#0A0A0F]/06">
+      <div className="px-4 md:px-6 py-4 flex items-center justify-between gap-3 border-b border-[#0A0A0F]/06">
         <div className="flex items-center gap-3 min-w-0">
           <div className="w-9 h-9 rounded-full bg-[#E63327]/10 flex items-center justify-center flex-shrink-0 font-bold text-[#E63327] text-sm">
             {lead.name.charAt(0).toUpperCase()}
@@ -98,7 +98,7 @@ function LeadCard({ lead, onStatusChange, onDelete }: {
       </div>
 
       {/* Meta row */}
-      <div className="px-6 py-3 flex flex-wrap gap-x-6 gap-y-2 border-b border-[#0A0A0F]/06 bg-[#F7F7F8]/50">
+      <div className="px-4 md:px-6 py-3 flex flex-wrap gap-x-4 md:gap-x-6 gap-y-2 border-b border-[#0A0A0F]/06 bg-[#F7F7F8]/50">
         {lead.company && (
           <div className="flex items-center gap-1.5 text-xs text-[#0A0A0F]/50">
             <Building2 size={11} /> {lead.company}
@@ -115,12 +115,12 @@ function LeadCard({ lead, onStatusChange, onDelete }: {
       </div>
 
       {/* Message */}
-      <div className="px-6 py-4">
+      <div className="px-4 md:px-6 py-4">
         <p className="text-sm text-[#0A0A0F]/65 leading-relaxed whitespace-pre-wrap">{lead.message}</p>
       </div>
 
       {/* Actions */}
-      <div className="px-6 pb-4">
+      <div className="px-4 md:px-6 pb-4">
         <a
           href={`mailto:${lead.email}?subject=Re: Your enquiry to BRANDD-AID`}
           className="inline-flex items-center gap-1.5 text-xs font-mono text-[#E63327] hover:underline"
@@ -186,7 +186,7 @@ export default function LeadsPage() {
   };
 
   return (
-    <div className="p-8 max-w-5xl">
+    <div className="p-4 md:p-8 max-w-5xl">
       <Toast toast={toast} onClose={() => setToast(null)} />
 
       <PageHeader
@@ -204,7 +204,7 @@ export default function LeadsPage() {
       />
 
       {/* Summary stats */}
-      <div className="grid grid-cols-5 gap-3 mb-8">
+      <div className="grid grid-cols-3 sm:grid-cols-5 gap-2 md:gap-3 mb-6 md:mb-8">
         {[
           { key: "all",       label: "Total"     },
           { key: "new",       label: "New"       },
@@ -215,16 +215,16 @@ export default function LeadsPage() {
           <button
             key={key}
             onClick={() => setFilter(key as Lead["status"] | "all")}
-            className={`rounded-xl border px-4 py-3 text-left transition-all ${
+            className={`rounded-xl border px-3 md:px-4 py-3 text-left transition-all ${
               filter === key
                 ? "bg-[#E63327] border-[#E63327] text-white"
                 : "bg-white border-[#0A0A0F]/06 text-[#0A0A0F] hover:border-[#E63327]/30"
             }`}
           >
-            <div className="text-2xl font-bold leading-none mb-1">
+            <div className="text-xl md:text-2xl font-bold leading-none mb-1">
               {counts[key as keyof typeof counts]}
             </div>
-            <div className={`text-xs font-mono ${filter === key ? "text-white/70" : "text-[#0A0A0F]/40"}`}>
+            <div className={`text-[10px] md:text-xs font-mono ${filter === key ? "text-white/70" : "text-[#0A0A0F]/40"}`}>
               {label}
             </div>
           </button>

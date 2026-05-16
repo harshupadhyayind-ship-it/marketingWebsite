@@ -15,7 +15,7 @@ export function PageHeader({
   action?: React.ReactNode;
 }) {
   return (
-    <div className="flex items-start justify-between mb-8">
+    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-6 md:mb-8">
       <div>
         {back && (
           <Link
@@ -26,10 +26,10 @@ export function PageHeader({
             {back.label}
           </Link>
         )}
-        <h1 className="text-2xl font-bold text-[#0A0A0F] tracking-tight">{title}</h1>
+        <h1 className="text-xl md:text-2xl font-bold text-[#0A0A0F] tracking-tight">{title}</h1>
         {subtitle && <p className="text-[#0A0A0F]/45 text-sm mt-1">{subtitle}</p>}
       </div>
-      {action && <div>{action}</div>}
+      {action && <div className="flex-shrink-0">{action}</div>}
     </div>
   );
 }
