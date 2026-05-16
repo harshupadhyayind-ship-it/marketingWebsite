@@ -62,34 +62,34 @@ export default function ContactPageContent() {
   };
 
   return (
-    <div className="bg-white min-h-screen">
+    <div className="bg-[#F5EFE6] min-h-screen">
 
       {/* ── Page header ── */}
       <section className="pt-40 pb-20 px-6 md:px-10 max-w-7xl mx-auto">
-        <p className="text-[#E63327] text-[10px] font-mono uppercase tracking-[0.25em] mb-6">
+        <p className="text-[#D64545] text-[10px] font-mono uppercase tracking-[0.25em] mb-6">
           Get In Touch
         </p>
         <h1
-          className="font-bold text-[#0A0A0F] leading-none"
+          className="font-bold text-[#1C1C1C] leading-none"
           style={{ fontSize: "clamp(3rem, 7vw, 7rem)", letterSpacing: "-0.04em" }}
         >
           Let's build
           <br />
           something
           <br />
-          <em className="text-[#E63327] not-italic">extraordinary.</em>
+          <em className="text-[#D64545] not-italic">extraordinary.</em>
         </h1>
       </section>
 
       {/* ── Two-column layout ── */}
-      <section className="border-t border-[#0A0A0F]/08 px-6 md:px-10 py-24 max-w-7xl mx-auto">
+      <section className="border-t border-[#1C1C1C]/08 px-6 md:px-10 py-24 max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-16 lg:gap-24">
 
           {/* LEFT — contact details */}
           <div className="flex flex-col gap-10">
             {/* Small floating HeroShapes canvas */}
             <div
-              className="relative rounded-sm overflow-hidden border border-[#0A0A0F]/08"
+              className="relative rounded-sm overflow-hidden border border-[#1C1C1C]/08"
               style={{ height: 200 }}
             >
               <HeroShapes />
@@ -100,7 +100,7 @@ export default function ContactPageContent() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-              className="text-[#0A0A0F]/55 text-lg leading-relaxed max-w-sm"
+              className="text-[#1C1C1C]/55 text-lg leading-relaxed max-w-sm"
             >
               Drop us a message and we'll put together a custom strategy for your brand.
             </motion.p>
@@ -114,18 +114,18 @@ export default function ContactPageContent() {
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: 0.1 + i * 0.08, ease: [0.22, 1, 0.36, 1] }}
                 >
-                  <p className="text-[#0A0A0F]/50 text-[10px] font-mono uppercase tracking-[0.25em] mb-2">
+                  <p className="text-[#1C1C1C]/50 text-[10px] font-mono uppercase tracking-[0.25em] mb-2">
                     {item.label}
                   </p>
                   {item.href ? (
                     <a
                       href={item.href}
-                      className="text-[#0A0A0F] text-xl hover:text-[#E63327] transition-colors duration-200"
+                      className="text-[#1C1C1C] text-xl hover:text-[#D64545] transition-colors duration-200"
                     >
                       {item.content}
                     </a>
                   ) : (
-                    <p className="text-[#0A0A0F] text-xl">{item.content}</p>
+                    <p className="text-[#1C1C1C] text-xl">{item.content}</p>
                   )}
                 </motion.div>
               ))}
@@ -138,8 +138,8 @@ export default function ContactPageContent() {
               transition={{ duration: 0.5, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
               className="flex items-center gap-2 pt-2"
             >
-              <span className="w-2 h-2 rounded-full bg-[#E63327] animate-pulse" />
-              <span className="text-[#0A0A0F]/50 text-sm">Usually responds within 24 hrs</span>
+              <span className="w-2 h-2 rounded-full bg-[#D64545] animate-pulse" />
+              <span className="text-[#1C1C1C]/50 text-sm">Usually responds within 24 hrs</span>
             </motion.div>
           </div>
 
@@ -152,70 +152,70 @@ export default function ContactPageContent() {
                 className="text-center py-24"
               >
                 <div
-                  className="text-[#E63327] mb-6 font-bold"
+                  className="text-[#D64545] mb-6 font-bold"
                   style={{ fontSize: "clamp(2rem, 5vw, 4rem)", letterSpacing: "-0.04em" }}
                 >
                   Message sent ✓
                 </div>
-                <p className="text-[#0A0A0F]/55 text-lg">
+                <p className="text-[#1C1C1C]/55 text-lg">
                   We'll review your brief and get back to you within 24 hours.
                 </p>
               </motion.div>
             ) : (
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-                <p className="text-[#E63327] text-[10px] font-mono uppercase tracking-[0.25em] mb-8">
+                <p className="text-[#D64545] text-[10px] font-mono uppercase tracking-[0.25em] mb-8">
                   Tell us about your project
                 </p>
 
                 {/* Name */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[#0A0A0F]/50 text-[10px] font-mono uppercase tracking-[0.2em]">
+                  <label className="text-[#1C1C1C]/50 text-[10px] font-mono uppercase tracking-[0.2em]">
                     Name *
                   </label>
                   <input
                     {...register("name")}
                     placeholder="Your name"
-                    className="w-full bg-white text-[#0A0A0F] text-sm border border-[#0A0A0F]/15 rounded-sm px-4 py-3 outline-none focus:border-[#0A0A0F]/40 placeholder:text-[#0A0A0F]/30 transition-colors duration-150"
+                    className="w-full bg-[#F5EFE6] text-[#1C1C1C] text-sm border border-[#1C1C1C]/15 rounded-sm px-4 py-3 outline-none focus:border-[#1C1C1C]/40 placeholder:text-[#1C1C1C]/30 transition-colors duration-150"
                   />
-                  {errors.name && <p className="text-[#E63327] text-xs">{errors.name.message}</p>}
+                  {errors.name && <p className="text-[#D64545] text-xs">{errors.name.message}</p>}
                 </div>
 
                 {/* Email */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[#0A0A0F]/50 text-[10px] font-mono uppercase tracking-[0.2em]">
+                  <label className="text-[#1C1C1C]/50 text-[10px] font-mono uppercase tracking-[0.2em]">
                     Email *
                   </label>
                   <input
                     {...register("email")}
                     type="email"
                     placeholder="your@email.com"
-                    className="w-full bg-white text-[#0A0A0F] text-sm border border-[#0A0A0F]/15 rounded-sm px-4 py-3 outline-none focus:border-[#0A0A0F]/40 placeholder:text-[#0A0A0F]/30 transition-colors duration-150"
+                    className="w-full bg-[#F5EFE6] text-[#1C1C1C] text-sm border border-[#1C1C1C]/15 rounded-sm px-4 py-3 outline-none focus:border-[#1C1C1C]/40 placeholder:text-[#1C1C1C]/30 transition-colors duration-150"
                   />
-                  {errors.email && <p className="text-[#E63327] text-xs">{errors.email.message}</p>}
+                  {errors.email && <p className="text-[#D64545] text-xs">{errors.email.message}</p>}
                 </div>
 
                 {/* Company */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[#0A0A0F]/50 text-[10px] font-mono uppercase tracking-[0.2em]">
+                  <label className="text-[#1C1C1C]/50 text-[10px] font-mono uppercase tracking-[0.2em]">
                     Company
                   </label>
                   <input
                     {...register("company")}
                     placeholder="Your company or brand"
-                    className="w-full bg-white text-[#0A0A0F] text-sm border border-[#0A0A0F]/15 rounded-sm px-4 py-3 outline-none focus:border-[#0A0A0F]/40 placeholder:text-[#0A0A0F]/30 transition-colors duration-150"
+                    className="w-full bg-[#F5EFE6] text-[#1C1C1C] text-sm border border-[#1C1C1C]/15 rounded-sm px-4 py-3 outline-none focus:border-[#1C1C1C]/40 placeholder:text-[#1C1C1C]/30 transition-colors duration-150"
                   />
                 </div>
 
                 {/* Budget — pill toggles */}
                 <div className="flex flex-col gap-2.5">
-                  <label className="text-[#0A0A0F]/50 text-[10px] font-mono uppercase tracking-[0.2em]">
+                  <label className="text-[#1C1C1C]/50 text-[10px] font-mono uppercase tracking-[0.2em]">
                     Budget
                   </label>
                   <div className="flex flex-wrap gap-2">
                     {budgetOptions.map((opt) => (
                       <label key={opt} className="cursor-pointer">
                         <input type="radio" value={opt} {...register("budget")} className="sr-only peer" />
-                        <span className="inline-block border border-[#0A0A0F]/15 rounded-sm px-4 py-2 text-xs font-mono text-[#0A0A0F]/50 peer-checked:border-[#E63327] peer-checked:text-[#E63327] peer-checked:bg-[#E63327]/05 hover:border-[#0A0A0F]/30 hover:text-[#0A0A0F]/70 transition-all duration-150 select-none">
+                        <span className="inline-block border border-[#1C1C1C]/15 rounded-sm px-4 py-2 text-xs font-mono text-[#1C1C1C]/50 peer-checked:border-[#D64545] peer-checked:text-[#D64545] peer-checked:bg-[#D64545]/05 hover:border-[#1C1C1C]/30 hover:text-[#1C1C1C]/70 transition-all duration-150 select-none">
                           {opt}
                         </span>
                       </label>
@@ -225,16 +225,16 @@ export default function ContactPageContent() {
 
                 {/* Message */}
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[#0A0A0F]/50 text-[10px] font-mono uppercase tracking-[0.2em]">
+                  <label className="text-[#1C1C1C]/50 text-[10px] font-mono uppercase tracking-[0.2em]">
                     Project Brief *
                   </label>
                   <textarea
                     {...register("message")}
                     rows={5}
                     placeholder="Tell us about your project goals, timeline, and challenges…"
-                    className="w-full bg-white text-[#0A0A0F] text-sm border border-[#0A0A0F]/15 rounded-sm px-4 py-3 outline-none focus:border-[#0A0A0F]/40 placeholder:text-[#0A0A0F]/30 resize-none transition-colors duration-150"
+                    className="w-full bg-[#F5EFE6] text-[#1C1C1C] text-sm border border-[#1C1C1C]/15 rounded-sm px-4 py-3 outline-none focus:border-[#1C1C1C]/40 placeholder:text-[#1C1C1C]/30 resize-none transition-colors duration-150"
                   />
-                  {errors.message && <p className="text-[#E63327] text-xs">{errors.message.message}</p>}
+                  {errors.message && <p className="text-[#D64545] text-xs">{errors.message.message}</p>}
                 </div>
 
                 {/* Submit */}
@@ -242,7 +242,7 @@ export default function ContactPageContent() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="bg-[#E63327] text-white font-bold px-10 py-4 rounded-sm text-sm uppercase tracking-widest hover:bg-[#B5261B] transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="bg-[#D64545] text-white font-bold px-10 py-4 rounded-sm text-sm uppercase tracking-widest hover:bg-[#8B3232] transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isSubmitting ? "Sending…" : "Send Message →"}
                   </button>

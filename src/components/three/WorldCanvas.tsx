@@ -14,11 +14,11 @@ export default function WorldCanvas() {
     const H = mount.clientHeight;
 
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color("#FFFFFF");
-    scene.fog = new THREE.Fog(0xffffff, 60, 200);
+    scene.background = new THREE.Color("#F5EFE6");
+    scene.fog = new THREE.Fog(0xf5efe6, 60, 200);
 
     const camera = new THREE.PerspectiveCamera(60, W / H, 0.1, 500);
-    camera.position.set(0, 22, 70);
+    camera.position.set(0, 26, 70);
     camera.lookAt(0, 0, 0);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
@@ -27,7 +27,7 @@ export default function WorldCanvas() {
     renderer.shadowMap.enabled = true;
     mount.appendChild(renderer.domElement);
 
-    // ── Ground grid ───────────────────────────────────────────────────
+    // ── Ground grid (main) ───────────────────────────────────────────────
     const GRID_W = 60, GRID_D = 80, GRID_STEP = 4;
     const gridPts: number[] = [];
 
@@ -41,7 +41,7 @@ export default function WorldCanvas() {
     const gridGeo = new THREE.BufferGeometry();
     gridGeo.setAttribute("position", new THREE.BufferAttribute(new Float32Array(gridPts), 3));
     const gridMat = new THREE.LineBasicMaterial({
-      color: new THREE.Color("#E63327"),
+      color: new THREE.Color("#D64545"),
       transparent: true,
       opacity: 0.10,
     });
@@ -49,20 +49,56 @@ export default function WorldCanvas() {
     grid.position.y = -8;
     scene.add(grid);
 
+    // ── Inner fine grid (half step) ─────────────────────────────────────
+    const fineGridPts: number[] = [];
+    const FINE_STEP = GRID_STEP / 2;
+    for (let x = -GRID_W / 2; x <= GRID_W / 2; x += FINE_STEP) {
+      fineGridPts.push(x, 0, -GRID_D / 2, x, 0, GRID_D / 2);
+    }
+    for (let z = -GRID_D / 2; z <= GRID_D / 2; z += FINE_STEP) {
+      fineGridPts.push(-GRID_W / 2, 0, z, GRID_W / 2, 0, z);
+    }
+    const fineGridGeo = new THREE.BufferGeometry();
+    fineGridGeo.setAttribute("position", new THREE.BufferAttribute(new Float32Array(fineGridPts), 3));
+    const fineGridMat = new THREE.LineBasicMaterial({
+      color: new THREE.Color("#D64545"),
+      transparent: true,
+      opacity: 0.05,
+    });
+    const fineGrid = new THREE.LineSegments(fineGridGeo, fineGridMat);
+    fineGrid.position.y = -8;
+    scene.add(fineGrid);
+
+    // ── Triangulated diagonal grid ──────────────────────────────────────
+    const triPts: number[] = [];
+    for (let x = -GRID_W / 2; x < GRID_W / 2; x += GRID_STEP) {
+      for (let z = -GRID_D / 2; z < GRID_D / 2; z += GRID_STEP) {
+        triPts.push(x, 0, z, x + GRID_STEP, 0, z + GRID_STEP); // diagonal
+      }
+    }
+    const triGeo = new THREE.BufferGeometry();
+    triGeo.setAttribute("position", new THREE.BufferAttribute(new Float32Array(triPts), 3));
+    const triMat = new THREE.LineBasicMaterial({ color: new THREE.Color("#D64545"), transparent: true, opacity: 0.04 });
+    const triLines = new THREE.LineSegments(triGeo, triMat);
+    triLines.position.y = -8;
+    scene.add(triLines);
+
     // ── Rising bar chart — 3D performance bars ─────────────────────────
     const BAR_DATA = [14, 28, 22, 48, 38, 62, 52, 76, 68, 92];
     const bars: THREE.Mesh[] = [];
+    const barCaps: THREE.Mesh[] = [];
     const barTargetH: number[] = [];
     const barMats: THREE.MeshStandardMaterial[] = [];
+    const capMats: THREE.MeshStandardMaterial[] = [];
 
     BAR_DATA.forEach((pct, i) => {
-      const maxH = (pct / 100) * 18;
+      const maxH = (pct / 100) * 18 * 1.3;
       barTargetH.push(maxH);
 
       const isLast = i === BAR_DATA.length - 1;
       const mat = new THREE.MeshStandardMaterial({
-        color:    new THREE.Color(isLast ? "#E63327" : "#FF7A6E"),
-        emissive: new THREE.Color(isLast ? "#E63327" : "#E63327"),
+        color:    new THREE.Color(isLast ? "#D64545" : "#C87070"),
+        emissive: new THREE.Color(isLast ? "#D64545" : "#C87070"),
         emissiveIntensity: isLast ? 0.6 : 0.2,
         transparent: true,
         opacity: 0,
@@ -71,13 +107,31 @@ export default function WorldCanvas() {
       });
       barMats.push(mat);
 
-      const geo = new THREE.BoxGeometry(2.2, 1, 2.2);
+      const geo = new THREE.BoxGeometry(2.8, 1, 2.8);
       const mesh = new THREE.Mesh(geo, mat);
       mesh.scale.y = 0.001;
       mesh.position.set((i - (BAR_DATA.length - 1) / 2) * 3.2, -8, 0);
       mesh.castShadow = true;
       bars.push(mesh);
       scene.add(mesh);
+
+      // Glow cap on top of each bar
+      const capMat = new THREE.MeshStandardMaterial({
+        color:    new THREE.Color(isLast ? "#D64545" : "#C87070"),
+        emissive: new THREE.Color(isLast ? "#D64545" : "#C87070"),
+        emissiveIntensity: 2.0,
+        transparent: true,
+        opacity: 0,
+        roughness: 0.1,
+        metalness: 0.3,
+      });
+      capMats.push(capMat);
+      const capGeo = new THREE.BoxGeometry(2.9, 0.15, 2.9);
+      const cap = new THREE.Mesh(capGeo, capMat);
+      cap.scale.y = 0.001;
+      cap.position.set((i - (BAR_DATA.length - 1) / 2) * 3.2, -8, 0);
+      barCaps.push(cap);
+      scene.add(cap);
     });
 
     // ── Rising accent lines (vertical) ───────────────────────────────
@@ -92,14 +146,15 @@ export default function WorldCanvas() {
     const vlineGeo = new THREE.BufferGeometry();
     vlineGeo.setAttribute("position", new THREE.BufferAttribute(new Float32Array(vlinePts), 3));
     const vlineMat = new THREE.LineBasicMaterial({
-      color: new THREE.Color("#E63327"),
+      color: new THREE.Color("#D64545"),
       transparent: true,
       opacity: 0,
     });
     const vlines = new THREE.LineSegments(vlineGeo, vlineMat);
     scene.add(vlines);
 
-    // ── Growth curve (bezier path line) ──────────────────────────────
+    // ── Growth curves ─────────────────────────────────────────────────
+    // Curve 1 (main)
     const curve = new THREE.CatmullRomCurve3([
       new THREE.Vector3(-28, -6, 0),
       new THREE.Vector3(-18, -4, 0),
@@ -112,14 +167,14 @@ export default function WorldCanvas() {
     const curvePts = curve.getPoints(120);
     const curveGeo = new THREE.BufferGeometry().setFromPoints(curvePts);
     const curveMat = new THREE.LineBasicMaterial({
-      color: new THREE.Color("#E63327"),
+      color: new THREE.Color("#D64545"),
       transparent: true,
       opacity: 0,
     });
     const curveLine = new THREE.Line(curveGeo, curveMat);
     scene.add(curveLine);
 
-    // Second curve — slightly behind and fainter
+    // Curve 2 — behind and fainter
     const curve2 = new THREE.CatmullRomCurve3([
       new THREE.Vector3(-28, -8, -6),
       new THREE.Vector3(-16, -6, -6),
@@ -131,52 +186,86 @@ export default function WorldCanvas() {
     const curve2Pts = curve2.getPoints(100);
     const curve2Geo = new THREE.BufferGeometry().setFromPoints(curve2Pts);
     const curve2Mat = new THREE.LineBasicMaterial({
-      color: new THREE.Color("#E63327"),
+      color: new THREE.Color("#D64545"),
       transparent: true,
       opacity: 0,
     });
     const curveLine2 = new THREE.Line(curve2Geo, curve2Mat);
     scene.add(curveLine2);
 
-    // ── Central red geometric accent — a rotating octahedron ─────────
+    // Curve 3 — highlight, slightly in front (z=4), opacity 0.25 max
+    const curve3 = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(-28, -5, 4),
+      new THREE.Vector3(-18, -3, 4),
+      new THREE.Vector3(-6,   0, 4),
+      new THREE.Vector3( 4,   4, 4),
+      new THREE.Vector3( 14,  8, 4),
+      new THREE.Vector3( 28, 13, 4),
+    ]);
+    const curve3Pts = curve3.getPoints(110);
+    const curve3Geo = new THREE.BufferGeometry().setFromPoints(curve3Pts);
+    const curve3Mat = new THREE.LineBasicMaterial({
+      color: new THREE.Color("#D64545"),
+      transparent: true,
+      opacity: 0,
+    });
+    const curveLine3 = new THREE.Line(curve3Geo, curve3Mat);
+    scene.add(curveLine3);
+
+    // ── Central red geometric accent — rotating octahedron ───────────
     const accentMat = new THREE.MeshStandardMaterial({
-      color:   new THREE.Color("#E63327"),
-      emissive: new THREE.Color("#E63327"),
+      color:   new THREE.Color("#D64545"),
+      emissive: new THREE.Color("#D64545"),
       emissiveIntensity: 1.2,
       transparent: true,
       opacity: 0,
       roughness: 0.1,
       metalness: 0.6,
     });
-    const accent = new THREE.Mesh(new THREE.OctahedronGeometry(2.2, 0), accentMat);
+    const accent = new THREE.Mesh(new THREE.OctahedronGeometry(2.8, 0), accentMat);
     accent.position.set(0, 4, 0);
     scene.add(accent);
 
-    // Wireframe overlay on accent
+    // Inner wireframe overlay
     const wireMat = new THREE.MeshBasicMaterial({
-      color: new THREE.Color("#E63327"),
+      color: new THREE.Color("#D64545"),
       wireframe: true,
       transparent: true,
       opacity: 0,
     });
-    const wire = new THREE.Mesh(new THREE.OctahedronGeometry(2.4, 1), wireMat);
+    const wire = new THREE.Mesh(new THREE.OctahedronGeometry(3.0, 1), wireMat);
     wire.position.copy(accent.position);
     scene.add(wire);
+
+    // Outer wireframe octahedron — slower rotation, nested ring effect
+    const outerWireMat = new THREE.MeshBasicMaterial({
+      color: new THREE.Color("#D64545"),
+      wireframe: true,
+      transparent: true,
+      opacity: 0,
+    });
+    const outerWire = new THREE.Mesh(new THREE.OctahedronGeometry(3.4, 1), outerWireMat);
+    outerWire.position.copy(accent.position);
+    scene.add(outerWire);
 
     // ── Lights ───────────────────────────────────────────────────────
     const ambLight = new THREE.AmbientLight(0xffffff, 1.0);
     scene.add(ambLight);
-    const dirLight = new THREE.DirectionalLight(0xe63327, 1.5);
+    const dirLight = new THREE.DirectionalLight(0xD64545, 1.5);
     dirLight.position.set(10, 20, 10);
     dirLight.castShadow = true;
     scene.add(dirLight);
     const fillLight = new THREE.DirectionalLight(0xffffff, 0.6);
     fillLight.position.set(-10, 5, -10);
     scene.add(fillLight);
+    // Warm red glow on bars
+    const redPoint = new THREE.PointLight(0xD64545, 2.5, 30);
+    redPoint.position.set(0, 8, 2);
+    scene.add(redPoint);
 
     // ── Camera waypoints ─────────────────────────────────────────────
     const WAY = [
-      { z: 70, y: 22, x:  0 },  // 0%  — elevated overview
+      { z: 70, y: 26, x:  0 },  // 0%  — elevated overview (y bumped from 22→26)
       { z: 42, y: 10, x: -2 },  // 25% — descending into grid
       { z: 18, y:  2, x:  0 },  // 50% — at grid level, curves visible
       { z:  4, y:  2, x:  0 },  // 75% — bars & accent close
@@ -236,9 +325,10 @@ export default function WorldCanvas() {
       camera.position.z = lp(camera.position.z, camTZ, 0.04);
       camera.lookAt(0, 0, 0);
 
-      // Grid — always visible, brighten on approach
+      // Grid — always visible, max opacity 0.15
       const gridApproach = Math.min(1, p / 0.4);
-      gridMat.opacity = 0.06 + gridApproach * 0.14;
+      gridMat.opacity = 0.04 + gridApproach * 0.11;   // max = 0.15
+      fineGridMat.opacity = 0.02 + gridApproach * 0.03; // stays subtle
 
       // Growth curves — fade in 0.20→0.45, hold, fade 0.72→0.84
       const curveFade = p < 0.20 ? 0
@@ -248,6 +338,7 @@ export default function WorldCanvas() {
         : 0;
       curveMat.opacity  = curveFade * 0.85;
       curve2Mat.opacity = curveFade * 0.40;
+      curve3Mat.opacity = curveFade * 0.25;  // highlight curve
 
       // Vertical accent lines — fade 0.15→0.40
       vlineMat.opacity = lp(0, 0.55, Math.min(1, Math.max(0, (p - 0.15) / 0.25)));
@@ -268,16 +359,29 @@ export default function WorldCanvas() {
         bar.scale.y = lp(bar.scale.y, Math.max(0.001, targetH), 0.06);
         // Keep bar sitting on grid floor
         bar.position.y = -8 + (bar.scale.y * barTargetH[i]) / 2;
+
+        // Glow cap: position at top of bar, fade with bar
+        capMats[i].opacity = barFade * 0.95;
+        barCaps[i].scale.y = lp(barCaps[i].scale.y, Math.max(0.001, targetH * 0.5), 0.06);
+        barCaps[i].position.y = bar.position.y + (bar.scale.y * barTargetH[i]) / 2;
       });
 
-      // Accent octahedron — fade in 0.40→0.60
+      // Accent octahedra — fade in 0.40→0.60
       const accentFade = fade(p, 0.40, 0.60);
-      accentMat.opacity = accentFade * 0.80;
-      wireMat.opacity   = accentFade * 0.30;
+      accentMat.opacity    = accentFade * 0.80;
+      wireMat.opacity      = accentFade * 0.30;
+      outerWireMat.opacity = accentFade * 0.18;
+
+      // Inner accent: normal speed rotation
       accent.rotation.y = t * 0.55;
       accent.rotation.x = t * 0.28;
       wire.rotation.copy(accent.rotation);
       wire.position.copy(accent.position);
+
+      // Outer wireframe: slightly slower rotation for nested ring effect
+      outerWire.rotation.y = t * 0.35;
+      outerWire.rotation.x = t * 0.18;
+      outerWire.position.copy(accent.position);
 
       renderer.render(scene, camera);
     };

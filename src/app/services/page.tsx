@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import ServicesPageContent from "./ServicesPageContent";
+import servicesData from "@/data/services.json";
 
 export const metadata: Metadata = {
   title: "Services",
@@ -8,5 +9,5 @@ export const metadata: Metadata = {
 };
 
 export default function ServicesPage() {
-  return <ServicesPageContent />;
+  return <ServicesPageContent services={servicesData} />;
 }

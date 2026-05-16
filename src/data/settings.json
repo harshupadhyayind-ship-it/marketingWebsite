@@ -1,0 +1,25 @@
+{
+  "company": {
+    "name": "BRANDD-AID",
+    "tagline": "Marketing That Elevates",
+    "email": "hello@branddaid.com",
+    "phone": "+91 98765 43210",
+    "location": "Mumbai, India",
+    "year": "2025"
+  },
+  "social": {
+    "instagram": "https://instagram.com",
+    "linkedin": "https://linkedin.com",
+    "twitter": "https://twitter.com"
+  },
+  "marquee": [
+    "Brand Strategy",
+    "Web Design",
+    "Digital Marketing",
+    "Content Creation",
+    "Performance Analytics",
+    "Creative Direction",
+    "Growth Marketing",
+    "UI / UX Design"
+  ]
+}

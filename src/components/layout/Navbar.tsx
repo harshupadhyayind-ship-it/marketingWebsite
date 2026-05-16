@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import settingsData from "@/data/settings.json";
 
 const NAV_LINKS = [
   { label: "Home",     href: "/",        index: "01" },
@@ -15,9 +16,9 @@ const NAV_LINKS = [
 ];
 
 const SOCIAL = [
-  { label: "Instagram", href: "https://instagram.com" },
-  { label: "LinkedIn",  href: "https://linkedin.com"  },
-  { label: "Twitter",   href: "https://twitter.com"   },
+  { label: "Instagram", href: settingsData.social.instagram },
+  { label: "LinkedIn",  href: settingsData.social.linkedin  },
+  { label: "Twitter",   href: settingsData.social.twitter   },
 ];
 
 export default function Navbar() {
@@ -47,14 +48,14 @@ export default function Navbar() {
           className="group flex items-baseline gap-2 cursor-pointer"
           aria-label="Open menu"
         >
-          <span className="text-[#E63327]/60 text-[10px] font-mono leading-none">(08)</span>
-          <span className="text-[#0A0A0F] font-bold text-4xl leading-none tracking-tight group-hover:text-[#E63327] transition-colors duration-200">
+          <span className="text-[#D64545]/60 text-[10px] font-mono leading-none">(08)</span>
+          <span className="text-[#1C1C1C] font-bold text-4xl leading-none tracking-tight group-hover:text-[#D64545] transition-colors duration-200">
             menu
           </span>
         </button>
         <Link href="/contact" className="flex items-baseline gap-1.5 group mt-0.5">
-          <span className="text-[#E63327]/60 text-[10px] font-mono leading-none">(01)</span>
-          <span className="text-[#0A0A0F]/50 text-sm font-medium group-hover:text-[#0A0A0F] transition-colors duration-200">contact</span>
+          <span className="text-[#D64545]/60 text-[10px] font-mono leading-none">(01)</span>
+          <span className="text-[#1C1C1C]/50 text-sm font-medium group-hover:text-[#1C1C1C] transition-colors duration-200">contact</span>
         </Link>
       </div>
 
@@ -68,20 +69,20 @@ export default function Navbar() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.35, ease: "easeOut" }}
             className="fixed inset-0 z-[100] flex flex-col"
-            style={{ background: "#FFFFFF" }}
+            style={{ background: "#F5EFE6" }}
           >
             {/* Red scan line at top */}
             <motion.div
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
               transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-              className="absolute top-0 left-0 right-0 h-[2px] bg-[#E63327] origin-left"
+              className="absolute top-0 left-0 right-0 h-[2px] bg-[#D64545] origin-left"
             />
 
             {/* Close button */}
             <button
               onClick={() => setOpen(false)}
-              className="absolute top-5 right-6 text-[#0A0A0F]/45 hover:text-[#E63327] transition-colors duration-200 cursor-pointer z-10"
+              className="absolute top-5 right-6 text-[#1C1C1C]/45 hover:text-[#D64545] transition-colors duration-200 cursor-pointer z-10"
               style={{ fontSize: "2.8rem", lineHeight: 1, fontWeight: 200 }}
               aria-label="Close menu"
             >
@@ -104,10 +105,10 @@ export default function Navbar() {
                   className="rounded-sm flex-shrink-0"
                 />
                 <div className="flex flex-col">
-                  <span className="font-black text-[#0A0A0F] text-lg leading-none tracking-[0.06em]">
-                    BRANDD<span className="text-[#E63327]">-AID</span>
+                  <span className="font-black text-[#1C1C1C] text-lg leading-none tracking-[0.06em]">
+                    BRANDD<span className="text-[#D64545]">-AID</span>
                   </span>
-                  <span className="text-[#0A0A0F]/35 text-[8px] font-mono uppercase tracking-[0.24em] mt-1">
+                  <span className="text-[#1C1C1C]/35 text-[8px] font-mono uppercase tracking-[0.24em] mt-1">
                     Marketing That Elevates
                   </span>
                 </div>
@@ -136,7 +137,7 @@ export default function Navbar() {
               transition={{ duration: 0.5, delay: 0.5 }}
               className="flex items-end justify-between px-8 md:px-16 lg:px-24 pb-8"
             >
-              <p className="text-[#0A0A0F]/25 text-[10px] font-mono uppercase tracking-[0.2em]">
+              <p className="text-[#1C1C1C]/25 text-[10px] font-mono uppercase tracking-[0.2em]">
                 Mumbai · India · 2025
               </p>
               <div className="flex items-center gap-6">
@@ -146,7 +147,7 @@ export default function Navbar() {
                     href={s.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[#0A0A0F]/35 text-xs font-mono uppercase tracking-widest hover:text-[#E63327] transition-colors duration-200"
+                    className="text-[#1C1C1C]/35 text-xs font-mono uppercase tracking-widest hover:text-[#D64545] transition-colors duration-200"
                   >
                     {s.label}
                   </a>
@@ -177,7 +178,7 @@ function NavLink({
   const [hovered, setHovered] = useState(false);
 
   return (
-    <Link href={href} onClick={onClick} className="flex-1 flex items-center border-b border-[#0A0A0F]/08 last:border-b-0">
+    <Link href={href} onClick={onClick} className="flex-1 flex items-center border-b border-[#1C1C1C]/08 last:border-b-0">
       <motion.div
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
@@ -188,7 +189,7 @@ function NavLink({
       >
         {/* Left: index + label */}
         <div className="flex items-center gap-6">
-          <span className="text-[#E63327] font-mono text-xs leading-none flex-shrink-0 w-6 opacity-70">
+          <span className="text-[#D64545] font-mono text-xs leading-none flex-shrink-0 w-6 opacity-70">
             {index}
           </span>
 
@@ -197,7 +198,7 @@ function NavLink({
             <motion.span
               animate={{ y: hovered ? "-100%" : "0%" }}
               transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-              className="block font-bold text-[#0A0A0F] leading-none"
+              className="block font-bold text-[#1C1C1C] leading-none"
               style={{ fontSize: "clamp(2.2rem, 7vh, 5.5rem)", letterSpacing: "-0.04em" }}
             >
               {label}
@@ -205,7 +206,7 @@ function NavLink({
             <motion.span
               animate={{ y: hovered ? "0%" : "100%" }}
               transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-              className="absolute inset-0 block font-bold text-[#E63327] leading-none"
+              className="absolute inset-0 block font-bold text-[#D64545] leading-none"
               style={{ fontSize: "clamp(2.2rem, 7vh, 5.5rem)", letterSpacing: "-0.04em" }}
             >
               {label}
@@ -214,7 +215,7 @@ function NavLink({
 
           {/* Active indicator */}
           {active && (
-            <span className="w-1.5 h-1.5 rounded-full bg-[#E63327] flex-shrink-0" />
+            <span className="w-1.5 h-1.5 rounded-full bg-[#D64545] flex-shrink-0" />
           )}
         </div>
 
@@ -223,14 +224,14 @@ function NavLink({
           <motion.span
             animate={{ opacity: hovered ? 1 : 0, x: hovered ? 0 : 8 }}
             transition={{ duration: 0.2 }}
-            className="text-[#0A0A0F]/35 text-xs font-mono uppercase tracking-widest hidden md:block"
+            className="text-[#1C1C1C]/35 text-xs font-mono uppercase tracking-widest hidden md:block"
           >
             {NAV_DESCRIPTIONS[href]}
           </motion.span>
           <motion.span
             animate={{ opacity: hovered ? 1 : 0.15, x: hovered ? 0 : -6 }}
             transition={{ duration: 0.25 }}
-            className="text-[#E63327] text-lg font-light"
+            className="text-[#D64545] text-lg font-light"
           >
             →
           </motion.span>

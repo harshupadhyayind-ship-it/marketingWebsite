@@ -1,11 +1,29 @@
-<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="200" height="200" fill="#E63327"/>
-  <!-- Upper outer triangle (pointing up) -->
-  <path d="M100 28 L168 108 L32 108 Z" stroke="white" stroke-width="8" stroke-linejoin="round" fill="none"/>
-  <!-- Upper inner triangle (pointing up) -->
-  <path d="M100 48 L148 104 L52 104 Z" stroke="white" stroke-width="7" stroke-linejoin="round" fill="none"/>
-  <!-- Lower outer downward triangle -->
-  <path d="M32 118 L168 118 L100 168 Z" stroke="white" stroke-width="8" stroke-linejoin="round" fill="none"/>
-  <!-- Lower inner small downward triangle -->
-  <path d="M54 122 L146 122 L100 152 Z" stroke="white" stroke-width="6" stroke-linejoin="round" fill="none"/>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080">
+  <defs>
+    <style>
+      .cls-5 { letter-spacing: -.04em; }
+      .cls-6 { fill: #6B4F3A; stroke-width: 0px; }
+      .cls-7 { fill: #F5EFE6; stroke-width: 0px; }
+      .cls-8 { letter-spacing: .19em; }
+      .cls-9 { letter-spacing: .1em; }
+      .cls-10 { font-family: Outfit-Bold, Outfit; font-size: 126px; font-weight: 700; fill: #F5EFE6; }
+      .cls-11 { font-family: Outfit-Regular, Outfit; font-size: 40px; fill: #D64545; }
+      .cls-12 { letter-spacing: .19em; }
+      .cls-13 { letter-spacing: -.03em; }
+      .cls-14 { letter-spacing: .18em; }
+      .cls-15 { letter-spacing: 0em; }
+      .cls-16 { letter-spacing: .17em; }
+      .cls-17 { letter-spacing: .2em; }
+      .cls-1 { letter-spacing: .19em; }
+      .cls-2 { letter-spacing: .11em; }
+      .cls-3 { letter-spacing: .18em; }
+      .cls-4 { letter-spacing: .1em; }
+    </style>
+  </defs>
+  <rect class="cls-6" width="1080" height="1080"/>
+  <path class="cls-7" d="m413.42,476.43h262.41c-44.28,55.48-87.13,109.18-131.1,164.27-43.96-55-86.75-108.52-131.32-164.27Zm79.81,39.52c17.75,22,34.24,42.44,51.52,63.87,17.14-21.55,33.46-42.06,50.81-63.87h-102.33Z"/>
+  <text class="cls-10" transform="translate(128.91 790.74)"><tspan x="0" y="0">B</tspan><tspan class="cls-5" x="80.76" y="0">R</tspan><tspan class="cls-15" x="158.38" y="0">A</tspan><tspan x="249.23" y="0">NDD</tspan><tspan class="cls-13" x="532.22" y="0">-</tspan><tspan class="cls-15" x="586.78" y="0">A</tspan><tspan x="677.62" y="0">ID</tspan></text>
+  <text class="cls-11" transform="translate(167.55 871.41)"><tspan class="cls-17" x="0" y="0">M</tspan><tspan class="cls-8" x="41.56" y="0">A</tspan><tspan class="cls-12" x="77.08" y="0">R</tspan><tspan class="cls-3" x="109.72" y="0">K</tspan><tspan class="cls-16" x="143.64" y="0">E</tspan><tspan class="cls-17" x="174.2" y="0">TING</tspan><tspan class="cls-14" x="300.84" y="0"> </tspan><tspan class="cls-17" x="316.52" y="0">TH</tspan><tspan class="cls-4" x="385.76" y="0">A</tspan><tspan class="cls-14" x="417.56" y="0">T</tspan><tspan class="cls-17" x="449.92" y="0" xml:space="preserve"> EL</tspan><tspan class="cls-1" x="527.92" y="0">E</tspan><tspan class="cls-2" x="558.96" y="0">V</tspan><tspan class="cls-9" x="590.68" y="0">A</tspan><tspan class="cls-17" x="622.48" y="0">T</tspan><tspan class="cls-3" x="655.48" y="0">E</tspan><tspan class="cls-17" x="686.36" y="0">S</tspan></text>
+  <polygon class="cls-7" points="374.19 443.59 417.33 443.59 544.97 224.48 648.74 401.79 526.67 401.79 566.22 334.03 544.59 296.21 459.2 442.94 715.06 442.94 544.73 151.01 374.19 443.59"/>
 </svg>

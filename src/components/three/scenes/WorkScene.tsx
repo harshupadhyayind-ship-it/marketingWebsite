@@ -6,11 +6,11 @@ import { Float, RoundedBox } from "@react-three/drei";
 import * as THREE from "three";
 
 const PROJECT_COLORS = [
-  "#E63327",
+  "#D64545",
   "#C5B99A",
-  "#B5261B",
+  "#8B3232",
   "#B8A88A",
-  "#FF5349",
+  "#E05555",
   "#D4CAB8",
 ];
 
@@ -79,9 +79,9 @@ export default function WorkScene() {
         <ProjectCard key={i} index={i} total={PROJECT_COLORS.length} color={color} />
       ))}
 
-      <pointLight position={[0, 4, -75]} intensity={3} color="#E63327" distance={20} />
+      <pointLight position={[0, 4, -75]} intensity={3} color="#D64545" distance={20} />
       <pointLight position={[0, -4, -75]} intensity={2} color="#D4CAB8" distance={18} />
-      <pointLight position={[4, 0, -72]} intensity={1.5} color="#FF5349" distance={15} />
+      <pointLight position={[4, 0, -72]} intensity={1.5} color="#E05555" distance={15} />
     </group>
   );
 }

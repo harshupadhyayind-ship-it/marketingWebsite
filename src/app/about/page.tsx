@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import AboutPageContent from "./AboutPageContent";
+import aboutData from "@/data/about.json";
 
 export const metadata: Metadata = {
   title: "About Us",
@@ -8,5 +9,5 @@ export const metadata: Metadata = {
 };
 
 export default function AboutPage() {
-  return <AboutPageContent />;
+  return <AboutPageContent data={aboutData} />;
 }

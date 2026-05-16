@@ -15,9 +15,9 @@ export default function HeroShapes() {
     renderer.setSize(mount.clientWidth, mount.clientHeight);
     mount.appendChild(renderer.domElement);
 
-    /* ── Scene — keep white background for page hero sections ── */
+    /* ── Scene ── */
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color("#FFFFFF");
+    scene.background = new THREE.Color("#F5EFE6");
 
     /* ── Camera ── */
     const camera = new THREE.PerspectiveCamera(
@@ -26,170 +26,132 @@ export default function HeroShapes() {
       0.1,
       200
     );
-    camera.position.set(0, 0, 20);
+    camera.position.set(0, 0, 18);
 
     /* ── Lights ── */
-    const ambient = new THREE.AmbientLight(0xffffff, 0.8);
+    const ambient = new THREE.AmbientLight(0xffffff, 1.0);
     scene.add(ambient);
 
-    const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
-    dirLight.position.set(10, 10, 10);
-    scene.add(dirLight);
+    /* ── Triangulated grid background ── */
+    const triGridPts: number[] = [];
+    const COLS = 12, ROWS = 7;
+    const GW = 28, GH = 18;
+    for (let row = 0; row <= ROWS; row++) {
+      for (let col = 0; col <= COLS; col++) {
+        const x = -GW / 2 + (col / COLS) * GW;
+        const y = -GH / 2 + (row / ROWS) * GH;
+        // Horizontal lines
+        if (col < COLS) triGridPts.push(x, y, -3, x + (GW / COLS), y, -3);
+        // Vertical lines
+        if (row < ROWS) triGridPts.push(x, y, -3, x, y + (GH / ROWS), -3);
+        // Diagonal (triangle subdivision)
+        if (col < COLS && row < ROWS) {
+          triGridPts.push(x, y, -3, x + (GW / COLS), y + (GH / ROWS), -3);
+        }
+      }
+    }
+    const triGridGeo = new THREE.BufferGeometry();
+    triGridGeo.setAttribute("position", new THREE.BufferAttribute(new Float32Array(triGridPts), 3));
+    const triGridMat = new THREE.LineBasicMaterial({
+      color: 0x6B4F3A,
+      transparent: true,
+      opacity: 0.12,
+    });
+    const triGrid = new THREE.LineSegments(triGridGeo, triGridMat);
+    scene.add(triGrid);
 
-    // Warm red glow points for subtle depth
-    const glow1 = new THREE.PointLight(0xe63327, 1.5, 15);
-    glow1.position.set(-6, 3, 5);
-    scene.add(glow1);
+    /* ── 150 Particles ── */
+    const PARTICLE_COUNT = 150;
+    const positions = new Float32Array(PARTICLE_COUNT * 3);
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      positions[i * 3]     = (Math.random() - 0.5) * 24;
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 14;
+      positions[i * 3 + 2] = -5 + Math.random() * 6;
+    }
+    const particleGeo = new THREE.BufferGeometry();
+    particleGeo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+    const particleMat = new THREE.PointsMaterial({
+      size: 0.07,
+      color: 0xD64545,
+      transparent: true,
+      opacity: 0.55,
+      sizeAttenuation: true,
+    });
+    const points = new THREE.Points(particleGeo, particleMat);
+    scene.add(points);
 
-    const glow2 = new THREE.PointLight(0xe63327, 1.5, 15);
-    glow2.position.set(7, -4, 3);
-    scene.add(glow2);
-
-    /* ── Red colour ── */
-    const RED = 0xe63327;
-
-    /* ── Shape definitions ── */
-    type ShapeDef = {
-      mesh: THREE.Mesh;
-      rotSpeed: [number, number, number];
-    };
-    const shapes: ShapeDef[] = [];
-
-    function makeMesh(
-      geo: THREE.BufferGeometry,
-      mat: THREE.Material,
-      pos: [number, number, number]
-    ): ShapeDef {
-      const mesh = new THREE.Mesh(geo, mat);
-      mesh.position.set(...pos);
-      scene.add(mesh);
-      return {
-        mesh,
-        rotSpeed: [
-          (Math.random() - 0.5) * 0.016,
-          (Math.random() - 0.5) * 0.020,
-          (Math.random() - 0.5) * 0.012,
-        ],
-      };
+    /* ── Network lines (pre-computed once) ── */
+    const lineVerts: number[] = [];
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      for (let j = i + 1; j < PARTICLE_COUNT; j++) {
+        const dx = positions[i * 3]     - positions[j * 3];
+        const dy = positions[i * 3 + 1] - positions[j * 3 + 1];
+        const dz = positions[i * 3 + 2] - positions[j * 3 + 2];
+        const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+        if (dist < 5.0) {
+          lineVerts.push(
+            positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2],
+            positions[j * 3], positions[j * 3 + 1], positions[j * 3 + 2]
+          );
+        }
+      }
     }
 
-    // ── 4 wireframe octahedra ──────────────────────────────────────────
+    let lines: THREE.LineSegments | null = null;
+    if (lineVerts.length > 0) {
+      const lineGeo = new THREE.BufferGeometry();
+      lineGeo.setAttribute("position", new THREE.BufferAttribute(new Float32Array(lineVerts), 3));
+      const lineMat = new THREE.LineBasicMaterial({
+        color: 0xD64545,
+        transparent: true,
+        opacity: 0.08,
+      });
+      lines = new THREE.LineSegments(lineGeo, lineMat);
+      scene.add(lines);
+    }
 
-    /* 1 */
-    shapes.push(
-      makeMesh(
-        new THREE.OctahedronGeometry(2.2),
-        new THREE.MeshBasicMaterial({ color: RED, wireframe: true, transparent: true, opacity: 0.45 }),
-        [-7, 4, -6]
-      )
-    );
+    /* ── Central rotating tetrahedron ── */
+    const centralGeo = new THREE.TetrahedronGeometry(2.2, 1);
+    const centralMat = new THREE.MeshBasicMaterial({
+      color: 0xD64545,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.18,
+    });
+    const central = new THREE.Mesh(centralGeo, centralMat);
+    scene.add(central);
 
-    /* 2 */
-    shapes.push(
-      makeMesh(
-        new THREE.OctahedronGeometry(1.4),
-        new THREE.MeshBasicMaterial({ color: RED, wireframe: true, transparent: true, opacity: 0.35 }),
-        [8, -3, -7]
-      )
-    );
+    /* ── Floating UI cards ── */
+    const CARDS = [
+      { x: -6, y: 2, z: -1, w: 3.2, h: 1.8, color: 0x6B4F3A },
+      { x: 5, y: -1.5, z: -2, w: 2.6, h: 1.5, color: 0xD64545 },
+      { x: -4, y: -2.5, z: -3, w: 2.2, h: 1.3, color: 0x8B6550 },
+      { x: 7, y: 1.5, z: -4, w: 3.0, h: 1.6, color: 0x6B4F3A },
+    ];
+    const cards: THREE.Mesh[] = [];
+    const cardPhases: number[] = [];
+    const cardEdges: THREE.LineSegments[] = [];
 
-    /* 3 */
-    shapes.push(
-      makeMesh(
-        new THREE.OctahedronGeometry(3.0),
-        new THREE.MeshBasicMaterial({ color: RED, wireframe: true, transparent: true, opacity: 0.20 }),
-        [2, -4, -8]
-      )
-    );
+    CARDS.forEach(({ x, y, z, w, h, color }) => {
+      const geo = new THREE.BoxGeometry(w, h, 0.04);
+      const mat = new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.18 });
+      const mesh = new THREE.Mesh(geo, mat);
+      mesh.position.set(x, y, z);
+      mesh.rotation.z = (Math.random() - 0.5) * 0.15;
+      mesh.rotation.x = (Math.random() - 0.5) * 0.1;
+      scene.add(mesh);
+      cards.push(mesh);
+      cardPhases.push(Math.random() * Math.PI * 2);
 
-    /* 4 */
-    shapes.push(
-      makeMesh(
-        new THREE.OctahedronGeometry(1.8),
-        new THREE.MeshBasicMaterial({ color: RED, wireframe: true, transparent: true, opacity: 0.40 }),
-        [-5, -3, -5]
-      )
-    );
-
-    // ── 2 solid icosahedra ─────────────────────────────────────────────
-
-    /* 5 */
-    shapes.push(
-      makeMesh(
-        new THREE.IcosahedronGeometry(0.9, 0),
-        new THREE.MeshStandardMaterial({
-          color: RED,
-          transparent: true,
-          opacity: 0.55,
-          roughness: 0.4,
-          metalness: 0.1,
-          emissive: new THREE.Color(RED),
-          emissiveIntensity: 0.12,
-        }),
-        [6, 3, -4]
-      )
-    );
-
-    /* 6 */
-    shapes.push(
-      makeMesh(
-        new THREE.IcosahedronGeometry(1.2, 0),
-        new THREE.MeshStandardMaterial({
-          color: RED,
-          transparent: true,
-          opacity: 0.50,
-          roughness: 0.3,
-          metalness: 0.1,
-          emissive: new THREE.Color(RED),
-          emissiveIntensity: 0.10,
-        }),
-        [-3, 2, -6]
-      )
-    );
-
-    // ── 2 wireframe tori ───────────────────────────────────────────────
-
-    /* 7 */
-    (() => {
-      const def = makeMesh(
-        new THREE.TorusGeometry(2.0, 0.22, 16, 48),
-        new THREE.MeshBasicMaterial({ color: RED, wireframe: true, transparent: true, opacity: 0.38 }),
-        [7, 2, -7]
-      );
-      def.mesh.rotation.x = Math.PI / 3;
-      shapes.push(def);
-    })();
-
-    /* 8 */
-    (() => {
-      const def = makeMesh(
-        new THREE.TorusGeometry(1.5, 0.18, 12, 40),
-        new THREE.MeshBasicMaterial({ color: RED, wireframe: true, transparent: true, opacity: 0.45 }),
-        [-8, -2, -5]
-      );
-      def.mesh.rotation.x = Math.PI / 4;
-      shapes.push(def);
-    })();
-
-    // ── 2 large wireframe spheres ──────────────────────────────────────
-
-    /* 9 */
-    shapes.push(
-      makeMesh(
-        new THREE.SphereGeometry(1.5, 6, 6),
-        new THREE.MeshBasicMaterial({ color: RED, wireframe: true, transparent: true, opacity: 0.22 }),
-        [-6, 3, -7]
-      )
-    );
-
-    /* 10 */
-    shapes.push(
-      makeMesh(
-        new THREE.SphereGeometry(1.5, 6, 6),
-        new THREE.MeshBasicMaterial({ color: RED, wireframe: true, transparent: true, opacity: 0.18 }),
-        [5, -4, -6]
-      )
-    );
+      // Card border/edge wireframe
+      const edgeGeo = new THREE.EdgesGeometry(geo);
+      const edgeMat = new THREE.LineBasicMaterial({ color, transparent: true, opacity: 0.45 });
+      const edges = new THREE.LineSegments(edgeGeo, edgeMat);
+      edges.position.copy(mesh.position);
+      edges.rotation.copy(mesh.rotation);
+      scene.add(edges);
+      cardEdges.push(edges);
+    });
 
     /* ── Mouse parallax ── */
     const mouse = { x: 0, y: 0 };
@@ -213,20 +175,27 @@ export default function HeroShapes() {
 
     /* ── Animation loop ── */
     let rafId: number;
+    const clock = new THREE.Clock();
+
     const animate = () => {
       rafId = requestAnimationFrame(animate);
+      const t = clock.getElapsedTime();
 
-      // Parallax camera — ±2.5 units
-      camera.position.x += (mouse.x * 2.5 - camera.position.x) * 0.03;
-      camera.position.y += (mouse.y * 2.5 - camera.position.y) * 0.03;
+      // Central tetrahedron rotation
+      central.rotation.y += 0.005;
+      central.rotation.x += 0.003;
+
+      // Floating cards bob
+      cards.forEach((card, i) => {
+        card.position.y += Math.sin(t * 0.5 + cardPhases[i]) * 0.003;
+        // Keep edges in sync
+        cardEdges[i].position.copy(card.position);
+      });
+
+      // Camera mouse parallax: drifts ±1.5 on X, ±1.0 on Y
+      camera.position.x += (mouse.x * 1.5 - camera.position.x) * 0.03;
+      camera.position.y += (mouse.y * 1.0 - camera.position.y) * 0.03;
       camera.lookAt(scene.position);
-
-      // Rotate each shape
-      for (const { mesh, rotSpeed } of shapes) {
-        mesh.rotation.x += rotSpeed[0];
-        mesh.rotation.y += rotSpeed[1];
-        mesh.rotation.z += rotSpeed[2];
-      }
 
       renderer.render(scene, camera);
     };
@@ -237,14 +206,31 @@ export default function HeroShapes() {
       cancelAnimationFrame(rafId);
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("resize", handleResize);
-      for (const { mesh } of shapes) {
-        mesh.geometry.dispose();
-        if (Array.isArray(mesh.material)) {
-          mesh.material.forEach((m) => m.dispose());
-        } else {
-          mesh.material.dispose();
-        }
+
+      triGridGeo.dispose();
+      triGridMat.dispose();
+
+      particleGeo.dispose();
+      particleMat.dispose();
+
+      if (lines) {
+        lines.geometry.dispose();
+        (lines.material as THREE.Material).dispose();
       }
+
+      centralGeo.dispose();
+      centralMat.dispose();
+
+      cards.forEach((card) => {
+        card.geometry.dispose();
+        (card.material as THREE.Material).dispose();
+      });
+
+      cardEdges.forEach((edge) => {
+        edge.geometry.dispose();
+        (edge.material as THREE.Material).dispose();
+      });
+
       renderer.dispose();
       if (mount.contains(renderer.domElement)) {
         mount.removeChild(renderer.domElement);

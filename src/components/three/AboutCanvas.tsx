@@ -45,19 +45,19 @@ function DNAHelix() {
   return (
     <group ref={groupRef}>
       {/* Strand lines */}
-      <Line points={strand1} color="#E63327" lineWidth={2}  transparent opacity={0.65} />
-      <Line points={strand2} color="#FF5349" lineWidth={2}  transparent opacity={0.65} />
+      <Line points={strand1} color="#D64545" lineWidth={2}  transparent opacity={0.65} />
+      <Line points={strand2} color="#E05555" lineWidth={2}  transparent opacity={0.65} />
 
       {/* Rung cross-links */}
       {rungs.map((pair, i) => (
-        <Line key={i} points={pair as THREE.Vector3[]} color="#E6332755" lineWidth={0.7} transparent opacity={0.3} />
+        <Line key={i} points={pair as THREE.Vector3[]} color="#D6454555" lineWidth={0.7} transparent opacity={0.3} />
       ))}
 
       {/* Strand 1 nodes */}
       {strand1.map((pos, i) => (
         <mesh key={`a${i}`} position={pos}>
           <sphereGeometry args={[0.11, 16, 16]} />
-          <meshStandardMaterial color="#E63327" emissive="#E63327" emissiveIntensity={1.2} roughness={0.1} metalness={0.4} />
+          <meshStandardMaterial color="#D64545" emissive="#D64545" emissiveIntensity={1.2} roughness={0.1} metalness={0.4} />
         </mesh>
       ))}
 
@@ -65,7 +65,7 @@ function DNAHelix() {
       {strand2.map((pos, i) => (
         <mesh key={`b${i}`} position={pos}>
           <sphereGeometry args={[0.11, 16, 16]} />
-          <meshStandardMaterial color="#FF5349" emissive="#FF5349" emissiveIntensity={1.2} roughness={0.1} metalness={0.4} />
+          <meshStandardMaterial color="#E05555" emissive="#E05555" emissiveIntensity={1.2} roughness={0.1} metalness={0.4} />
         </mesh>
       ))}
 
@@ -98,7 +98,7 @@ export default function AboutCanvas() {
     >
       <CameraRig />
       <ambientLight intensity={0.4} />
-      <pointLight position={[5, 5, 5]}   color="#E63327" intensity={4} distance={20} />
+      <pointLight position={[5, 5, 5]}   color="#D64545" intensity={4} distance={20} />
       <pointLight position={[-5, -5, 5]} color="#F5F5FA" intensity={2} distance={18} />
       <Stars radius={40} depth={20} count={900} factor={1.5} saturation={0} fade speed={0.25} />
       <DNAHelix />

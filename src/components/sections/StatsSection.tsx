@@ -1,10 +1,7 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { useInView, useMotionValue, useSpring, motion } from "framer-motion";
-import { useEffect } from "react";
-import AnimatedSection from "@/components/ui/AnimatedSection";
-import TiltCard from "@/components/ui/TiltCard";
 
 function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
   const ref = useRef<HTMLSpanElement>(null);
@@ -25,29 +22,30 @@ function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
   return <span ref={ref}>0{suffix}</span>;
 }
 
-const stats = [
-  { value: 120, suffix: "+", label: "Projects Delivered", desc: "Across 15+ industries" },
-  { value: 40, suffix: "+", label: "Happy Clients", desc: "India & globally" },
-  { value: 5, suffix: "+", label: "Years of Excellence", desc: "In premium marketing" },
-  { value: 98, suffix: "%", label: "Client Satisfaction", desc: "Speak for themselves" },
-];
+type StatItem = { value: number; suffix: string; label: string; desc: string };
 
-export default function StatsSection() {
+export default function StatsSection({ stats }: { stats: StatItem[] }) {
   return (
-    <section className="py-20 bg-[#E63327]/10 border-y border-[#E63327]/15">
-      <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 lg:grid-cols-4 gap-8">
+    <section className="border-t border-b border-[#1C1C1C]/08 bg-[#F5EFE6]">
+      <div className="max-w-7xl mx-auto grid grid-cols-2 lg:grid-cols-4 divide-x divide-[#1C1C1C]/08">
         {stats.map((stat, i) => (
-          <AnimatedSection key={stat.label} delay={i * 0.1}>
-            <TiltCard className="relative">
-              <div className="text-center">
-                <div className="font-heading text-4xl md:text-5xl font-bold text-[#E63327] mb-1">
-                  <Counter to={stat.value} suffix={stat.suffix} />
-                </div>
-                <div className="font-semibold text-foreground text-sm mb-1">{stat.label}</div>
-                <div className="text-[#0A0A0F]/45 text-xs">{stat.desc}</div>
-              </div>
-            </TiltCard>
-          </AnimatedSection>
+          <motion.div
+            key={stat.label}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+            className="px-8 py-14 flex flex-col"
+          >
+            <div
+              className="font-bold text-[#D64545] leading-none mb-3"
+              style={{ fontSize: "clamp(3rem, 6vw, 5.5rem)", letterSpacing: "-0.04em" }}
+            >
+              <Counter to={stat.value} suffix={stat.suffix} />
+            </div>
+            <div className="text-[#1C1C1C] font-bold text-sm mb-1">{stat.label}</div>
+            <div className="text-[#1C1C1C]/40 text-xs font-mono">{stat.desc}</div>
+          </motion.div>
         ))}
       </div>
     </section>
