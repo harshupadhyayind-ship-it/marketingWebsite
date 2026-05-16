@@ -5,30 +5,58 @@ import clientPromise from "@/lib/mongodb";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
+const PAGE_SIZE = 10;
+
 async function isAuthed() {
   const cookieStore = await cookies();
   return cookieStore.get("admin_auth")?.value === "1";
 }
 
-export async function GET() {
+export async function GET(req: Request) {
   if (!(await isAuthed())) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   try {
+    const { searchParams } = new URL(req.url);
+    const page   = Math.max(1, parseInt(searchParams.get("page")   ?? "1", 10));
+    const status = searchParams.get("status") ?? "all";
+    const counts = searchParams.get("counts") === "1";
+
     const client = await clientPromise;
     const db = client.db("branddaid");
-    const leads = await db
-      .collection("leads")
-      .find({})
+    const col = db.collection("leads");
+
+    // counts-only request (for the summary bar)
+    if (counts) {
+      const [all, newC, contacted, converted, archived] = await Promise.all([
+        col.countDocuments({}),
+        col.countDocuments({ status: "new" }),
+        col.countDocuments({ status: "contacted" }),
+        col.countDocuments({ status: "converted" }),
+        col.countDocuments({ status: "archived" }),
+      ]);
+      return NextResponse.json({ all, new: newC, contacted, converted, archived });
+    }
+
+    const filter = status === "all" ? {} : { status };
+    const total  = await col.countDocuments(filter);
+    const leads  = await col
+      .find(filter)
       .sort({ createdAt: -1 })
+      .skip((page - 1) * PAGE_SIZE)
+      .limit(PAGE_SIZE)
       .toArray();
 
-    // Serialize _id as string
     const serialized = leads.map((l) => ({ ...l, _id: l._id.toString() }));
-    return NextResponse.json(serialized);
+    return NextResponse.json({
+      leads: serialized,
+      page,
+      hasMore: page * PAGE_SIZE < total,
+      total,
+    });
   } catch (err) {
     console.error("[admin/leads] GET error:", err);
-    return NextResponse.json([], { status: 200 });
+    return NextResponse.json({ leads: [], page: 1, hasMore: false, total: 0 });
   }
 }
 
