@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { FolderOpen, Briefcase, Users, Home, Settings, ArrowRight, Inbox } from "lucide-react";
+import { FolderOpen, Briefcase, Users, Home, Settings, ArrowRight, Inbox, DatabaseZap } from "lucide-react";
 
 const SECTIONS = [
   {
@@ -51,6 +51,21 @@ const SECTIONS = [
 
 export default function AdminDashboard() {
   const [counts, setCounts] = useState({ projects: 0, services: 0, team: 0 });
+  const [seedState, setSeedState] = useState<"idle" | "loading" | "done" | "error">("idle");
+
+  const handleSeed = async () => {
+    setSeedState("loading");
+    try {
+      const res = await fetch("/api/admin/seed", { method: "POST" });
+      if (res.ok) {
+        setSeedState("done");
+      } else {
+        setSeedState("error");
+      }
+    } catch {
+      setSeedState("error");
+    }
+  };
 
   useEffect(() => {
     const load = async () => {
@@ -123,8 +138,38 @@ export default function AdminDashboard() {
         ))}
       </div>
 
-      {/* View site link */}
+      {/* Seed Database */}
       <div className="mt-8 pt-6 border-t border-[#0A0A0F]/06">
+        <div className="flex items-center justify-between mb-2">
+          <div>
+            <p className="text-sm font-semibold text-[#0A0A0F]">Seed Database</p>
+            <p className="text-xs text-[#0A0A0F]/45">Migrate JSON files → MongoDB (run once)</p>
+          </div>
+          <button
+            onClick={handleSeed}
+            disabled={seedState === "loading" || seedState === "done"}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
+            style={{
+              background: seedState === "done" ? "#16a34a" : seedState === "error" ? "#dc2626" : "#E63327",
+              color: "#fff",
+            }}
+          >
+            <DatabaseZap size={15} />
+            {seedState === "idle" && "Seed Now"}
+            {seedState === "loading" && "Seeding…"}
+            {seedState === "done" && "Seeded ✓"}
+            {seedState === "error" && "Failed — Retry"}
+          </button>
+        </div>
+        {seedState === "error" && (
+          <p className="text-xs text-red-600 mt-1">
+            Seed failed. Check that MONGODB_URI is set and the database is reachable.
+          </p>
+        )}
+      </div>
+
+      {/* View site link */}
+      <div className="mt-6 pt-6 border-t border-[#0A0A0F]/06">
         <a
           href="/"
           target="_blank"

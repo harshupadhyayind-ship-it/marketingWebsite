@@ -3,12 +3,20 @@
 import Link from "next/link";
 import { useScrollProgress } from "@/hooks/useScrollProgress";
 
+export type HomepageData = {
+  scene0: { label: string; line1: string; line2: string; subtitle: string };
+  scene1: { label: string; line1: string; line2: string; line3: string; body: string };
+  scene2: { label: string; line1: string; line2: string; line3: string; body: string; services: string[] };
+  scene3: { label: string; stats: { value: string; label: string }[] };
+  scene4: { label: string; line1: string; line2: string; body: string; buttonText: string; email: string };
+};
+
 const SCENES: [number, number][] = [
-  [0.00, 0.20],  // 0 — "Engineer Growth"
-  [0.20, 0.44],  // 1 — "Turn data into dominance"
-  [0.44, 0.64],  // 2 — Services / orbit entry
-  [0.64, 0.84],  // 3 — Performance stats
-  [0.84, 1.01],  // 4 — CTA
+  [0.00, 0.20],
+  [0.20, 0.44],
+  [0.44, 0.64],
+  [0.64, 0.84],
+  [0.84, 1.01],
 ];
 
 const HALF_FADE = 0.028;
@@ -19,10 +27,8 @@ function sceneOpacity(p: number, i: number): number {
   const isLast  = e >= 1;
   if (p < s - HALF_FADE || p > e + HALF_FADE) return 0;
   let o = 1;
-  if (!isFirst && p < s + HALF_FADE)
-    o = Math.min(o, (p - (s - HALF_FADE)) / (2 * HALF_FADE));
-  if (!isLast && p > e - HALF_FADE)
-    o = Math.min(o, ((e + HALF_FADE) - p) / (2 * HALF_FADE));
+  if (!isFirst && p < s + HALF_FADE) o = Math.min(o, (p - (s - HALF_FADE)) / (2 * HALF_FADE));
+  if (!isLast  && p > e - HALF_FADE) o = Math.min(o, ((e + HALF_FADE) - p) / (2 * HALF_FADE));
   return Math.max(0, o);
 }
 
@@ -43,18 +49,16 @@ function countUp(p: number, max: number, s: number, e: number): number {
   return Math.round(max * easeOut((p - s) / (e - s)));
 }
 
-export default function ScrollOverlay() {
+const BARS = [14, 28, 22, 48, 38, 62, 52, 76, 68, 92];
+
+export default function ScrollOverlay({ data }: { data: HomepageData }) {
   const progress  = useScrollProgress();
   const active    = activeScene(progress);
   const opacities = SCENES.map((_, i) => sceneOpacity(progress, i));
+  const graphPct  = progress < 0.64 ? 0 : progress > 0.84 ? 1 : (progress - 0.64) / 0.20;
 
-  const roas       = countUp(progress, 4,   0.64, 0.80);
-  const impressions= countUp(progress, 50,  0.64, 0.80);
-  const revenue    = countUp(progress, 2.8, 0.64, 0.80).toFixed(1);
-  const lift       = countUp(progress, 340, 0.64, 0.80);
-
-  const graphPct = progress < 0.64 ? 0 : progress > 0.84 ? 1 : (progress - 0.64) / 0.20;
-  const BARS = [14, 28, 22, 48, 38, 62, 52, 76, 68, 92];
+  // Animated counters for scene3
+  const animPct = progress < 0.64 ? 0 : progress > 0.80 ? 1 : easeOut((progress - 0.64) / 0.16);
 
   return (
     <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden select-none">
@@ -67,35 +71,20 @@ export default function ScrollOverlay() {
       {/* ── SCENE 0 — HERO ── */}
       <Scene opacity={opacities[0]}>
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-8">
-          {/* Red label */}
           <div className="flex items-center gap-3 mb-8">
             <span className="h-px w-10 bg-[#D64545]" />
-            <span className="text-[#D64545] text-[10px] font-mono uppercase tracking-[0.25em]">
-              Marketing That Elevates
-            </span>
+            <span className="text-[#D64545] text-[10px] font-mono uppercase tracking-[0.25em]">{data.scene0.label}</span>
             <span className="h-px w-10 bg-[#D64545]" />
           </div>
-
-          <h1
-            className="font-black text-[#1C1C1C] mb-5"
-            style={{ fontSize: "clamp(3.2rem, 9vw, 9.5rem)", letterSpacing: "-0.04em", lineHeight: 0.92 }}
-          >
-            We don&apos;t run ads.
+          <h1 className="font-black text-[#1C1C1C] mb-5"
+            style={{ fontSize: "clamp(3.2rem, 9vw, 9.5rem)", letterSpacing: "-0.04em", lineHeight: 0.92 }}>
+            {data.scene0.line1}
             <br />
-            <span
-              style={{
-                background: "linear-gradient(135deg, #E05555 0%, #D64545 50%, #E07070 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-              }}
-            >
-              We engineer growth.
+            <span style={{ background: "linear-gradient(135deg, #E05555 0%, #D64545 50%, #E07070 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
+              {data.scene0.line2}
             </span>
           </h1>
-          <p className="text-[#1C1C1C]/55 text-base max-w-xs leading-relaxed mb-10">
-            Scroll to discover what real performance looks like.
-          </p>
+          <p className="text-[#1C1C1C]/55 text-base max-w-xs leading-relaxed mb-10">{data.scene0.subtitle}</p>
           <div className="flex flex-col items-center gap-2 opacity-60">
             <div className="w-px h-10 bg-[#D64545] animate-pulse" />
             <span className="text-[#D64545] text-[9px] font-mono uppercase tracking-[0.3em]">scroll</span>
@@ -107,16 +96,14 @@ export default function ScrollOverlay() {
       {/* ── SCENE 1 — SIGNAL ── */}
       <Scene opacity={opacities[1]}>
         <div className="absolute inset-0 flex flex-col justify-end pb-20 px-10 md:px-20">
-          <Label>The Performance Signal</Label>
+          <Label>{data.scene1.label}</Label>
           <h2 className="font-black text-[#1C1C1C] mb-5"
             style={{ fontSize: "clamp(2.5rem, 6.5vw, 6.5rem)", letterSpacing: "-0.04em", lineHeight: 0.94 }}>
-            Brands that lead<br />
-            <span className="text-[#D64545]">don&apos;t hope.</span><br />
-            They outperform.
+            {data.scene1.line1}<br />
+            <span className="text-[#D64545]">{data.scene1.line2}</span><br />
+            {data.scene1.line3}
           </h2>
-          <p className="text-[#1C1C1C]/50 text-base max-w-md leading-relaxed">
-            We find the signal in the noise — and amplify it into compounding, measurable growth.
-          </p>
+          <p className="text-[#1C1C1C]/50 text-base max-w-md leading-relaxed">{data.scene1.body}</p>
         </div>
         <BigNum>02</BigNum>
       </Scene>
@@ -126,28 +113,19 @@ export default function ScrollOverlay() {
         <div className="absolute inset-0 flex flex-col justify-end pb-20 px-10 md:px-20">
           <div className="grid md:grid-cols-2 gap-10 w-full items-end">
             <div>
-              <Label>Entering the Growth Engine</Label>
+              <Label>{data.scene2.label}</Label>
               <h2 className="font-black text-[#1C1C1C] mb-5"
                 style={{ fontSize: "clamp(2.2rem, 5.5vw, 5.5rem)", letterSpacing: "-0.04em", lineHeight: 0.95 }}>
-                Strategy, creative<br />
-                <span className="text-[#D64545]">&amp; performance</span><br />
-                unified.
+                {data.scene2.line1}<br />
+                <span className="text-[#D64545]">{data.scene2.line2}</span><br />
+                {data.scene2.line3}
               </h2>
-              <p className="text-[#1C1C1C]/50 text-sm max-w-xs leading-relaxed">
-                Full-stack marketing — from brand positioning to paid performance — one orbit.
-              </p>
+              <p className="text-[#1C1C1C]/50 text-sm max-w-xs leading-relaxed">{data.scene2.body}</p>
             </div>
-
             <div className="flex flex-col gap-2.5">
-              {[
-                ["01", "Brand Strategy & Positioning"],
-                ["02", "Performance Marketing"],
-                ["03", "Creative Direction"],
-                ["04", "Data & Analytics"],
-                ["05", "Web Design & Development"],
-              ].map(([n, s]) => (
-                <div key={n} className="flex items-baseline gap-4 border-b border-[#1C1C1C]/06 pb-2.5">
-                  <span className="text-[#D64545] font-mono text-[10px] flex-shrink-0">{n}</span>
+              {data.scene2.services.map((s, i) => (
+                <div key={i} className="flex items-baseline gap-4 border-b border-[#1C1C1C]/06 pb-2.5">
+                  <span className="text-[#D64545] font-mono text-[10px] flex-shrink-0">0{i + 1}</span>
                   <span className="text-[#1C1C1C]/70 text-sm tracking-wide">{s}</span>
                 </div>
               ))}
@@ -160,19 +138,13 @@ export default function ScrollOverlay() {
       {/* ── SCENE 3 — PERFORMANCE ── */}
       <Scene opacity={opacities[3]}>
         <div className="absolute inset-0 flex flex-col justify-end pb-16 px-10 md:px-20">
-          <Label>Real Results. Real Revenue.</Label>
-
-          {/* Animated bars */}
+          <Label>{data.scene3.label}</Label>
           <div className="flex items-end gap-1 mb-8" style={{ height: 60 }}>
             {BARS.map((h, i) => (
-              <div
-                key={i}
-                className="flex-1 rounded-t-sm"
+              <div key={i} className="flex-1 rounded-t-sm"
                 style={{
                   height: `${h * graphPct}%`,
-                  background: i === BARS.length - 1
-                    ? "#D64545"
-                    : `rgba(214,69,69,${0.2 + (i / BARS.length) * 0.6})`,
+                  background: i === BARS.length - 1 ? "#D64545" : `rgba(214,69,69,${0.2 + (i / BARS.length) * 0.6})`,
                   minHeight: graphPct > 0 ? 2 : 0,
                   transition: "height 0.04s linear",
                   boxShadow: i === BARS.length - 1 ? "0 0 12px rgba(214,69,69,0.6)" : "none",
@@ -180,12 +152,18 @@ export default function ScrollOverlay() {
               />
             ))}
           </div>
-
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <Stat value={`${roas}×`}   label="Average ROAS"           color="#D64545" />
-            <Stat value={`${impressions}M+`} label="Monthly Impressions"  color="#E05555" />
-            <Stat value={`₹${revenue}Cr`}    label="Revenue Generated"     color="#D64545" />
-            <Stat value={`${lift}%`}   label="Conversion Lift"        color="#E05555" />
+            {data.scene3.stats.map((stat, i) => (
+              <Stat
+                key={i}
+                value={stat.value}
+                animValue={Math.round(parseFloat(stat.value.replace(/[^\d.]/g, "")) * animPct * 10) / 10}
+                raw={stat.value}
+                label={stat.label}
+                color={i % 2 === 0 ? "#D64545" : "#E05555"}
+                animPct={animPct}
+              />
+            ))}
           </div>
         </div>
         <BigNum>04</BigNum>
@@ -194,43 +172,37 @@ export default function ScrollOverlay() {
       {/* ── SCENE 4 — CTA ── */}
       <Scene opacity={opacities[4]}>
         <div className="absolute inset-0 flex flex-col justify-end pb-20 px-10 md:px-20">
-          <Label>Ready to Launch</Label>
+          <Label>{data.scene4.label}</Label>
           <h2 className="font-black text-[#1C1C1C] mb-5"
             style={{ fontSize: "clamp(2.8rem, 7vw, 7rem)", letterSpacing: "-0.04em", lineHeight: 0.93 }}>
-            Build your<br />
-            <span className="text-[#D64545]">growth machine.</span>
+            {data.scene4.line1}<br />
+            <span className="text-[#D64545]">{data.scene4.line2}</span>
           </h2>
-          <p className="text-[#1C1C1C]/50 text-base max-w-sm leading-relaxed mb-8">
-            Tell us about your brand and we&apos;ll engineer a strategy that compounds.
-          </p>
+          <p className="text-[#1C1C1C]/50 text-base max-w-sm leading-relaxed mb-8">{data.scene4.body}</p>
           <div className="flex items-center gap-5 pointer-events-auto flex-wrap">
             <Link
               href="/#contact"
               className="group relative overflow-hidden bg-[#D64545] text-white font-bold px-8 py-4 rounded-sm text-sm uppercase tracking-widest hover:bg-[#E05555] transition-colors duration-200"
               style={{ boxShadow: "0 0 30px rgba(214,69,69,0.4)" }}
             >
-              Start a Project
+              {data.scene4.buttonText}
             </Link>
-            <a
-              href="mailto:hello@branddaid.com"
-              className="text-[#1C1C1C]/45 text-sm hover:text-[#D64545] transition-colors duration-200 font-mono tracking-wider"
-            >
-              hello@branddaid.com ↗
+            <a href={`mailto:${data.scene4.email}`}
+              className="text-[#1C1C1C]/45 text-sm hover:text-[#D64545] transition-colors duration-200 font-mono tracking-wider">
+              {data.scene4.email} ↗
             </a>
           </div>
         </div>
         <BigNum>05</BigNum>
       </Scene>
 
-      {/* Progress bar — right side */}
+      {/* Progress dots */}
       <div className="absolute right-5 top-1/2 -translate-y-1/2 flex flex-col gap-2.5 items-center">
         {SCENES.map((_, i) => (
-          <div
-            key={i}
-            className="rounded-full transition-all duration-500"
+          <div key={i} className="rounded-full transition-all duration-500"
             style={{
-              width:  active === i ? 4   : 2,
-              height: active === i ? 20  : 6,
+              width:     active === i ? 4  : 2,
+              height:    active === i ? 20 : 6,
               background: active === i ? "#D64545" : "rgba(28,28,28,0.18)",
               boxShadow:  active === i ? "0 0 8px rgba(230,51,39,0.7)" : "none",
             }}
@@ -243,14 +215,8 @@ export default function ScrollOverlay() {
 
 function Scene({ children, opacity }: { children: React.ReactNode; opacity: number }) {
   return (
-    <div
-      className="absolute inset-0"
-      style={{
-        opacity,
-        transition: "opacity 0.5s cubic-bezier(0.22,1,0.36,1)",
-        pointerEvents: opacity > 0.4 ? "auto" : "none",
-      }}
-    >
+    <div className="absolute inset-0"
+      style={{ opacity, transition: "opacity 0.5s cubic-bezier(0.22,1,0.36,1)", pointerEvents: opacity > 0.4 ? "auto" : "none" }}>
       {children}
     </div>
   );
@@ -267,23 +233,29 @@ function Label({ children }: { children: React.ReactNode }) {
 
 function BigNum({ children }: { children: React.ReactNode }) {
   return (
-    <div
-      className="absolute top-16 right-10 md:right-20 font-black text-[#1C1C1C] leading-none pointer-events-none"
-      style={{ fontSize: "clamp(5rem, 12vw, 11rem)", letterSpacing: "-0.06em", opacity: 0.028 }}
-    >
+    <div className="absolute top-16 right-10 md:right-20 font-black text-[#1C1C1C] leading-none pointer-events-none"
+      style={{ fontSize: "clamp(5rem, 12vw, 11rem)", letterSpacing: "-0.06em", opacity: 0.028 }}>
       {children}
     </div>
   );
 }
 
-function Stat({ value, label, color }: { value: string; label: string; color: string }) {
+function Stat({ value, label, color, animPct, raw }: {
+  value: string; label: string; color: string; animPct: number; animValue: number; raw: string;
+}) {
+  // Show animated number if purely numeric, otherwise show static value
+  const num = parseFloat(raw.replace(/[^\d.]/g, ""));
+  const prefix = raw.match(/^[^\d]*/)?.[0] ?? "";
+  const suffix = raw.match(/[^\d.]+$/)?.[0] ?? "";
+  const display = isNaN(num)
+    ? value
+    : `${prefix}${Number((num * animPct).toFixed(num % 1 !== 0 ? 1 : 0))}${suffix}`;
+
   return (
     <div>
-      <div
-        className="font-black leading-none mb-1"
-        style={{ fontSize: "clamp(1.8rem, 4vw, 3.8rem)", letterSpacing: "-0.04em", color }}
-      >
-        {value}
+      <div className="font-black leading-none mb-1"
+        style={{ fontSize: "clamp(1.8rem, 4vw, 3.8rem)", letterSpacing: "-0.04em", color }}>
+        {display}
       </div>
       <div className="text-[#1C1C1C]/40 text-[9px] uppercase tracking-[0.18em] font-mono">{label}</div>
     </div>

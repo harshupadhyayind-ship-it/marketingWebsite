@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import dynamic from "next/dynamic";
-import { allProjects, type Project } from "@/lib/projects-data";
+import { type Project } from "@/lib/projects-data";
 import TiltCard from "@/components/ui/TiltCard";
 
 const HeroShapes = dynamic(() => import("@/components/three/HeroShapes"), { ssr: false });
@@ -183,7 +183,7 @@ function ServicesSection({ services, settings }: { services: Service[]; settings
    ── WORK ──────────────────────────────────────────────────────────────────
 ════════════════════════════════════════════════════════════════════════════ */
 
-const allTags = ["All", ...Array.from(new Set(allProjects.flatMap((p) => p.tags)))];
+// allTags is now computed inside WorkSection from the projects prop
 
 /* ── Project Drawer ── */
 function ProjectDrawer({ project, onClose }: { project: Project; onClose: () => void }) {
@@ -481,9 +481,10 @@ function FeaturedCard({ project }: { project: Project }) {
   );
 }
 
-function WorkSection({ settings }: { settings: Settings }) {
+function WorkSection({ projects, settings }: { projects: Project[]; settings: Settings }) {
+  const allTags = ["All", ...Array.from(new Set(projects.flatMap((p) => p.tags)))];
   const [activeTag, setActiveTag] = useState("All");
-  const filtered = activeTag === "All" ? allProjects : allProjects.filter((p) => p.tags.includes(activeTag));
+  const filtered = activeTag === "All" ? projects : projects.filter((p) => p.tags.includes(activeTag));
   const featured = activeTag === "All" ? filtered[0] : null;
   const rest = activeTag === "All" ? filtered.slice(1) : filtered;
   const { workSection } = settings;
@@ -505,7 +506,7 @@ function WorkSection({ settings }: { settings: Settings }) {
             </h2>
           </div>
           <p className="text-[#1C1C1C]/45 text-sm max-w-xs leading-relaxed md:pb-3">
-            {allProjects.length} {workSection.subtitle}
+            {projects.length} {workSection.subtitle}
           </p>
         </div>
       </div>
@@ -1087,15 +1088,17 @@ export default function SinglePageSections({
   services,
   about,
   settings,
+  projects,
 }: {
   services: Service[];
   about: AboutData;
   settings: Settings;
+  projects: Project[];
 }) {
   return (
     <main>
       <ServicesSection services={services} settings={settings} />
-      <WorkSection settings={settings} />
+      <WorkSection projects={projects} settings={settings} />
       <AboutSection data={about} />
       <ContactSection settings={settings} />
     </main>
