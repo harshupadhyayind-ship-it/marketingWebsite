@@ -8,8 +8,52 @@
   },
   "stats": [
     { "value": 120, "suffix": "+", "label": "Projects Delivered", "desc": "Across 15+ industries" },
-    { "value": 40, "suffix": "+", "label": "Happy Clients", "desc": "India & globally" },
-    { "value": 5, "suffix": "+", "label": "Years of Excellence", "desc": "In premium marketing" },
-    { "value": 98, "suffix": "%", "label": "Client Satisfaction", "desc": "Speak for themselves" }
-  ]
+    { "value": 40,  "suffix": "+", "label": "Happy Clients",       "desc": "India & globally"      },
+    { "value": 5,   "suffix": "+", "label": "Years of Excellence", "desc": "In premium marketing"  },
+    { "value": 98,  "suffix": "%", "label": "Client Satisfaction", "desc": "Speak for themselves"  }
+  ],
+  "scene0": {
+    "label":    "Marketing That Elevates",
+    "line1":    "We don't run ads.",
+    "line2":    "We engineer growth.",
+    "subtitle": "Scroll to discover what real performance looks like."
+  },
+  "scene1": {
+    "label":    "The Performance Signal",
+    "line1":    "Brands that lead",
+    "line2":    "don't hope.",
+    "line3":    "They outperform.",
+    "body":     "We find the signal in the noise — and amplify it into compounding, measurable growth."
+  },
+  "scene2": {
+    "label":    "Entering the Growth Engine",
+    "line1":    "Strategy, creative",
+    "line2":    "& performance",
+    "line3":    "unified.",
+    "body":     "Full-stack marketing — from brand positioning to paid performance — one orbit.",
+    "services": [
+      "Brand Strategy & Positioning",
+      "Performance Marketing",
+      "Creative Direction",
+      "Data & Analytics",
+      "Web Design & Development"
+    ]
+  },
+  "scene3": {
+    "label": "Real Results. Real Revenue.",
+    "stats": [
+      { "value": "4×",     "label": "Average ROAS"       },
+      { "value": "50M+",   "label": "Monthly Impressions" },
+      { "value": "₹2.8Cr", "label": "Revenue Generated"   },
+      { "value": "340%",   "label": "Conversion Lift"     }
+    ]
+  },
+  "scene4": {
+    "label":      "Ready to Launch",
+    "line1":      "Build your",
+    "line2":      "growth machine.",
+    "body":       "Tell us about your brand and we'll engineer a strategy that compounds.",
+    "buttonText": "Start a Project",
+    "email":      "hello@branddaid.com"
+  }
 }

@@ -1,18 +1,20 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Metadata } from "next";
-import { allProjects } from "@/lib/projects-data";
+import { fetchProjects } from "@/lib/projects-data";
 import { ArrowLeft } from "lucide-react";
 
 type Props = { params: Promise<{ slug: string }> };
 
 export async function generateStaticParams() {
-  return allProjects.map((p) => ({ slug: p.slug }));
+  const projects = await fetchProjects();
+  return projects.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const project = allProjects.find((p) => p.slug === slug);
+  const projects = await fetchProjects();
+  const project = projects.find((p) => p.slug === slug);
   if (!project) return {};
   return {
     title: `${project.title} — BRANDD-AID`,
@@ -22,7 +24,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ProjectPage({ params }: Props) {
   const { slug } = await params;
-  const project = allProjects.find((p) => p.slug === slug);
+  const projects = await fetchProjects();
+  const project = projects.find((p) => p.slug === slug);
   if (!project) notFound();
 
   return (
