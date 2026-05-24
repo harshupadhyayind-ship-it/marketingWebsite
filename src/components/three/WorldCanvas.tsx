@@ -14,8 +14,8 @@ export default function WorldCanvas() {
     const H = mount.clientHeight;
 
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color("#F5EFE6");
-    scene.fog = new THREE.Fog(0xf5efe6, 60, 200);
+    scene.background = new THREE.Color("#0D0F1C");
+    scene.fog = new THREE.Fog(0x0d0f1c, 60, 200);
 
     const camera = new THREE.PerspectiveCamera(60, W / H, 0.1, 500);
     camera.position.set(0, 26, 70);
@@ -43,7 +43,7 @@ export default function WorldCanvas() {
     const gridMat = new THREE.LineBasicMaterial({
       color: new THREE.Color("#D64545"),
       transparent: true,
-      opacity: 0.10,
+      opacity: 0.18,
     });
     const grid = new THREE.LineSegments(gridGeo, gridMat);
     grid.position.y = -8;
@@ -63,7 +63,7 @@ export default function WorldCanvas() {
     const fineGridMat = new THREE.LineBasicMaterial({
       color: new THREE.Color("#D64545"),
       transparent: true,
-      opacity: 0.05,
+      opacity: 0.07,
     });
     const fineGrid = new THREE.LineSegments(fineGridGeo, fineGridMat);
     fineGrid.position.y = -8;
@@ -97,8 +97,8 @@ export default function WorldCanvas() {
 
       const isLast = i === BAR_DATA.length - 1;
       const mat = new THREE.MeshStandardMaterial({
-        color:    new THREE.Color(isLast ? "#D64545" : "#C87070"),
-        emissive: new THREE.Color(isLast ? "#D64545" : "#C87070"),
+        color:    new THREE.Color(isLast ? "#D64545" : "#A03030"),
+        emissive: new THREE.Color(isLast ? "#D64545" : "#A03030"),
         emissiveIntensity: isLast ? 0.6 : 0.2,
         transparent: true,
         opacity: 0,
@@ -117,8 +117,8 @@ export default function WorldCanvas() {
 
       // Glow cap on top of each bar
       const capMat = new THREE.MeshStandardMaterial({
-        color:    new THREE.Color(isLast ? "#D64545" : "#C87070"),
-        emissive: new THREE.Color(isLast ? "#D64545" : "#C87070"),
+        color:    new THREE.Color(isLast ? "#D64545" : "#A03030"),
+        emissive: new THREE.Color(isLast ? "#D64545" : "#A03030"),
         emissiveIntensity: 2.0,
         transparent: true,
         opacity: 0,
@@ -249,19 +249,24 @@ export default function WorldCanvas() {
     scene.add(outerWire);
 
     // ── Lights ───────────────────────────────────────────────────────
-    const ambLight = new THREE.AmbientLight(0xffffff, 1.0);
+    const ambLight = new THREE.AmbientLight(0x1a1a2e, 0.8);
     scene.add(ambLight);
-    const dirLight = new THREE.DirectionalLight(0xD64545, 1.5);
+    const dirLight = new THREE.DirectionalLight(0xD64545, 2.0);
     dirLight.position.set(10, 20, 10);
     dirLight.castShadow = true;
     scene.add(dirLight);
-    const fillLight = new THREE.DirectionalLight(0xffffff, 0.6);
+    // Purple fill — matches HTML reference accent
+    const fillLight = new THREE.DirectionalLight(0x6B4EFF, 0.8);
     fillLight.position.set(-10, 5, -10);
     scene.add(fillLight);
     // Warm red glow on bars
-    const redPoint = new THREE.PointLight(0xD64545, 2.5, 30);
+    const redPoint = new THREE.PointLight(0xD64545, 3.0, 35);
     redPoint.position.set(0, 8, 2);
     scene.add(redPoint);
+    // Subtle purple rim
+    const purplePoint = new THREE.PointLight(0x6B4EFF, 1.2, 50);
+    purplePoint.position.set(-20, 10, -10);
+    scene.add(purplePoint);
 
     // ── Camera waypoints ─────────────────────────────────────────────
     const WAY = [
@@ -325,10 +330,10 @@ export default function WorldCanvas() {
       camera.position.z = lp(camera.position.z, camTZ, 0.04);
       camera.lookAt(0, 0, 0);
 
-      // Grid — always visible, max opacity 0.15
+      // Grid — always visible, slightly more visible on dark bg
       const gridApproach = Math.min(1, p / 0.4);
-      gridMat.opacity = 0.04 + gridApproach * 0.11;   // max = 0.15
-      fineGridMat.opacity = 0.02 + gridApproach * 0.03; // stays subtle
+      gridMat.opacity = 0.08 + gridApproach * 0.16;   // max = 0.24
+      fineGridMat.opacity = 0.03 + gridApproach * 0.05; // stays subtle
 
       // Growth curves — fade in 0.20→0.45, hold, fade 0.72→0.84
       const curveFade = p < 0.20 ? 0

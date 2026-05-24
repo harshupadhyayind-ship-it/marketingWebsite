@@ -65,7 +65,7 @@ export default function ScrollOverlay({ data }: { data: HomepageData }) {
       {/* Bottom vignette */}
       <div
         className="absolute inset-0 pointer-events-none"
-        style={{ background: "linear-gradient(to top, rgba(245,239,230,0.92) 0%, rgba(245,239,230,0.25) 35%, transparent 60%)" }}
+        style={{ background: "linear-gradient(to top, rgba(13,15,28,0.95) 0%, rgba(13,15,28,0.3) 35%, transparent 60%)" }}
       />
 
       {/* ── SCENE 0 — HERO ── */}
@@ -76,7 +76,7 @@ export default function ScrollOverlay({ data }: { data: HomepageData }) {
             <span className="text-[#D64545] text-[10px] font-mono uppercase tracking-[0.25em]">{data.scene0.label}</span>
             <span className="h-px w-10 bg-[#D64545]" />
           </div>
-          <h1 className="font-black text-[#1C1C1C] mb-5"
+          <h1 className="font-black text-white mb-5"
             style={{ fontSize: "clamp(3.2rem, 9vw, 9.5rem)", letterSpacing: "-0.04em", lineHeight: 0.92 }}>
             {data.scene0.line1}
             <br />
@@ -84,7 +84,7 @@ export default function ScrollOverlay({ data }: { data: HomepageData }) {
               {data.scene0.line2}
             </span>
           </h1>
-          <p className="text-[#1C1C1C]/55 text-base max-w-xs leading-relaxed mb-10">{data.scene0.subtitle}</p>
+          <p className="text-white/55 text-base max-w-xs leading-relaxed mb-10">{data.scene0.subtitle}</p>
           <div className="flex flex-col items-center gap-2 opacity-60">
             <div className="w-px h-10 bg-[#D64545] animate-pulse" />
             <span className="text-[#D64545] text-[9px] font-mono uppercase tracking-[0.3em]">scroll</span>
@@ -97,13 +97,13 @@ export default function ScrollOverlay({ data }: { data: HomepageData }) {
       <Scene opacity={opacities[1]}>
         <div className="absolute inset-0 flex flex-col justify-end pb-20 px-10 md:px-20">
           <Label>{data.scene1.label}</Label>
-          <h2 className="font-black text-[#1C1C1C] mb-5"
+          <h2 className="font-black text-white mb-5"
             style={{ fontSize: "clamp(2.5rem, 6.5vw, 6.5rem)", letterSpacing: "-0.04em", lineHeight: 0.94 }}>
             {data.scene1.line1}<br />
             <span className="text-[#D64545]">{data.scene1.line2}</span><br />
             {data.scene1.line3}
           </h2>
-          <p className="text-[#1C1C1C]/50 text-base max-w-md leading-relaxed">{data.scene1.body}</p>
+          <p className="text-white/55 text-base max-w-md leading-relaxed">{data.scene1.body}</p>
         </div>
         <BigNum>02</BigNum>
       </Scene>
@@ -114,19 +114,19 @@ export default function ScrollOverlay({ data }: { data: HomepageData }) {
           <div className="grid md:grid-cols-2 gap-10 w-full items-end">
             <div>
               <Label>{data.scene2.label}</Label>
-              <h2 className="font-black text-[#1C1C1C] mb-5"
+              <h2 className="font-black text-white mb-5"
                 style={{ fontSize: "clamp(2.2rem, 5.5vw, 5.5rem)", letterSpacing: "-0.04em", lineHeight: 0.95 }}>
                 {data.scene2.line1}<br />
                 <span className="text-[#D64545]">{data.scene2.line2}</span><br />
                 {data.scene2.line3}
               </h2>
-              <p className="text-[#1C1C1C]/50 text-sm max-w-xs leading-relaxed">{data.scene2.body}</p>
+              <p className="text-white/55 text-sm max-w-xs leading-relaxed">{data.scene2.body}</p>
             </div>
             <div className="flex flex-col gap-2.5">
               {data.scene2.services.map((s, i) => (
-                <div key={i} className="flex items-baseline gap-4 border-b border-[#1C1C1C]/06 pb-2.5">
+                <div key={i} className="flex items-baseline gap-4 border-b border-white/10 pb-2.5">
                   <span className="text-[#D64545] font-mono text-[10px] flex-shrink-0">0{i + 1}</span>
-                  <span className="text-[#1C1C1C]/70 text-sm tracking-wide">{s}</span>
+                  <span className="text-white/65 text-sm tracking-wide">{s}</span>
                 </div>
               ))}
             </div>
@@ -173,12 +173,12 @@ export default function ScrollOverlay({ data }: { data: HomepageData }) {
       <Scene opacity={opacities[4]}>
         <div className="absolute inset-0 flex flex-col justify-end pb-20 px-10 md:px-20">
           <Label>{data.scene4.label}</Label>
-          <h2 className="font-black text-[#1C1C1C] mb-5"
+          <h2 className="font-black text-white mb-5"
             style={{ fontSize: "clamp(2.8rem, 7vw, 7rem)", letterSpacing: "-0.04em", lineHeight: 0.93 }}>
             {data.scene4.line1}<br />
             <span className="text-[#D64545]">{data.scene4.line2}</span>
           </h2>
-          <p className="text-[#1C1C1C]/50 text-base max-w-sm leading-relaxed mb-8">{data.scene4.body}</p>
+          <p className="text-white/55 text-base max-w-sm leading-relaxed mb-8">{data.scene4.body}</p>
           <div className="flex items-center gap-5 pointer-events-auto flex-wrap">
             <Link
               href="/#contact"
@@ -188,7 +188,7 @@ export default function ScrollOverlay({ data }: { data: HomepageData }) {
               {data.scene4.buttonText}
             </Link>
             <a href={`mailto:${data.scene4.email}`}
-              className="text-[#1C1C1C]/45 text-sm hover:text-[#D64545] transition-colors duration-200 font-mono tracking-wider">
+              className="text-white/45 text-sm hover:text-[#D64545] transition-colors duration-200 font-mono tracking-wider">
               {data.scene4.email} ↗
             </a>
           </div>
@@ -203,7 +203,7 @@ export default function ScrollOverlay({ data }: { data: HomepageData }) {
             style={{
               width:     active === i ? 4  : 2,
               height:    active === i ? 20 : 6,
-              background: active === i ? "#D64545" : "rgba(28,28,28,0.18)",
+              background: active === i ? "#D64545" : "rgba(255,255,255,0.2)",
               boxShadow:  active === i ? "0 0 8px rgba(230,51,39,0.7)" : "none",
             }}
           />
@@ -233,7 +233,7 @@ function Label({ children }: { children: React.ReactNode }) {
 
 function BigNum({ children }: { children: React.ReactNode }) {
   return (
-    <div className="absolute top-16 right-10 md:right-20 font-black text-[#1C1C1C] leading-none pointer-events-none"
+    <div className="absolute top-16 right-10 md:right-20 font-black text-white leading-none pointer-events-none"
       style={{ fontSize: "clamp(5rem, 12vw, 11rem)", letterSpacing: "-0.06em", opacity: 0.028 }}>
       {children}
     </div>
@@ -257,7 +257,7 @@ function Stat({ value, label, color, animPct, raw }: {
         style={{ fontSize: "clamp(1.8rem, 4vw, 3.8rem)", letterSpacing: "-0.04em", color }}>
         {display}
       </div>
-      <div className="text-[#1C1C1C]/40 text-[9px] uppercase tracking-[0.18em] font-mono">{label}</div>
+      <div className="text-white/45 text-[9px] uppercase tracking-[0.18em] font-mono">{label}</div>
     </div>
   );
 }

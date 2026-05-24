@@ -84,7 +84,7 @@ export default function SideNav() {
             {/* Label */}
             <span
               className="text-[9px] font-mono uppercase tracking-[0.22em] transition-all duration-300"
-              style={{ color: isActive ? "#1C1C1C" : "rgba(28,28,28,0.35)" }}
+              style={{ color: isActive ? "#ffffff" : "rgba(255,255,255,0.35)" }}
             >
               {label}
             </span>
@@ -95,7 +95,7 @@ export default function SideNav() {
                 className="block h-px transition-all duration-300 rounded-full"
                 style={{
                   width: isActive ? 20 : 10,
-                  background: isActive ? "#D64545" : "rgba(28,28,28,0.25)",
+                  background: isActive ? "#D64545" : "rgba(255,255,255,0.25)",
                 }}
               />
               <span
@@ -103,7 +103,7 @@ export default function SideNav() {
                 style={{
                   width:  isActive ? 6 : 4,
                   height: isActive ? 6 : 4,
-                  background: isActive ? "#D64545" : "rgba(28,28,28,0.25)",
+                  background: isActive ? "#D64545" : "rgba(255,255,255,0.25)",
                   boxShadow: isActive ? "0 0 6px rgba(214,69,69,0.7)" : "none",
                 }}
               />
