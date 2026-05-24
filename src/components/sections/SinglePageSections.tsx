@@ -67,7 +67,12 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 
 function AccordionRow({ s, open, onToggle }: { s: Service; open: boolean; onToggle: () => void }) {
   return (
-    <div className="border-b border-[#1C1C1C]/08">
+    <div className="border-b border-white/8 relative overflow-hidden group/row">
+      {/* Left accent bar — HTML pillar style */}
+      <span
+        className="absolute left-0 top-0 bottom-0 w-[3px] bg-[#D64545] transition-transform duration-300 origin-bottom"
+        style={{ transform: open ? "scaleY(1)" : "scaleY(0)" }}
+      />
       <button
         className="w-full text-left px-6 md:px-10 py-7 flex items-center justify-between gap-6 group"
         onClick={onToggle}
@@ -76,20 +81,20 @@ function AccordionRow({ s, open, onToggle }: { s: Service; open: boolean; onTogg
           <span className="font-mono text-xs text-[#D64545] flex-shrink-0">{s.num}</span>
           <div className="flex-1 min-w-0">
             <div
-              className="font-bold text-[#1C1C1C] group-hover:text-[#D64545] transition-colors duration-200 leading-tight"
+              className="font-bold text-white group-hover:text-[#D64545] transition-colors duration-200 leading-tight"
               style={{ fontSize: "clamp(1.1rem, 2.5vw, 1.75rem)", letterSpacing: "-0.03em" }}
             >
               {s.title}
             </div>
-            <div className="text-[#1C1C1C]/50 text-sm mt-0.5">{s.tagline}</div>
+            <div className="text-white/50 text-sm mt-0.5">{s.tagline}</div>
           </div>
         </div>
         <div className="flex items-center gap-5 flex-shrink-0">
-          <span className="text-[#1C1C1C]/40 text-xs font-mono hidden sm:block">{s.deliveryTime}</span>
+          <span className="text-white/40 text-xs font-mono hidden sm:block">{s.deliveryTime}</span>
           <motion.span
             animate={{ rotate: open ? 45 : 0 }}
             transition={{ duration: 0.2 }}
-            className="text-[#1C1C1C] text-2xl leading-none w-6 text-center font-light"
+            className="text-white text-2xl leading-none w-6 text-center font-light"
           >
             +
           </motion.span>
@@ -107,9 +112,9 @@ function AccordionRow({ s, open, onToggle }: { s: Service; open: boolean; onTogg
           >
             <div
               className="px-6 md:px-10 pb-10 pt-2 flex flex-col gap-6 md:flex-row md:gap-16"
-              style={{ background: "linear-gradient(135deg, rgba(214,69,69,0.03) 0%, transparent 100%)" }}
+              style={{ background: "linear-gradient(135deg, rgba(214,69,69,0.07) 0%, rgba(107,78,255,0.04) 100%)" }}
             >
-              <p className="text-[#1C1C1C]/55 leading-relaxed md:max-w-md flex-shrink-0 md:flex-1">
+              <p className="text-white/55 leading-relaxed md:max-w-md flex-shrink-0 md:flex-1">
                 {s.description}
               </p>
               <div className="flex flex-wrap gap-2 md:flex-1">
@@ -128,7 +133,8 @@ function AccordionRow({ s, open, onToggle }: { s: Service; open: boolean; onTogg
                       e.preventDefault();
                       document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
                     }}
-                    className="inline-block bg-[#D64545] text-white font-bold px-6 py-3 rounded-sm text-xs uppercase tracking-widest hover:bg-[#8B3232] transition-colors duration-200 cursor-pointer"
+                    className="inline-block bg-[#D64545] text-white font-bold px-6 py-3 text-xs uppercase tracking-widest hover:bg-[#c03030] transition-all duration-200 cursor-pointer"
+                    style={{ clipPath: "polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px))", boxShadow: "0 8px 24px rgba(214,69,69,0.35)" }}
                   >
                     Start This Service →
                   </a>
@@ -147,25 +153,25 @@ function ServicesSection({ services, settings }: { services: Service[]; settings
   const { servicesSection } = settings;
 
   return (
-    <section id="services" className="bg-[#F5EFE6] border-t border-[#1C1C1C]/08">
+    <section id="services" className="bg-[#0D0F1C] border-t border-white/8" style={{ background: "linear-gradient(180deg, #0D0F1C 0%, #12142A 50%, #0D0F1C 100%)" }}>
       {/* Section header */}
       <div className="px-6 md:px-10 pt-24 pb-16 max-w-7xl mx-auto">
         <SectionLabel>{servicesSection.label}</SectionLabel>
         <h2
-          className="font-bold text-[#1C1C1C] leading-none"
+          className="font-bold text-white leading-none"
           style={{ fontSize: "clamp(3rem, 8vw, 8rem)", letterSpacing: "-0.04em" }}
         >
           {servicesSection.heading1}
           <br />
           <em className="text-[#D64545] not-italic">{servicesSection.heading2}</em>
         </h2>
-        <p className="text-[#1C1C1C]/55 text-lg max-w-md leading-relaxed mt-6">
+        <p className="text-white/55 text-lg max-w-md leading-relaxed mt-6">
           {servicesSection.subtitle}
         </p>
       </div>
 
       {/* Accordion */}
-      <div className="border-t border-[#1C1C1C]/08">
+      <div className="border-t border-white/8">
         {services.map((s) => (
           <AccordionRow
             key={s.num}
@@ -209,16 +215,16 @@ function ProjectDrawer({ project, onClose }: { project: Project; onClose: () => 
         animate={{ x: 0 }}
         exit={{ x: "100%" }}
         transition={{ type: "spring", damping: 32, stiffness: 280 }}
-        className="fixed right-0 top-0 bottom-0 z-[201] w-full max-w-2xl bg-[#F5EFE6] overflow-y-auto"
+        className="fixed right-0 top-0 bottom-0 z-[201] w-full max-w-2xl bg-[#12142A] overflow-y-auto border-l border-white/8"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close */}
         <button
           onClick={onClose}
-          className="sticky top-0 z-10 w-full flex items-center justify-between px-8 py-5 bg-[#F5EFE6]/95 backdrop-blur-md border-b border-[#1C1C1C]/08"
+          className="sticky top-0 z-10 w-full flex items-center justify-between px-8 py-5 bg-[#12142A]/95 backdrop-blur-md border-b border-white/8"
         >
-          <span className="text-[10px] font-mono uppercase tracking-widest text-[#1C1C1C]/45">Close</span>
-          <span className="w-8 h-8 rounded-full border border-[#1C1C1C]/15 flex items-center justify-center text-[#1C1C1C]/50 hover:border-[#D64545] hover:text-[#D64545] transition-colors duration-200 text-xs">✕</span>
+          <span className="text-[10px] font-mono uppercase tracking-widest text-white/45">Close</span>
+          <span className="w-8 h-8 rounded-full border border-white/15 flex items-center justify-center text-white/50 hover:border-[#D64545] hover:text-[#D64545] transition-colors duration-200 text-xs">✕</span>
         </button>
 
         <div className="px-8 md:px-12 py-10 space-y-12">
@@ -228,12 +234,12 @@ function ProjectDrawer({ project, onClose }: { project: Project; onClose: () => 
               {project.category} · {project.year}
             </span>
             <h2
-              className="font-black text-[#1C1C1C] leading-tight mt-3 mb-4"
+              className="font-black text-white leading-tight mt-3 mb-4"
               style={{ fontSize: "clamp(1.8rem, 4vw, 3rem)", letterSpacing: "-0.04em" }}
             >
               {project.title}
             </h2>
-            <p className="text-[#1C1C1C]/55 leading-relaxed">{project.description}</p>
+            <p className="text-white/55 leading-relaxed">{project.description}</p>
           </div>
 
           {/* Result pill */}
@@ -248,7 +254,7 @@ function ProjectDrawer({ project, onClose }: { project: Project; onClose: () => 
           {/* Tags */}
           <div className="flex flex-wrap gap-2">
             {project.tags.map((t) => (
-              <span key={t} className="text-[10px] font-mono uppercase tracking-widest px-3 py-1.5 rounded-full border border-[#1C1C1C]/10 text-[#1C1C1C]/45">
+              <span key={t} className="text-[10px] font-mono uppercase tracking-widest px-3 py-1.5 rounded-full border border-white/10 text-white/45">
                 {t}
               </span>
             ))}
@@ -258,24 +264,24 @@ function ProjectDrawer({ project, onClose }: { project: Project; onClose: () => 
           <div className="space-y-8">
             <div>
               <p className="text-[#D64545] text-[10px] font-mono uppercase tracking-[0.2em] mb-3">The Challenge</p>
-              <p className="text-[#1C1C1C]/65 leading-relaxed">{project.challenge}</p>
+              <p className="text-white/65 leading-relaxed">{project.challenge}</p>
             </div>
             <div>
               <p className="text-[#D64545] text-[10px] font-mono uppercase tracking-[0.2em] mb-3">Our Solution</p>
-              <p className="text-[#1C1C1C]/65 leading-relaxed">{project.solution}</p>
+              <p className="text-white/65 leading-relaxed">{project.solution}</p>
             </div>
           </div>
 
           {/* Results grid */}
           <div>
             <p className="text-[#D64545] text-[10px] font-mono uppercase tracking-[0.2em] mb-5">Results</p>
-            <div className="grid grid-cols-2 gap-px bg-[#1C1C1C]/08">
+            <div className="grid grid-cols-2 gap-px bg-white/8">
               {project.results.map((r) => (
-                <div key={r.metric} className="bg-[#F5EFE6] p-5">
-                  <div className="font-black text-[#1C1C1C] leading-none mb-1" style={{ fontSize: "clamp(1.6rem, 4vw, 2.4rem)", letterSpacing: "-0.04em", color: project.color }}>
+                <div key={r.metric} className="bg-[#12142A] p-5">
+                  <div className="font-black text-white leading-none mb-1" style={{ fontSize: "clamp(1.6rem, 4vw, 2.4rem)", letterSpacing: "-0.04em", color: project.color }}>
                     {r.value}
                   </div>
-                  <div className="text-[#1C1C1C]/45 text-xs font-mono uppercase tracking-widest">{r.metric}</div>
+                  <div className="text-white/45 text-xs font-mono uppercase tracking-widest">{r.metric}</div>
                 </div>
               ))}
             </div>
@@ -289,8 +295,8 @@ function ProjectDrawer({ project, onClose }: { project: Project; onClose: () => 
                 <div key={step.step} className="flex gap-5">
                   <span className="font-mono text-xs text-[#D64545] flex-shrink-0 mt-0.5">{step.step}</span>
                   <div>
-                    <div className="font-bold text-[#1C1C1C] text-sm mb-1">{step.title}</div>
-                    <div className="text-[#1C1C1C]/55 text-sm leading-relaxed">{step.desc}</div>
+                    <div className="font-bold text-white text-sm mb-1">{step.title}</div>
+                    <div className="text-white/55 text-sm leading-relaxed">{step.desc}</div>
                   </div>
                 </div>
               ))}
@@ -308,12 +314,13 @@ function ProjectDrawer({ project, onClose }: { project: Project; onClose: () => 
           </div>
 
           {/* CTA */}
-          <div className="border-t border-[#1C1C1C]/08 pt-10">
-            <p className="text-[#1C1C1C]/55 text-sm mb-5">Want results like these for your brand?</p>
+          <div className="border-t border-white/8 pt-10">
+            <p className="text-white/55 text-sm mb-5">Want results like these for your brand?</p>
             <a
               href="#contact"
               onClick={(e) => { e.preventDefault(); onClose(); setTimeout(() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" }), 300); }}
-              className="inline-block bg-[#D64545] text-white font-bold px-8 py-4 rounded-sm text-xs uppercase tracking-widest hover:bg-[#C03A3A] transition-colors duration-200"
+              className="inline-block bg-[#D64545] text-white font-bold px-8 py-4 text-xs uppercase tracking-widest hover:bg-[#c03030] transition-all duration-200"
+              style={{ clipPath: "polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px))", boxShadow: "0 8px 24px rgba(214,69,69,0.35)" }}
             >
               Start a Project →
             </a>
@@ -336,7 +343,7 @@ function ProjectRow({ project, index }: { project: Project; index: number }) {
     >
       <Link href={`/work/${project.slug}`}>
         <div
-          className="group relative border-b border-[#1C1C1C]/08 py-9 md:py-11 cursor-pointer overflow-hidden"
+          className="group relative border-b border-white/8 py-9 md:py-11 cursor-pointer overflow-hidden"
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}
         >
@@ -359,7 +366,7 @@ function ProjectRow({ project, index }: { project: Project; index: number }) {
             </span>
             <div className="flex-1 min-w-0">
               <h3
-                className="font-bold text-[#1C1C1C] group-hover:text-[#D64545] transition-colors duration-200 leading-tight mb-2"
+                className="font-bold text-white group-hover:text-[#D64545] transition-colors duration-200 leading-tight mb-2"
                 style={{ fontSize: "clamp(1.25rem, 2.8vw, 2.2rem)", letterSpacing: "-0.03em" }}
               >
                 {project.title}
@@ -368,7 +375,7 @@ function ProjectRow({ project, index }: { project: Project; index: number }) {
                 {project.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="text-[10px] font-mono uppercase tracking-widest px-2.5 py-1 rounded-full border border-[#1C1C1C]/10 text-[#1C1C1C]/45"
+                    className="text-[10px] font-mono uppercase tracking-widest px-2.5 py-1 rounded-full border border-white/10 text-white/45"
                   >
                     {tag}
                   </span>
@@ -376,8 +383,8 @@ function ProjectRow({ project, index }: { project: Project; index: number }) {
               </div>
             </div>
             <div className="md:w-52 flex-shrink-0 md:text-right hidden md:block">
-              <p className="text-[#1C1C1C]/45 text-sm font-mono">{project.category}</p>
-              <p className="text-[#1C1C1C]/30 text-xs font-mono mt-0.5">{project.year}</p>
+              <p className="text-white/45 text-sm font-mono">{project.category}</p>
+              <p className="text-white/30 text-xs font-mono mt-0.5">{project.year}</p>
             </div>
             <div className="md:w-52 flex-shrink-0 md:text-right">
               <span
@@ -415,7 +422,7 @@ function FeaturedCard({ project }: { project: Project }) {
       className="mb-2"
     >
       <Link href={`/work/${project.slug}`}>
-        <TiltCard className="relative overflow-hidden rounded-2xl border border-[#1C1C1C]/08 cursor-pointer">
+        <TiltCard className="relative overflow-hidden rounded-2xl border border-white/8 cursor-pointer">
           <div
             className="absolute inset-0 transition-transform duration-700 group-hover:scale-105"
             style={{
@@ -438,7 +445,7 @@ function FeaturedCard({ project }: { project: Project }) {
                 <span className="text-xs font-mono uppercase tracking-widest" style={{ color: project.color }}>
                   {project.category}
                 </span>
-                <p className="text-[#1C1C1C]/35 text-xs font-mono mt-1">{project.year}</p>
+                <p className="text-white/35 text-xs font-mono mt-1">{project.year}</p>
               </div>
               <motion.div
                 className="w-10 h-10 rounded-full border flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300"
@@ -457,17 +464,17 @@ function FeaturedCard({ project }: { project: Project }) {
                 {project.result}
               </div>
               <h3
-                className="font-bold text-[#1C1C1C] group-hover:text-[#D64545] transition-colors duration-300 leading-tight"
+                className="font-bold text-white group-hover:text-[#D64545] transition-colors duration-300 leading-tight"
                 style={{ fontSize: "clamp(1.8rem, 4vw, 3.5rem)", letterSpacing: "-0.03em" }}
               >
                 {project.title}
               </h3>
-              <p className="text-[#1C1C1C]/50 text-sm leading-relaxed mt-3 max-w-lg">{project.description}</p>
+              <p className="text-white/50 text-sm leading-relaxed mt-3 max-w-lg">{project.description}</p>
               <div className="flex flex-wrap gap-2 mt-5">
                 {project.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="text-[10px] font-mono uppercase tracking-widest px-2.5 py-1 rounded-full border border-[#1C1C1C]/10 text-[#1C1C1C]/40"
+                    className="text-[10px] font-mono uppercase tracking-widest px-2.5 py-1 rounded-full border border-white/10 text-white/40"
                   >
                     {tag}
                   </span>
@@ -490,14 +497,14 @@ function WorkSection({ projects, settings }: { projects: Project[]; settings: Se
   const { workSection } = settings;
 
   return (
-    <section id="work" className="bg-[#F5EFE6] border-t border-[#1C1C1C]/08">
+    <section id="work" className="bg-[#0D0F1C] border-t border-white/8">
       {/* Section header */}
-      <div className="px-8 pt-24 pb-14 max-w-7xl mx-auto border-b border-[#1C1C1C]/08">
+      <div className="px-8 pt-24 pb-14 max-w-7xl mx-auto border-b border-white/8">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
           <div>
             <SectionLabel>{workSection.label}</SectionLabel>
             <h2
-              className="font-bold text-[#1C1C1C] leading-none"
+              className="font-bold text-white leading-none"
               style={{ fontSize: "clamp(3rem, 8vw, 7.5rem)", letterSpacing: "-0.04em" }}
             >
               {workSection.heading1}
@@ -505,14 +512,14 @@ function WorkSection({ projects, settings }: { projects: Project[]; settings: Se
               <em className="text-[#D64545] not-italic">{workSection.heading2}</em>
             </h2>
           </div>
-          <p className="text-[#1C1C1C]/45 text-sm max-w-xs leading-relaxed md:pb-3">
+          <p className="text-white/45 text-sm max-w-xs leading-relaxed md:pb-3">
             {projects.length} {workSection.subtitle}
           </p>
         </div>
       </div>
 
       {/* Filter bar */}
-      <div className="sticky top-0 z-30 bg-[#F5EFE6]/95 backdrop-blur-md border-b border-[#1C1C1C]/08 px-8 py-5">
+      <div className="sticky top-0 z-30 bg-[#0D0F1C]/95 backdrop-blur-md border-b border-white/8 px-8 py-5">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center flex-wrap gap-x-8 gap-y-3">
             {allTags.map((tag) => (
@@ -520,7 +527,7 @@ function WorkSection({ projects, settings }: { projects: Project[]; settings: Se
                 key={tag}
                 onClick={() => setActiveTag(tag)}
                 className={`relative text-[11px] font-mono uppercase tracking-[0.18em] transition-colors duration-200 pb-1 ${
-                  activeTag === tag ? "text-[#D64545]" : "text-[#1C1C1C]/35 hover:text-[#1C1C1C]/70"
+                  activeTag === tag ? "text-[#D64545]" : "text-white/35 hover:text-white/70"
                 }`}
               >
                 {tag}
@@ -600,11 +607,11 @@ function BudgetDropdown({
           onClick={() => setOpen((o) => !o)}
           className="w-full flex items-center justify-between text-lg text-left bg-transparent cursor-pointer group"
         >
-          <span style={{ color: value ? "#1C1C1C" : "rgba(28,28,28,0.25)" }}>
+          <span style={{ color: value ? "#ffffff" : "rgba(255,255,255,0.3)" }}>
             {value || "Select a range…"}
           </span>
           <span
-            className="transition-transform duration-200 text-[#1C1C1C]/30"
+            className="transition-transform duration-200 text-white/30"
             style={{ transform: open ? "rotate(180deg)" : "rotate(0deg)", fontSize: "0.7rem" }}
           >
             ▼
@@ -621,9 +628,9 @@ function BudgetDropdown({
               transition={{ duration: 0.15, ease: "easeOut" }}
               className="absolute left-0 right-0 z-50 mt-3 rounded-sm overflow-hidden"
               style={{
-                background: "#F0E8DC",
-                border: "1px solid rgba(28,28,28,0.08)",
-                boxShadow: "0 12px 40px rgba(28,28,28,0.10)",
+                background: "#12142A",
+                border: "1px solid rgba(255,255,255,0.08)",
+                boxShadow: "0 12px 40px rgba(255,255,255,0.08)",
               }}
             >
               {budgetOptions.map((opt) => (
@@ -633,10 +640,10 @@ function BudgetDropdown({
                     onMouseDown={(e) => { e.preventDefault(); onChange(opt); setOpen(false); }}
                     className="w-full text-left px-5 py-3.5 text-sm font-mono uppercase tracking-widest transition-colors duration-150"
                     style={{
-                      color: value === opt ? "#D64545" : "rgba(28,28,28,0.7)",
+                      color: value === opt ? "#D64545" : "rgba(255,255,255,0.7)",
                       background: value === opt ? "rgba(214,69,69,0.06)" : "transparent",
                     }}
-                    onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(28,28,28,0.04)"; }}
+                    onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.04)"; }}
                     onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = value === opt ? "rgba(214,69,69,0.06)" : "transparent"; }}
                   >
                     {value === opt && <span className="mr-2 text-[#D64545]">✓</span>}
@@ -706,12 +713,12 @@ function ContactSection({ settings }: { settings: Settings }) {
   };
 
   /* shared field row classes */
-  const row   = "flex flex-col sm:flex-row sm:items-center gap-3 border-t border-[#1C1C1C]/08 py-6";
-  const lbl   = "sm:w-36 flex-shrink-0 text-[#1C1C1C]/45 text-xs font-mono uppercase tracking-widest";
-  const input = "w-full min-w-0 bg-transparent text-[#1C1C1C] text-lg outline-none placeholder:text-[#1C1C1C]/25 border-none";
+  const row   = "flex flex-col sm:flex-row sm:items-center gap-3 border-t border-white/8 py-6";
+  const lbl   = "sm:w-36 flex-shrink-0 text-white/45 text-xs font-mono uppercase tracking-widest";
+  const input = "w-full min-w-0 bg-transparent text-white text-lg outline-none placeholder:text-white/25 border-none";
 
   return (
-    <section id="contact" className="bg-[#F5EFE6]">
+    <section id="contact" className="bg-[#0D0F1C]" style={{ background: "linear-gradient(180deg, #0D0F1C 0%, rgba(214,69,69,0.04) 50%, #0D0F1C 100%)" }}>
 
       {/* ── HERO — 2 column ── */}
       <div className="relative overflow-hidden">
@@ -720,7 +727,7 @@ function ContactSection({ settings }: { settings: Settings }) {
           className="absolute inset-0 pointer-events-none"
           style={{
             backgroundImage: `radial-gradient(circle at 75% 50%, rgba(214,69,69,0.06) 0%, transparent 60%),
-                              radial-gradient(circle at 20% 80%, rgba(107,79,58,0.05) 0%, transparent 50%)`,
+                              radial-gradient(circle at 20% 80%, rgba(107,78,255,0.08) 0%, transparent 50%)`,
           }}
         />
 
@@ -736,7 +743,7 @@ function ContactSection({ settings }: { settings: Settings }) {
               {contactSection.label}
             </p>
             <h2
-              className="font-black text-[#1C1C1C] leading-none"
+              className="font-black text-white leading-none"
               style={{ fontSize: "clamp(2.4rem, 5vw, 5rem)", letterSpacing: "-0.04em" }}
             >
               {contactSection.heading1}{" "}
@@ -760,25 +767,25 @@ function ContactSection({ settings }: { settings: Settings }) {
                 viewport={{ once: true }}
                 transition={{ duration: 0.45, delay: 0.15 + i * 0.08, ease: [0.22, 1, 0.36, 1] }}
               >
-                <p className="text-[#1C1C1C]/40 text-[10px] font-mono uppercase tracking-widest mb-1">
+                <p className="text-white/40 text-[10px] font-mono uppercase tracking-widest mb-1">
                   {item.label}
                 </p>
                 {item.href ? (
                   <a
                     href={item.href}
-                    className="text-[#1C1C1C] text-lg hover:text-[#D64545] transition-colors duration-200"
+                    className="text-white text-lg hover:text-[#D64545] transition-colors duration-200"
                   >
                     {item.content}
                   </a>
                 ) : (
-                  <p className="text-[#1C1C1C] text-lg">{item.content}</p>
+                  <p className="text-white text-lg">{item.content}</p>
                 )}
               </motion.div>
             ))}
 
             <div className="flex items-center gap-2 pt-1">
               <span className="w-1.5 h-1.5 rounded-full bg-[#D64545] animate-pulse" />
-              <span className="text-[#1C1C1C]/40 text-xs">{contactSection.responseTime}</span>
+              <span className="text-white/40 text-xs">{contactSection.responseTime}</span>
             </div>
           </motion.div>
         </div>
@@ -799,7 +806,7 @@ function ContactSection({ settings }: { settings: Settings }) {
               >
                 Message sent ✓
               </div>
-              <p className="text-[#1C1C1C]/50 text-lg">
+              <p className="text-white/50 text-lg">
                 We&apos;ll review your brief and get back within 24 hours.
               </p>
             </motion.div>
@@ -851,11 +858,12 @@ function ContactSection({ settings }: { settings: Settings }) {
               </div>
 
               {/* Submit */}
-              <div className="border-t border-[#1C1C1C]/08 pt-8">
+              <div className="border-t border-white/8 pt-8">
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="bg-[#D64545] text-white font-bold px-10 py-4 rounded-full text-sm uppercase tracking-widest hover:bg-[#1C1C1C] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="bg-[#D64545] text-white font-bold px-10 py-4 text-sm uppercase tracking-widest hover:bg-[#c03030] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                  style={{ clipPath: "polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px))", boxShadow: "0 12px 40px rgba(214,69,69,0.4)" }}
                 >
                   {isSubmitting ? "Sending…" : "Send Message →"}
                 </button>
@@ -908,7 +916,7 @@ function AboutSection({ data }: { data: AboutData }) {
   const { sectionHeader, story, stats, team, values, mission, vision, howWeWork } = data;
 
   return (
-    <section id="about" className="bg-[#F5EFE6] border-t border-[#1C1C1C]/08">
+    <section id="about" className="bg-[#0D0F1C] border-t border-white/8" style={{ background: "linear-gradient(180deg, #0D0F1C 0%, #12142A 40%, #0D0F1C 100%)" }}>
 
       {/* Header with DNA canvas background */}
       <div className="relative overflow-hidden" style={{ minHeight: "80vh" }}>
@@ -916,10 +924,13 @@ function AboutSection({ data }: { data: AboutData }) {
         <div className="absolute inset-0 pointer-events-none">
           <DNACanvas />
         </div>
+        {/* Orb accents */}
+        <div className="absolute top-20 right-20 w-96 h-96 rounded-full pointer-events-none" style={{ background: "radial-gradient(circle, rgba(214,69,69,0.12) 0%, transparent 70%)", filter: "blur(60px)" }} />
+        <div className="absolute bottom-20 right-60 w-72 h-72 rounded-full pointer-events-none" style={{ background: "radial-gradient(circle, rgba(107,78,255,0.1) 0%, transparent 70%)", filter: "blur(60px)" }} />
         {/* Bottom fade */}
         <div
           className="absolute bottom-0 left-0 right-0 h-40 pointer-events-none"
-          style={{ background: "linear-gradient(to bottom, transparent, #F5EFE6)" }}
+          style={{ background: "linear-gradient(to bottom, transparent, #0D0F1C)" }}
         />
 
         {/* Text — left side, sitting above canvas */}
@@ -929,17 +940,17 @@ function AboutSection({ data }: { data: AboutData }) {
         >
           <SectionLabel>{sectionHeader.label}</SectionLabel>
           <h2
-            className="font-black text-[#1C1C1C] leading-[0.92] mb-6"
+            className="font-black text-white leading-[0.92] mb-6"
             style={{ fontSize: "clamp(3.5rem, 9vw, 9rem)", letterSpacing: "-0.04em" }}
           >
             {sectionHeader.heading1}
             <br />
             <em className="not-italic text-[#D64545]">{sectionHeader.heading2}</em>
           </h2>
-          <p className="text-[#1C1C1C]/55 text-xl max-w-lg leading-relaxed">{sectionHeader.subtitle}</p>
+          <p className="text-white/55 text-xl max-w-lg leading-relaxed">{sectionHeader.subtitle}</p>
           <div className="flex items-center gap-3 mt-8">
             <span className="w-2 h-2 rounded-full bg-[#D64545] animate-pulse" />
-            <span className="text-[#1C1C1C]/45 text-xs font-mono uppercase tracking-[0.2em]">
+            <span className="text-white/45 text-xs font-mono uppercase tracking-[0.2em]">
               Mumbai, India · Est. 2019
             </span>
           </div>
@@ -947,77 +958,77 @@ function AboutSection({ data }: { data: AboutData }) {
       </div>
 
       {/* Stats strip */}
-      <div className="border-t border-b border-[#1C1C1C]/08 grid grid-cols-2 md:grid-cols-4">
+      <div className="border-t border-b border-white/8 grid grid-cols-2 md:grid-cols-4">
         {stats.map((s, i) => (
           <FadeUp key={s.label} delay={i * 0.07}>
-            <div className={`px-8 py-14 ${i < stats.length - 1 ? "border-r border-[#1C1C1C]/08" : ""}`}>
+            <div className={`px-8 py-14 ${i < stats.length - 1 ? "border-r border-white/8" : ""}`}>
               <div
                 className="font-black text-[#D64545] mb-2 leading-none"
                 style={{ fontSize: "clamp(2.8rem, 5vw, 5rem)", letterSpacing: "-0.04em" }}
               >
                 {s.val}
               </div>
-              <div className="text-[#1C1C1C]/50 text-sm font-mono uppercase tracking-[0.12em]">{s.label}</div>
+              <div className="text-white/50 text-sm font-mono uppercase tracking-[0.12em]">{s.label}</div>
             </div>
           </FadeUp>
         ))}
       </div>
 
       {/* Story 2-col */}
-      <div className="py-24 px-6 md:px-10 max-w-7xl mx-auto border-b border-[#1C1C1C]/08">
+      <div className="py-24 px-6 md:px-10 max-w-7xl mx-auto border-b border-white/8">
         <div className="grid md:grid-cols-2 gap-16 items-start">
           <FadeUp>
             <SectionLabel>Our Story</SectionLabel>
             <h3
-              className="font-black text-[#1C1C1C] leading-tight"
+              className="font-black text-white leading-tight"
               style={{ fontSize: "clamp(2rem, 4vw, 4rem)", letterSpacing: "-0.04em" }}
             >
               {story.heading}
             </h3>
           </FadeUp>
           <FadeUp delay={0.1}>
-            <p className="text-[#1C1C1C]/55 text-lg leading-relaxed mb-5">{story.paragraph1}</p>
-            <p className="text-[#1C1C1C]/55 text-lg leading-relaxed">{story.paragraph2}</p>
+            <p className="text-white/55 text-lg leading-relaxed mb-5">{story.paragraph1}</p>
+            <p className="text-white/55 text-lg leading-relaxed">{story.paragraph2}</p>
           </FadeUp>
         </div>
       </div>
 
       {/* Mission / Vision */}
-      <div className="py-24 px-6 md:px-10 max-w-7xl mx-auto border-b border-[#1C1C1C]/08">
+      <div className="py-24 px-6 md:px-10 max-w-7xl mx-auto border-b border-white/8">
         <div className="grid md:grid-cols-2 gap-8">
           <FadeUp>
-            <div className="border border-[#1C1C1C]/08 rounded-sm p-10 h-full" style={{ background: "rgba(214,69,69,0.02)" }}>
+            <div className="border border-white/8 rounded-sm p-10 h-full" style={{ background: "rgba(214,69,69,0.06)" }}>
               <SectionLabel>Mission</SectionLabel>
               <h3
-                className="font-black text-[#1C1C1C] mb-5 leading-tight"
+                className="font-black text-white mb-5 leading-tight"
                 style={{ fontSize: "clamp(1.5rem, 2.8vw, 2.6rem)", letterSpacing: "-0.03em" }}
               >
                 {mission.heading}
               </h3>
-              <p className="text-[#1C1C1C]/55 leading-relaxed">{mission.text}</p>
+              <p className="text-white/55 leading-relaxed">{mission.text}</p>
             </div>
           </FadeUp>
           <FadeUp delay={0.1}>
-            <div className="border border-[#1C1C1C]/08 rounded-sm p-10 h-full" style={{ background: "rgba(107,79,58,0.03)" }}>
+            <div className="border border-white/8 rounded-sm p-10 h-full" style={{ background: "rgba(107,78,255,0.06)" }}>
               <SectionLabel>Vision</SectionLabel>
               <h3
-                className="font-black text-[#1C1C1C] mb-5 leading-tight"
+                className="font-black text-white mb-5 leading-tight"
                 style={{ fontSize: "clamp(1.5rem, 2.8vw, 2.6rem)", letterSpacing: "-0.03em" }}
               >
                 {vision.heading}
               </h3>
-              <p className="text-[#1C1C1C]/55 leading-relaxed">{vision.text}</p>
+              <p className="text-white/55 leading-relaxed">{vision.text}</p>
             </div>
           </FadeUp>
         </div>
       </div>
 
       {/* How we work — 2×2 grid */}
-      <div className="py-24 px-6 md:px-10 max-w-7xl mx-auto border-b border-[#1C1C1C]/08">
+      <div className="py-24 px-6 md:px-10 max-w-7xl mx-auto border-b border-white/8">
         <FadeUp>
           <SectionLabel>{howWeWork.label}</SectionLabel>
           <h3
-            className="font-black text-[#1C1C1C] mb-14 leading-tight"
+            className="font-black text-white mb-14 leading-tight"
             style={{ fontSize: "clamp(2rem, 4vw, 4rem)", letterSpacing: "-0.04em" }}
           >
             {howWeWork.heading}
@@ -1025,18 +1036,18 @@ function AboutSection({ data }: { data: AboutData }) {
             <span className="text-[#D64545]">{howWeWork.headingRed}</span>
           </h3>
         </FadeUp>
-        <div className="grid sm:grid-cols-2 gap-px bg-[#1C1C1C]/08">
+        <div className="grid sm:grid-cols-2 gap-px bg-white/8">
           {values.map((v, i) => (
             <FadeUp key={v.title} delay={i * 0.07}>
-              <div className="bg-[#F5EFE6] p-10 h-full">
+              <div className="bg-[#0D0F1C] p-10 h-full hover:bg-[#12142A] transition-colors duration-300">
                 <span className="text-[#D64545] font-mono text-xs mb-5 block">0{i + 1}</span>
                 <h4
-                  className="font-black text-[#1C1C1C] mb-3 leading-tight"
+                  className="font-black text-white mb-3 leading-tight"
                   style={{ fontSize: "clamp(1.2rem, 2.2vw, 1.8rem)", letterSpacing: "-0.03em" }}
                 >
                   {v.title}
                 </h4>
-                <p className="text-[#1C1C1C]/55 leading-relaxed text-sm">{v.desc}</p>
+                <p className="text-white/55 leading-relaxed text-sm">{v.desc}</p>
               </div>
             </FadeUp>
           ))}
@@ -1044,11 +1055,11 @@ function AboutSection({ data }: { data: AboutData }) {
       </div>
 
       {/* Team grid */}
-      <div className="py-24 px-6 md:px-10 max-w-7xl mx-auto border-b border-[#1C1C1C]/08">
+      <div className="py-24 px-6 md:px-10 max-w-7xl mx-auto border-b border-white/8">
         <FadeUp>
           <SectionLabel>The Team</SectionLabel>
           <h3
-            className="font-black text-[#1C1C1C] mb-14 leading-tight"
+            className="font-black text-white mb-14 leading-tight"
             style={{ fontSize: "clamp(2rem, 4vw, 4rem)", letterSpacing: "-0.04em" }}
           >
             The people behind
@@ -1056,19 +1067,19 @@ function AboutSection({ data }: { data: AboutData }) {
             <span className="text-[#D64545]">the work.</span>
           </h3>
         </FadeUp>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-[#1C1C1C]/08">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-white/8">
           {team.map((member, i) => (
             <FadeUp key={member.name} delay={i * 0.06}>
-              <div className="bg-[#F5EFE6] p-8 h-full hover:bg-[#EDE5D8] transition-colors duration-300">
+              <div className="bg-[#0D0F1C] p-8 h-full hover:bg-[#12142A] transition-colors duration-300">
                 <div
                   className="w-14 h-14 rounded-full flex items-center justify-center font-black text-xl mb-6"
                   style={{ background: "rgba(214,69,69,0.1)", color: "#D64545" }}
                 >
                   {member.initial}
                 </div>
-                <div className="font-bold text-[#1C1C1C] text-lg mb-1">{member.name}</div>
+                <div className="font-bold text-white text-lg mb-1">{member.name}</div>
                 <div className="text-[#D64545] text-[10px] font-mono uppercase tracking-[0.2em] mb-4">{member.role}</div>
-                <p className="text-[#1C1C1C]/55 text-sm leading-relaxed">{member.bio}</p>
+                <p className="text-white/55 text-sm leading-relaxed">{member.bio}</p>
               </div>
             </FadeUp>
           ))}
