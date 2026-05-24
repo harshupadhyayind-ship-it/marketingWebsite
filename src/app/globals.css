@@ -37,44 +37,47 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) * 1.4);
 
-  /* Brand colors — warm palette */
+  /* Brand colors — dark navy palette */
   --color-red: #D64545;
   --color-red-light: #E05555;
-  --color-red-dark: #8B3232;
+  --color-red-dark: #c03030;
   --color-red-dim: rgba(214,69,69,0.15);
-  --color-beige: #F5EFE6;
-  --color-cream: #E8DFD1;
-  --color-brown: #6B4F3A;
-  --color-charcoal: #1C1C1C;
+  --color-red-glow: rgba(214,69,69,0.4);
+  --color-purple: #6B4EFF;
+  --color-purple-dim: rgba(107,78,255,0.2);
+  --color-navy: #0D0F1C;
+  --color-navy-2: #12142A;
+  --color-surface: rgba(255,255,255,0.04);
+  --color-surface-2: rgba(255,255,255,0.07);
 }
 
 :root {
-  --background: #F5EFE6;
-  --foreground: #1C1C1C;
-  --card: #E8DFD1;
-  --card-foreground: #1C1C1C;
-  --popover: #E8DFD1;
-  --popover-foreground: #1C1C1C;
+  --background: #0D0F1C;
+  --foreground: #ffffff;
+  --card: #12142A;
+  --card-foreground: #ffffff;
+  --popover: #12142A;
+  --popover-foreground: #ffffff;
   --primary: #D64545;
-  --primary-foreground: #F5EFE6;
-  --secondary: #E8DFD1;
-  --secondary-foreground: #1C1C1C;
-  --muted: #E8DFD1;
-  --muted-foreground: #6B4F3A;
+  --primary-foreground: #ffffff;
+  --secondary: rgba(255,255,255,0.07);
+  --secondary-foreground: #ffffff;
+  --muted: rgba(255,255,255,0.04);
+  --muted-foreground: rgba(255,255,255,0.55);
   --accent: #D64545;
-  --accent-foreground: #F5EFE6;
+  --accent-foreground: #ffffff;
   --destructive: #D64545;
-  --border: rgba(107,79,58,0.15);
-  --input: rgba(107,79,58,0.10);
+  --border: rgba(255,255,255,0.08);
+  --input: rgba(255,255,255,0.07);
   --ring: #D64545;
   --radius: 0.5rem;
-  --sidebar: #E8DFD1;
-  --sidebar-foreground: #1C1C1C;
+  --sidebar: #12142A;
+  --sidebar-foreground: #ffffff;
   --sidebar-primary: #D64545;
-  --sidebar-primary-foreground: #F5EFE6;
-  --sidebar-accent: #F5EFE6;
-  --sidebar-accent-foreground: #1C1C1C;
-  --sidebar-border: rgba(107,79,58,0.15);
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: rgba(255,255,255,0.07);
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: rgba(255,255,255,0.08);
   --sidebar-ring: #D64545;
 }
 
@@ -123,39 +126,61 @@
 }
 
 @layer utilities {
-  .text-red    { color: #D64545; }
+  .text-red       { color: #D64545; }
   .text-red-light { color: #E05555; }
-  .bg-red      { background-color: #D64545; }
-  .bg-red-dim  { background-color: rgba(230,51,39,0.12); }
-  .bg-dark     { background-color: #F5EFE6; }
-  .bg-dark-2   { background-color: #F8F8F8; }
-  .border-red  { border-color: #D64545; }
+  .text-dim       { color: rgba(255,255,255,0.55); }
+  .text-muted-nav { color: rgba(255,255,255,0.3); }
+  .bg-red         { background-color: #D64545; }
+  .bg-red-dim     { background-color: rgba(214,69,69,0.15); }
+  .bg-navy        { background-color: #0D0F1C; }
+  .bg-navy-2      { background-color: #12142A; }
+  .bg-surface     { background-color: rgba(255,255,255,0.04); }
+  .bg-surface-2   { background-color: rgba(255,255,255,0.07); }
+  .bg-dark        { background-color: #0D0F1C; }
+  .bg-dark-2      { background-color: #12142A; }
+  .border-red     { border-color: #D64545; }
+  .border-white-8 { border-color: rgba(255,255,255,0.08); }
 
   .glow-red {
-    box-shadow: 0 0 30px rgba(230,51,39,0.35), 0 0 60px rgba(230,51,39,0.12);
+    box-shadow: 0 0 30px rgba(214,69,69,0.4), 0 0 60px rgba(214,69,69,0.15);
   }
   .glow-red-sm {
-    box-shadow: 0 0 12px rgba(230,51,39,0.4);
+    box-shadow: 0 0 12px rgba(214,69,69,0.4);
+  }
+  .glow-purple {
+    box-shadow: 0 0 30px rgba(107,78,255,0.4), 0 0 60px rgba(107,78,255,0.15);
   }
 
   .gradient-red {
-    background: linear-gradient(135deg, #D64545 0%, #8B3232 100%);
+    background: linear-gradient(135deg, #D64545 0%, #c03030 100%);
   }
   .gradient-red-glow {
-    background: radial-gradient(ellipse at center, rgba(230,51,39,0.25) 0%, transparent 70%);
+    background: radial-gradient(ellipse at center, rgba(214,69,69,0.25) 0%, transparent 70%);
+  }
+  .gradient-hero {
+    background: radial-gradient(circle at 35% 35%, rgba(214,69,69,0.25), rgba(107,78,255,0.15), rgba(13,15,28,0.8));
   }
   .text-gradient-red {
-    background: linear-gradient(135deg, #E05555 0%, #D64545 50%, #FF7A6E 100%);
+    background: linear-gradient(135deg, #fff 60%, rgba(255,255,255,0.5));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
+  .text-gradient-accent {
+    -webkit-text-fill-color: #D64545;
+  }
 
   .glass-dark {
-    background: rgba(255,255,255,0.75);
+    background: rgba(255,255,255,0.04);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(0,0,0,0.07);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .glass-nav {
+    background: rgba(13,15,28,0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
   }
 
   .text-display {
@@ -174,19 +199,19 @@
     text-transform: uppercase;
     font-weight: 500;
   }
-  .border-hairline { border-width: 1px; border-color: rgba(0,0,0,0.08); }
+  .border-hairline { border-width: 1px; border-color: rgba(255,255,255,0.08); }
 }
 
 /* Scrollbar */
 ::-webkit-scrollbar { width: 3px; }
-::-webkit-scrollbar-track { background: #F5EFE6; }
+::-webkit-scrollbar-track { background: #0D0F1C; }
 ::-webkit-scrollbar-thumb { background: #D64545; border-radius: 2px; }
 ::-webkit-scrollbar-thumb:hover { background: #E05555; }
 
 /* Selection */
 ::selection {
-  background: rgba(230, 51, 39, 0.3);
-  color: #F5EFE6;
+  background: rgba(214,69,69,0.35);
+  color: #ffffff;
 }
 
 /* Marquee */
@@ -199,8 +224,8 @@
 
 /* Red glow pulse */
 @keyframes glow-pulse {
-  0%, 100% { box-shadow: 0 0 20px rgba(230,51,39,0.3); }
-  50%       { box-shadow: 0 0 40px rgba(230,51,39,0.6), 0 0 80px rgba(230,51,39,0.2); }
+  0%, 100% { box-shadow: 0 0 20px rgba(214,69,69,0.3); }
+  50%       { box-shadow: 0 0 40px rgba(214,69,69,0.6), 0 0 80px rgba(214,69,69,0.2); }
 }
 .animate-glow-pulse { animation: glow-pulse 2.5s ease-in-out infinite; }
 
